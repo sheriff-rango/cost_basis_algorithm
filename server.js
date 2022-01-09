@@ -291,7 +291,7 @@ async function getWalletCostBasis(data) {
 
   global_balances = await getTokenBalances(data.chain, data.wallet.toLowerCase(), data.blockheight);
   global_transfers = await getTokenTransfers(data.chain, data.wallet.toLowerCase(), data.blockheight);
-  global_tx = getTransactions(data.chain, data.wallet.toLowerCase(), data.blockheight);
+  global_tx = await getTransactions(data.chain, data.wallet.toLowerCase(), data.blockheight);
 
   //Copy native transfers to ERC20 transfers
   native_xfers = global_tx.filter((xfer) => xfer.value > 0);
