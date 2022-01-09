@@ -11,6 +11,8 @@ const appId = 'rLSZFQmw1hUwtAjRnjZnce5cxu1qcPJzy01TuyU1';
 let history = null;
 let serverState = false;
 
+const DELAY = 1000;
+
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -129,7 +131,7 @@ async function getTokenMetadata(_chain, _tokenAddresses) {
         chain: _chain,
         addresses: _tokenAddresses.splice(0, 10)
       }
-      // await sleep(page * 3000)
+      await sleep(page * DELAY)
       result = await Moralis.Web3API.token.getTokenMetadata(options);
       tokenMetadata = tokenMetadata.concat(result);
       page++;
@@ -163,7 +165,7 @@ async function getTransactions(_chain, _tokenAddress, _toBlock) {
         options.offset = page * 500;
         txFunctions.push(Moralis.Web3API.account.getTransactions(options));
         if (page % 1 === 0) {
-          // await sleep(page * 3000)
+          await sleep(page * DELAY)
           await Promise.all(txFunctions).then(results => {
             results.map(each => {
               mergeResult = mergeResult.concat(each.result);
@@ -174,7 +176,7 @@ async function getTransactions(_chain, _tokenAddress, _toBlock) {
         page++;
       }
       if (txFunctions.length) {
-        // await sleep(page * 3000)
+        await sleep(page * DELAY)
         await Promise.all(txFunctions).then(results => {
           results.map(each => {
             mergeResult = mergeResult.concat(each.result);
@@ -242,7 +244,7 @@ async function getTokenTransfers(_chain, _address, _toBlock) {
         options.offset = page * 500;
         transferFunctions.push(Moralis.Web3API.account.getTokenTransfers(options));
         if (page % 1 === 0) {
-          // await sleep(page * 3000)
+          await sleep(page * DELAY)
           await Promise.all(transferFunctions).then(results => {
             results.map(each => {
               mergeResult = mergeResult.concat(each.result);
@@ -253,7 +255,7 @@ async function getTokenTransfers(_chain, _address, _toBlock) {
         page++;
       }
       if (transferFunctions.length) {
-        // await sleep(page * 3000)
+        await sleep(page * DELAY)
         await Promise.all(transferFunctions).then(results => {
           results.map(each => {
             mergeResult = mergeResult.concat(each.result);
