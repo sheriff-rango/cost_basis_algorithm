@@ -17,7 +17,7 @@ app.listen(PORT, () => {
   console.log(`Server running at (http://localhost:${PORT}`);
 });
 app.get('/', function(req, res) {
-  res.send({result,})
+  res.send({result: history,})
 })
 
 console.log('moralis starting...')
