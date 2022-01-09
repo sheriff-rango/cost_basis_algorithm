@@ -12,13 +12,12 @@ let history = null;
 
 const app = express();
 app.use(cors());
-// const PORT = 3200;
-const PORT = process.env?.PORT || 3000;
+const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server running at (http://localhost:${PORT}`);
 });
 app.get('/', function(req, res) {
-  res.send({result: history})
+  res.send({result,})
 })
 
 console.log('moralis starting...')
@@ -29,18 +28,26 @@ Moralis.start({ serverUrl, appId })
   .then((result) => {
     console.log('final result', result);
     history = result;
-    // exit(1);
+    exit(1);
   })
   .catch((e) => {
     console.log('get wallet cost basis error', e);
-    history = e;
-    // exit(1);
+    // history = 'get wallet cost basis error';
+    history = {
+      message: 'get wallet cost basis error',
+      error: e
+    };
+    exit(1);
   });
 })
 .catch((e) => {
   console.log('moralis start error', e);
-  history = e;
-  // exit(1);
+  // history = 'moralis start error';
+    history = {
+      message: 'moralis start error',
+      error: e
+    };
+  exit(1);
 });
 
 
@@ -101,6 +108,11 @@ async function getTokenMetadata(_chain, _tokenAddresses) {
     return tokenMetadata;
   } catch (e) {
     console.log('get token meta data error', e);
+  // history = 'get token meta data error';
+    history = {
+      message: 'get token meta data error',
+      error: e
+    };
     return null;
   }
 }
@@ -144,6 +156,11 @@ async function getTransactions(_chain, _tokenAddress, _toBlock) {
     return result.result;
   } catch (e) {
     console.log('get transactions error', e);
+    // history = 'get transactions error';
+    history = {
+      message: 'get transactions error',
+      error: e
+    };
     return null;
   }
 }
@@ -170,6 +187,10 @@ async function getTokenBalances(_chain, _address, _toBlock) {
     return getTokenBalancesResult;
   } catch (e) {
     console.log('get token balances error', e);
+    history = {
+      message: 'get token balances error',
+      error: e
+    };
     return null;
   }
 }
@@ -211,6 +232,10 @@ async function getTokenTransfers(_chain, _address, _toBlock) {
     else return result.result;
   } catch (e) {
     console.log('get token transfers error', e);
+    history = {
+      message: 'get token transfer error',
+      error: e
+    };
     return null;
   }
 }
