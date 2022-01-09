@@ -9,6 +9,6 @@
     "start": "node server",
   },
   "engines": {
-  	"node": "14.x"
+  	"node": "14.17.5"
   }
 }
