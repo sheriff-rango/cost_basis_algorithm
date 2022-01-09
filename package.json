@@ -4,19 +4,19 @@
 	"description": "",
 	"main": "server.js",
 	"scripts": {
-    	"start": "node server"
+		"start": "node server"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"engines": {
-  		"node": "14.17.5"
+		"node": "14.17.5"
 	},
 	"dependencies": {
-	    "axios": "^0.24.0",
-	    "moralis": "^0.0.176",
-	    "nodemon": "^2.0.15",
-	    "express": "^4.17.2",
-	    "web3": "^1.6.1"
+		"axios": "^0.24.0",
+		"moralis": "^0.0.176",
+		"nodemon": "^2.0.15",
+		"express": "^4.17.2",
+		"web3": "^1.6.1"
 	}
 }
