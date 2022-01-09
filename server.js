@@ -9,6 +9,8 @@ const appId = 'rLSZFQmw1hUwtAjRnjZnce5cxu1qcPJzy01TuyU1';
 // const serverUrl = 'https://ea4ql61igwkq.usemoralis.com:2053/server';
 // const appId = 'ayFgiTCfWrFcBtgXqvwiLJQqSlGbnxYezYipOJQx';
 let history = null;
+let serverState = false;
+
 
 const app = express();
 app.use(cors());
@@ -16,39 +18,62 @@ const PORT = process.env?.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running at (http://localhost:${PORT}`);
 });
-app.get('/', function(req, res) {
-  res.send({result: history,})
+app.get('/', function (req, res) {
+  if (!history) return res.status(400).send("Getting data. Please wait...")
+  res.send({ result: history, })
+})
+
+app.get('/costbasis', function (req, res) {
+  if (!serverState) return res.status(400).send("Moralis server does not started yet. Please wait...")
+  getWalletCostBasis(testData)
+    .then((result) => {
+      console.log('final result', result);
+      history = result;
+      res.send({ result: history, })
+      // exit(1);
+    })
+    .catch((e) => {
+      console.log('get wallet cost basis error', e);
+      // history = 'get wallet cost basis error';
+      history = {
+        message: 'get wallet cost basis error',
+        error: e
+      };
+      res.send({ result: history, })
+      // exit(1);
+    });
 })
 
 console.log('moralis starting...')
 Moralis.start({ serverUrl, appId })
-.then(() => {
-  console.log('moralis successfully started');
-  getWalletCostBasis(testData)
-  .then((result) => {
-    console.log('final result', result);
-    history = result;
-    // exit(1);
+  .then(() => {
+    console.log('moralis successfully started');
+    serverState = true;
+    getWalletCostBasis(testData)
+      .then((result) => {
+        console.log('final result', result);
+        history = result;
+        // exit(1);
+      })
+      .catch((e) => {
+        console.log('get wallet cost basis error', e);
+        // history = 'get wallet cost basis error';
+        history = {
+          message: 'get wallet cost basis error',
+          error: e
+        };
+        // exit(1);
+      });
   })
   .catch((e) => {
-    console.log('get wallet cost basis error', e);
-    // history = 'get wallet cost basis error';
-    history = {
-      message: 'get wallet cost basis error',
-      error: e
-    };
-    // exit(1);
-  });
-})
-.catch((e) => {
-  console.log('moralis start error', e);
-  // history = 'moralis start error';
+    console.log('moralis start error', e);
+    // history = 'moralis start error';
     history = {
       message: 'moralis start error',
       error: e
     };
-  // exit(1);
-});
+    // exit(1);
+  });
 
 
 // common data
@@ -108,7 +133,7 @@ async function getTokenMetadata(_chain, _tokenAddresses) {
     return tokenMetadata;
   } catch (e) {
     console.log('get token meta data error', e);
-  // history = 'get token meta data error';
+    // history = 'get token meta data error';
     history = {
       message: 'get token meta data error',
       error: e
@@ -147,7 +172,7 @@ async function getTransactions(_chain, _tokenAddress, _toBlock) {
         await Promise.all(txFunctions).then(results => {
           results.map(each => {
             mergeResult = mergeResult.concat(each.result);
-          }) 
+          })
           return mergeResult;
         }).catch(e => console.log(e))
       } else return mergeResult;
@@ -224,7 +249,7 @@ async function getTokenTransfers(_chain, _address, _toBlock) {
         await Promise.all(transferFunctions).then(results => {
           results.map(each => {
             mergeResult = mergeResult.concat(each.result);
-          }) 
+          })
           return mergeResult;
         }).catch(e => console.log(e))
       } else return mergeResult;
@@ -342,7 +367,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
       valued_directly: true,
     })
     console.log('Token: ' + token.address + ' Cost= ' + cost_basis);
-    return {cost_basis, history: newHistory};
+    return { cost_basis, history: newHistory };
   }
 
   // retrieve list of token transactions to/from wallet, prior to block
@@ -371,18 +396,18 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
 
     //calculate the balance of token in wallet, just before transaction.
     const units_of_token = transaction.value / 10 ** (token_meta.decimals || 18);
-    current_balance = current_balance + (isReceived? -1 : 1) * units_of_token;
+    current_balance = current_balance + (isReceived ? -1 : 1) * units_of_token;
     console.log('current balance', current_balance);
 
     // calculate the cost basis of current transaction
     const offsetting_coins = global_transfers.filter((xfer) =>
       xfer.transaction_hash == transaction.transaction_hash &&
       xfer.used == undefined &&
-      (isReceived? (xfer.from_address.toLowerCase() == wallet) : (xfer.to_address.toLowerCase() == wallet))
+      (isReceived ? (xfer.from_address.toLowerCase() == wallet) : (xfer.to_address.toLowerCase() == wallet))
     );
 
     // console.log('offsetting coins', offsetting_coins.length);
-    
+
     for (let i = 0; i < offsetting_coins.length; i++) {
       let offsetting_coin = offsetting_coins[i];
       // console.log('offsetting coin', offsetting_coin);
@@ -398,7 +423,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
         hierarchy_level + 1,
         transaction,
       );
-      cost_basis = cost_basis + (isReceived? 1 : -1) * getTokenCostBasisResult.cost_basis;
+      cost_basis = cost_basis + (isReceived ? 1 : -1) * getTokenCostBasisResult.cost_basis;
       newHistory = newHistory.concat(getTokenCostBasisResult.history);
     }
     const fee_native_units = transaction_detail.gas * transaction_detail.gas_price / 10 ** (token_meta.decimals || 18);
@@ -415,10 +440,10 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
       hierarchy_level,
       valued_directly: false,
     })
-    
+
     // ********* STOP CONDITION *********
     if (current_balance <= 0) break;
   }
-  
-  return {cost_basis, history: newHistory};
+
+  return { cost_basis, history: newHistory };
 }
