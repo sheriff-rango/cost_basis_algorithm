@@ -17,31 +17,32 @@ const PORT = process.env?.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running at (http://localhost:${PORT}`);
 });
-app.get('/result', function(req, res) {
-  res.send({result: 'Hello World'})
+app.get('/', function(req, res) {
+  res.send({result: history})
 })
 
-// console.log('moralis starting...')
-// Moralis.start({ serverUrl, appId })
-// .then(() => {
-//   console.log('moralis successfully started');
-//   getWalletCostBasis(testData)
-//   .then((result) => {
-//     console.log('final result', result);
-//     history = result;
-//     exit(1);
-//   })
-//   .catch((e) => {
-//     console.log('get wallet cost basis error', e);
-//     history = e;
-//     exit(1);
-//   });
-// })
-// .catch((e) => {
-//   console.log('moralis start error', e);
-//   history = e;
-//   exit(1);
-// });
+console.log('moralis starting...')
+Moralis.start({ serverUrl, appId })
+.then(() => {
+  console.log('moralis successfully started');
+  // getWalletCostBasis(testData)
+  // .then((result) => {
+  //   console.log('final result', result);
+  //   history = result;
+  //   exit(1);
+  // })
+  // .catch((e) => {
+  //   console.log('get wallet cost basis error', e);
+  //   history = e;
+  //   exit(1);
+  // });
+  history = 'Hello World';
+})
+.catch((e) => {
+  console.log('moralis start error', e);
+  history = e;
+  exit(1);
+});
 
 
 // common data
