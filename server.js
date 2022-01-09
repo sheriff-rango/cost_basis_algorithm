@@ -28,7 +28,7 @@ Moralis.start({ serverUrl, appId })
   .then((result) => {
     console.log('final result', result);
     history = result;
-    exit(1);
+    // exit(1);
   })
   .catch((e) => {
     console.log('get wallet cost basis error', e);
@@ -37,7 +37,7 @@ Moralis.start({ serverUrl, appId })
       message: 'get wallet cost basis error',
       error: e
     };
-    exit(1);
+    // exit(1);
   });
 })
 .catch((e) => {
@@ -47,7 +47,7 @@ Moralis.start({ serverUrl, appId })
       message: 'moralis start error',
       error: e
     };
-  exit(1);
+  // exit(1);
 });
 
 
