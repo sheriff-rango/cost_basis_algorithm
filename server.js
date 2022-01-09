@@ -62,10 +62,10 @@ Moralis.start({ serverUrl, appId })
       .catch((e) => {
         console.log('get wallet cost basis error', e);
         // history = 'get wallet cost basis error';
-        history = {
-          message: 'get wallet cost basis error',
-          error: e
-        };
+        // history = {
+        //   message: 'get wallet cost basis error',
+        //   error: e
+        // };
         // exit(1);
       });
   })
@@ -129,9 +129,8 @@ async function getTokenMetadata(_chain, _tokenAddresses) {
         chain: _chain,
         addresses: _tokenAddresses.splice(0, 10)
       }
-      await sleep(page * 3000)
+      // await sleep(page * 3000)
       result = await Moralis.Web3API.token.getTokenMetadata(options);
-      console.log('token meta data', result.total)
       tokenMetadata = tokenMetadata.concat(result);
       page++;
     }
@@ -164,7 +163,7 @@ async function getTransactions(_chain, _tokenAddress, _toBlock) {
         options.offset = page * 500;
         txFunctions.push(Moralis.Web3API.account.getTransactions(options));
         if (page % 1 === 0) {
-          await sleep(page * 3000)
+          // await sleep(page * 3000)
           await Promise.all(txFunctions).then(results => {
             results.map(each => {
               mergeResult = mergeResult.concat(each.result);
@@ -175,7 +174,7 @@ async function getTransactions(_chain, _tokenAddress, _toBlock) {
         page++;
       }
       if (txFunctions.length) {
-        await sleep(page * 3000)
+        // await sleep(page * 3000)
         await Promise.all(txFunctions).then(results => {
           results.map(each => {
             mergeResult = mergeResult.concat(each.result);
@@ -243,7 +242,7 @@ async function getTokenTransfers(_chain, _address, _toBlock) {
         options.offset = page * 500;
         transferFunctions.push(Moralis.Web3API.account.getTokenTransfers(options));
         if (page % 1 === 0) {
-          await sleep(page * 3000)
+          // await sleep(page * 3000)
           await Promise.all(transferFunctions).then(results => {
             results.map(each => {
               mergeResult = mergeResult.concat(each.result);
@@ -254,7 +253,7 @@ async function getTokenTransfers(_chain, _address, _toBlock) {
         page++;
       }
       if (transferFunctions.length) {
-        await sleep(page * 3000)
+        // await sleep(page * 3000)
         await Promise.all(transferFunctions).then(results => {
           results.map(each => {
             mergeResult = mergeResult.concat(each.result);
