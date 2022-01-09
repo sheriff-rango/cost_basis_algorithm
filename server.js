@@ -25,18 +25,17 @@ console.log('moralis starting...')
 Moralis.start({ serverUrl, appId })
 .then(() => {
   console.log('moralis successfully started');
-  // getWalletCostBasis(testData)
-  // .then((result) => {
-  //   console.log('final result', result);
-  //   history = result;
-  //   exit(1);
-  // })
-  // .catch((e) => {
-  //   console.log('get wallet cost basis error', e);
-  //   history = e;
-  //   exit(1);
-  // });
-  history = 'Hello World';
+  getWalletCostBasis(testData)
+  .then((result) => {
+    console.log('final result', result);
+    history = result;
+    exit(1);
+  })
+  .catch((e) => {
+    console.log('get wallet cost basis error', e);
+    history = e;
+    exit(1);
+  });
 })
 .catch((e) => {
   console.log('moralis start error', e);
