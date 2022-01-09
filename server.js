@@ -29,18 +29,18 @@ Moralis.start({ serverUrl, appId })
   .then((result) => {
     console.log('final result', result);
     history = result;
-    exit(1);
+    // exit(1);
   })
   .catch((e) => {
     console.log('get wallet cost basis error', e);
     history = e;
-    exit(1);
+    // exit(1);
   });
 })
 .catch((e) => {
   console.log('moralis start error', e);
   history = e;
-  exit(1);
+  // exit(1);
 });
 
 
