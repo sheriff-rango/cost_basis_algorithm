@@ -270,6 +270,8 @@ async function getWalletCostBasis(data) {
     global_tx = result[2];
   });
 
+  history = 'promise all success';
+
   //Copy native transfers to ERC20 transfers
   native_xfers = global_tx.filter((xfer) => xfer.value > 0);
   for (let i = 0; i < native_xfers.length; i++) {
@@ -296,6 +298,7 @@ async function getWalletCostBasis(data) {
   token_list.push(chainCoins[data.chain].address); //add native token
   token_list = Array.from(new Set(token_list)); //de-dupe
   global_token_meta = await getTokenMetadata(data.chain, token_list);
+  history = 'get token meta data successfully';
 
   //If token specified in request, just do that token instead of the whole wallet
   if (data.token) {
