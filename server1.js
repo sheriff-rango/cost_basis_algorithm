@@ -27,6 +27,26 @@ app.get('/', function (req, res) {
   if (!history) return res.status(400).send("Getting data. Please wait...")
   res.send({ result: history, })
 })
+app.get('/costbasis', function (req, res) {
+  if (!serverState) return res.status(400).send("Moralis server does not started yet. Please wait...")
+  hitory = 'Loading...';
+  res.send({ result: 'Loading...', })
+  getWalletCostBasis(testData)
+    .then((result) => {
+      console.log('final result', result);
+      history = result;
+      // exit(1);
+    })
+    .catch((e) => {
+      console.log('get wallet cost basis error', e);
+      // history = 'get wallet cost basis error';
+      history = {
+        message: 'get wallet cost basis error',
+        error: e
+      };
+      // exit(1);
+    });
+})
 
 console.log('moralis starting...')
 Moralis.start({ serverUrl, appId })
