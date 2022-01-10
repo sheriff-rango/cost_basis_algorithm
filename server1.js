@@ -10,6 +10,7 @@ const appId = 'rLSZFQmw1hUwtAjRnjZnce5cxu1qcPJzy01TuyU1';
 // const appId = 'ayFgiTCfWrFcBtgXqvwiLJQqSlGbnxYezYipOJQx';
 let history = null;
 let serverState = false;
+let moralisStarted = false;
 
 const DELAY = 1000;
 
@@ -28,7 +29,8 @@ app.get('/', function (req, res) {
   res.send({ result: history, })
 })
 app.get('/costbasis', function (req, res) {
-  if (!serverState) return res.status(400).send("Moralis server does not started yet. Please wait...")
+  if (!moralisStarted) return res.status(400).send("Moralis server does not started yet. Please wait...")
+  if (serverState) return res.status(400).send("Moralis server is busy at the moment. Please wait...")
   history = 'Loading...';
   res.send({ result: 'Loading...', })
   serverState = true;
@@ -56,6 +58,7 @@ Moralis.start({ serverUrl, appId })
   .then(() => {
     console.log('moralis successfully started');
     serverState = true;
+    moralisStarted = true;
     getWalletCostBasis(testData)
       .then((result) => {
         console.log('final result', result);
