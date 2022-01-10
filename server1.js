@@ -325,6 +325,7 @@ async function getWalletCostBasis(data) {
   }
 
   //Run cost basis for illiquid tokens
+  let cost_basis = 0;
   //TODO: Make this loop asynchronous using Promise.allSettled
   for (let i = 0; i < global_balances.length; i++) {
     global_balances[i].usdPrice = null;
@@ -341,10 +342,39 @@ async function getWalletCostBasis(data) {
       1,
       {}
     );
+    cost_basis = tokenHistory.cost_basis;
     returnData = returnData.concat(tokenHistory.history);
   }
 
-  return returnData.reverse();
+  // return returnData.reverse();
+  return [{
+    id: "p2",
+		chain: "Polygon",
+		chain_id: 123,
+		chain_logo: "https://debank.com/static/media/polygon.23445189.svg",
+		type: "Yield",
+		type_img: "../assets/images/yield.jpg",
+		protocol: "Kogefarm",
+		protocol_logo: "https://static.debank.com/image/project/logo_url/ftm_kogefarm/55341a6e10b63e331441928a6bb19572.png",
+		protocol_url: "https://kogefarm.io/vaults",
+		assets: [
+			{
+				id: "0x123",
+				ticker: "WMATIC",
+				logo: "https://static.debank.com/image/matic_token/logo_url/matic/e5a8a2860ba5cf740a474dcab796dc63.png"
+			},
+			{
+				id: "0x8a953cfe442c5e8855cc6c61b1293fa648bae472",
+				ticker: "POLYDOGE",
+				logo: "https://assets.coingecko.com/coins/images/15146/small/p1kSco1h_400x400.jpg?1619842715"
+			}
+		],
+		units: 123,
+		cost_basis,
+		_comment: "No cost info yet for wallet positions",
+		value: 456,
+    history: returnData.reverse(),
+  }];
 }
 
 async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hierarchy_level, parent_transaction) {
