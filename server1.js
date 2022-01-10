@@ -281,15 +281,15 @@ async function getWalletCostBasis(data) {
   let returnData = [];
 
   //Get global data
-  await Promise.all([
-    getTokenBalances(data.chain, data.wallet.toLowerCase(), data.blockheight),
-    getTokenTransfers(data.chain, data.wallet.toLowerCase(), data.blockheight),
-    getTransactions(data.chain, data.wallet.toLowerCase(), data.blockheight),
-  ]).then((result) => {
-    global_balances = result[0];
-    global_transfers = result[1];
-    global_tx = result[2];
-  });
+  // await Promise.all([
+  //   getTokenBalances(data.chain, data.wallet.toLowerCase(), data.blockheight),
+  //   getTokenTransfers(data.chain, data.wallet.toLowerCase(), data.blockheight),
+  //   getTransactions(data.chain, data.wallet.toLowerCase(), data.blockheight),
+  // ]).then((result) => {
+  //   global_balances = result[0];
+  //   global_transfers = result[1];
+  //   global_tx = result[2];
+  // });
 
   global_balances = await getTokenBalances(data.chain, data.wallet.toLowerCase(), data.blockheight);
   consoleStr = 'Getting data. Please wait... (get token balances success)';
