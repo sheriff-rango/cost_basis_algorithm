@@ -391,11 +391,12 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
   }
 
   // retrieve list of token transactions to/from wallet, prior to block
-  const token_transactions = global_transfers.filter((xfer) => xfer.address == token.address && xfer.used == undefined && Number(xfer.block_number) < Number(blockheight));
+  let token_transactions = global_transfers.filter((xfer) => xfer.address == token.address && xfer.used == undefined && Number(xfer.block_number) < Number(blockheight));
   console.log('token transactions', token_transactions.length);
 
   // process token transactions in reverse chronological order is skipped because global_transfers is already in that form
-
+  token_transactions = token_transactions.sort(sortBlockNumber_reverseChrono);
+  
   // For each transactions
   for (let i = 0; i < token_transactions.length; i++) {
     const transaction = token_transactions[i];
