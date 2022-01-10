@@ -29,7 +29,7 @@ app.get('/', function (req, res) {
 })
 app.get('/costbasis', function (req, res) {
   if (!serverState) return res.status(400).send("Moralis server does not started yet. Please wait...")
-  hitory = 'Loading...';
+  history = 'Loading...';
   res.send({ result: 'Loading...', })
   getWalletCostBasis(testData)
     .then((result) => {
