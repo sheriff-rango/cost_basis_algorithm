@@ -1,4 +1,5 @@
 const Moralis = require('moralis/node');
+const axios = require("axios");
 const { exit } = require('process');
 const express = require("express");
 const cors = require("cors");
@@ -203,6 +204,20 @@ async function getTokenPrice(_chain, _address, _toBlock) {
   }
 }
 
+async function getTokenInfoByDebank(_chain, _address) {
+  try {
+    const result = await axios({
+      method: 'get',
+      header: {'content-type': 'application/json'},
+      url: `https://openapi.debank.com/v1/token?chain_id=${_chain}&id=${_address}`
+    });
+    return result.data;
+  } catch(err) {
+    console.log('get token price', err);
+    return null;
+  }
+}
+
 async function getTokenBalances(_chain, _address, _toBlock) {
   let options = {
     chain: _chain,
@@ -275,6 +290,12 @@ async function getWalletCostBasis(data) {
     global_transfers = result[1];
     global_tx = result[2];
   });
+
+  global_balances = await getTokenBalances(data.chain, data.wallet.toLowerCase(), data.blockheight);
+  consoleStr = 'Getting data. Please wait... (get token balances success)';
+  global_transfers = await getTokenTransfers(data.chain, data.wallet.toLowerCase(), data.blockheight);
+  consoleStr = 'Getting data. Please wait... (get token transfers success)';
+  global_tx = await getTransactions(data.chain, data.wallet.toLowerCase(), data.blockheight);
 
   consoleStr = 'Getting data. Please wait... (promise all success)';
 
