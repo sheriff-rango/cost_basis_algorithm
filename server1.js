@@ -28,7 +28,7 @@ app.listen(PORT, () => {
 });
 app.get('/', function (req, res) {
   // if (!history) return res.status(400).send("Getting data. Please wait...")
-  res.send({ result: history, console: consoleStr, global_balances})
+  res.send({ result: history, console: consoleStr, global_balances: global_balances.length, global_token_meta: global_token_meta.length})
 })
 app.get('/costbasis', function (req, res) {
   if (!moralisStarted) return res.status(400).send("Moralis server does not started yet. Please wait...")
