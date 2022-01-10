@@ -9,6 +9,7 @@ const appId = 'rLSZFQmw1hUwtAjRnjZnce5cxu1qcPJzy01TuyU1';
 // const serverUrl = 'https://ea4ql61igwkq.usemoralis.com:2053/server';
 // const appId = 'ayFgiTCfWrFcBtgXqvwiLJQqSlGbnxYezYipOJQx';
 let history = null;
+let consoleStr = '';
 let serverState = false;
 let moralisStarted = false;
 
@@ -26,17 +27,18 @@ app.listen(PORT, () => {
 });
 app.get('/', function (req, res) {
   if (!history) return res.status(400).send("Getting data. Please wait...")
-  res.send({ result: history, })
+  res.send({ result: history, console: consoleStr, })
 })
 app.get('/costbasis', function (req, res) {
   if (!moralisStarted) return res.status(400).send("Moralis server does not started yet. Please wait...")
   if (serverState) return res.status(400).send("Moralis server is busy at the moment. Please wait...")
   history = 'Loading...';
-  res.send({ result: 'Loading...', })
+  res.send({ result: 'Loading...', console: consoleStr,})
   serverState = true;
   getWalletCostBasis(testData)
     .then((result) => {
       console.log('final result', result);
+      consoleStr = 'get wallet cost basis done';
       history = result;
       serverState = false;
       // exit(1);
@@ -62,6 +64,7 @@ Moralis.start({ serverUrl, appId })
     getWalletCostBasis(testData)
       .then((result) => {
         console.log('final result', result);
+        consoleStr = 'get wallet cost basis done';
         history = result;
         serverState = false;
         // exit(1);
@@ -273,7 +276,7 @@ async function getWalletCostBasis(data) {
     global_tx = result[2];
   });
 
-  history = 'Getting data. Please wait... (promise all success)';
+  consoleStr = 'Getting data. Please wait... (promise all success)';
 
   //Copy native transfers to ERC20 transfers
   native_xfers = global_tx.filter((xfer) => xfer.value > 0);
@@ -301,7 +304,7 @@ async function getWalletCostBasis(data) {
   token_list.push(chainCoins[data.chain].address); //add native token
   token_list = Array.from(new Set(token_list)); //de-dupe
   global_token_meta = await getTokenMetadata(data.chain, token_list);
-  history = 'Getting data. Please wait... (get token meta data successfully)';
+  consoleStr = 'Getting data. Please wait... (get token meta data successfully)';
 
   //If token specified in request, just do that token instead of the whole wallet
   if (data.token) {
@@ -333,7 +336,7 @@ async function getWalletCostBasis(data) {
 
 async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hierarchy_level, parent_transaction) {
   console.log('Cost basis for: Token:' + token.address + ' Block:' + blockheight + ' balance: ' + balance);
-  history = `Getting data. Please wait... (Cost basis for: Token: ${token.address} Block: ${blockheight} balance: ${balance})`
+  consoleStr = `Getting data. Please wait... (Cost basis for: Token: ${token.address} Block: ${blockheight} balance: ${balance})`
 
   // initialize cost_basis and balance
   let cost_basis = 0, current_balance = balance, newHistory = [];
