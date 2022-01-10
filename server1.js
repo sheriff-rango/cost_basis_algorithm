@@ -446,7 +446,8 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
       );
       cost_basis = cost_basis + (isReceived? 1 : -1) * getTokenCostBasisResult.cost_basis;
       // newHistory = newHistory.concat(getTokenCostBasisResult.history);
-      childHistory = childHistory.push(getTokenCostBasisResult.history);
+      // childHistory = childHistory.concat(getTokenCostBasisResult.history);
+      childHistory.push(getTokenCostBasisResult.history);
     }
     const fee_native_units = transaction_detail.gas * transaction_detail.gas_price / 10 ** (token_meta.decimals || 18);
     newHistory.push({
