@@ -445,6 +445,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
     newHistory.push({
       units: transaction.value / 10 ** (token_meta.decimals || 18),
       transaction_id: transaction.transaction_hash,
+      transaction_url: `https://polygonscan.com/tx/${transaction.transaction_hash}`,
       datetime: transaction.block_timestamp,
       token_id: token.address,
       token_name: token_meta.name,
