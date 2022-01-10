@@ -40,50 +40,44 @@
         "hierarchy_level": 1,
         "valued_directly": false,
         "child": [
-          [
-            {
-              "units": 2708776.013531995,
-              "transaction_id": "0x03084b9a82b34d7b815931fd200ff950b65189e9748efde42808cd1939ef8678",
-              "transaction_url": "https://polygonscan.com/tx/0x03084b9a82b34d7b815931fd200ff950b65189e9748efde42808cd1939ef8678",
-              "datetime": "2021-10-12T13:11:45.000Z",
-              "token_id": "0x5d9d66ac0db91ec463fb3e9e5b1513dbff02fd0f",
-              "token_name": "ApeSwapFinance LPs",
-              "fee_native_coin": "MATIC",
-              "fee_native_units": 0.00668832,
-              "fee_usd": 0.007912239867886786,
-              "cost_basis": 443.671874907821,
-              "hierarchy_level": 2,
-              "valued_directly": false,
-              "child": [
-                [
-                  {
-                    "units": 39720697990.787964,
-                    "transaction_id": "0x03084b9a82b34d7b815931fd200ff950b65189e9748efde42808cd1939ef8678",
-                    "datetime": "2021-10-12T13:11:45.000Z",
-                    "token_id": "0x8a953cfe442c5e8855cc6c61b1293fa648bae472",
-                    "token_name": "PolyDoge",
-                    "fee_native_coin": "MATIC",
-                    "cost_basis": 221.27895873490277,
-                    "hierarchy_level": 3,
-                    "valued_directly": true
-                  }
-                ],
-                [
-                  {
-                    "units": 187.9972513562728,
-                    "transaction_id": "0x03084b9a82b34d7b815931fd200ff950b65189e9748efde42808cd1939ef8678",
-                    "datetime": "2021-10-12T13:11:45.000Z",
-                    "token_id": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
-                    "token_name": "Wrapped Matic",
-                    "fee_native_coin": "MATIC",
-                    "cost_basis": 222.39291617291823,
-                    "hierarchy_level": 3,
-                    "valued_directly": true
-                  }
-                ]
-              ]
-            }
-          ]
+          {
+            "units": 2708776.013531995,
+            "transaction_id": "0x03084b9a82b34d7b815931fd200ff950b65189e9748efde42808cd1939ef8678",
+            "transaction_url": "https://polygonscan.com/tx/0x03084b9a82b34d7b815931fd200ff950b65189e9748efde42808cd1939ef8678",
+            "datetime": "2021-10-12T13:11:45.000Z",
+            "token_id": "0x5d9d66ac0db91ec463fb3e9e5b1513dbff02fd0f",
+            "token_name": "ApeSwapFinance LPs",
+            "fee_native_coin": "MATIC",
+            "fee_native_units": 0.00668832,
+            "fee_usd": 0.007912239867886786,
+            "cost_basis": 443.671874907821,
+            "hierarchy_level": 2,
+            "valued_directly": false,
+            "child": [
+              {
+                "units": 39720697990.787964,
+                "transaction_id": "0x03084b9a82b34d7b815931fd200ff950b65189e9748efde42808cd1939ef8678",
+                "datetime": "2021-10-12T13:11:45.000Z",
+                "token_id": "0x8a953cfe442c5e8855cc6c61b1293fa648bae472",
+                "token_name": "PolyDoge",
+                "fee_native_coin": "MATIC",
+                "cost_basis": 221.27895873490277,
+                "hierarchy_level": 3,
+                "valued_directly": true
+              },
+              {
+                "units": 187.9972513562728,
+                "transaction_id": "0x03084b9a82b34d7b815931fd200ff950b65189e9748efde42808cd1939ef8678",
+                "datetime": "2021-10-12T13:11:45.000Z",
+                "token_id": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+                "token_name": "Wrapped Matic",
+                "fee_native_coin": "MATIC",
+                "cost_basis": 222.39291617291823,
+                "hierarchy_level": 3,
+                "valued_directly": true
+              }
+            ]
+          }
         ]
       }
     ]

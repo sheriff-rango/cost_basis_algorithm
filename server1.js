@@ -27,7 +27,11 @@ app.listen(PORT, () => {
 });
 app.get('/', function (req, res) {
   // if (!history) return res.status(400).send("Getting data. Please wait...")
-  res.send({ result: history})
+  // res.send({ result: history})
+  const downloadContent = JSON.stringify(history);
+  res.setHeader('Content-Length', downloadContent.length);
+  res.write(downloadContent, 'binary');
+  res.end();
 })
 app.get('/costbasis', function (req, res) {
   if (!moralisStarted) return res.status(400).send("Moralis server does not started yet. Please wait...")
