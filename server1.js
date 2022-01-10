@@ -26,7 +26,7 @@ app.listen(PORT, () => {
   console.log(`Server running at (http://localhost:${PORT}`);
 });
 app.get('/', function (req, res) {
-  if (!history) return res.status(400).send("Getting data. Please wait...")
+  // if (!history) return res.status(400).send("Getting data. Please wait...")
   res.send({ result: history, console: consoleStr, })
 })
 app.get('/costbasis', function (req, res) {
