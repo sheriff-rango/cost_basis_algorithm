@@ -7,9 +7,11 @@ const cors = require("cors");
 // const serverUrl = 'https://8dyuriovbupo.usemoralis.com:2053/server';
 // const appId = 'rLSZFQmw1hUwtAjRnjZnce5cxu1qcPJzy01TuyU1';
 
-const serverUrl = 'https://ea4ql61igwkq.usemoralis.com:2053/server';
-const appId = 'ayFgiTCfWrFcBtgXqvwiLJQqSlGbnxYezYipOJQx';
+// const serverUrl = 'https://ea4ql61igwkq.usemoralis.com:2053/server';
+// const appId = 'ayFgiTCfWrFcBtgXqvwiLJQqSlGbnxYezYipOJQx';
 
+const serverUrl = 'https://nobftmga5e7k.usemoralis.com:2053/server';
+const appId = '1ECvf1IwjzCgTFYXyD44lIeVKPMgV6ZYFoUHrPwS';
 
 let history = null;
 let serverState = false;
@@ -136,6 +138,10 @@ function sortBlockNumber_reverseChrono(a, b) {
     return 1;
   }
   return 0;
+}
+
+function convertDateTime(time) {
+  return time.split('.')[0];
 }
 
 // Moralis functions
@@ -412,7 +418,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
       units: token.value / 10 ** (token_meta.decimals || 18),
       transaction_id: parent_transaction.transaction_hash,
       transaction_url: `https://polygonscan.com/tx/${parent_transaction.transaction_hash}`,
-      datetime: parent_transaction.block_timestamp,
+      datetime: convertDateTime(parent_transaction.block_timestamp),
       token_id: token.address,
       token_name: token_meta.name,
       token_img: token_info?.logo_url || '',
@@ -490,7 +496,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
       units: transaction.value / 10 ** (token_meta.decimals || 18),
       transaction_id: transaction.transaction_hash,
       transaction_url: `https://polygonscan.com/tx/${transaction.transaction_hash}`,
-      datetime: transaction.block_timestamp,
+      datetime: convertDateTime(transaction.block_timestamp),
       token_id: token.address,
       token_name: token_meta.name,
       token_img: token_info?.logo_url || '',
