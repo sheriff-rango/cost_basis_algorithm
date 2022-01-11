@@ -4,11 +4,11 @@ const { exit } = require('process');
 const express = require("express");
 const cors = require("cors");
 
-const serverUrl = 'https://8dyuriovbupo.usemoralis.com:2053/server';
-const appId = 'rLSZFQmw1hUwtAjRnjZnce5cxu1qcPJzy01TuyU1';
+// const serverUrl = 'https://8dyuriovbupo.usemoralis.com:2053/server';
+// const appId = 'rLSZFQmw1hUwtAjRnjZnce5cxu1qcPJzy01TuyU1';
 
-// const serverUrl = 'https://ea4ql61igwkq.usemoralis.com:2053/server';
-// const appId = 'ayFgiTCfWrFcBtgXqvwiLJQqSlGbnxYezYipOJQx';
+const serverUrl = 'https://ea4ql61igwkq.usemoralis.com:2053/server';
+const appId = 'ayFgiTCfWrFcBtgXqvwiLJQqSlGbnxYezYipOJQx';
 let history = null;
 let serverState = false;
 let moralisStarted = false;
