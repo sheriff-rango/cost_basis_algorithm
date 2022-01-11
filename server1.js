@@ -9,6 +9,8 @@ const cors = require("cors");
 
 const serverUrl = 'https://ea4ql61igwkq.usemoralis.com:2053/server';
 const appId = 'ayFgiTCfWrFcBtgXqvwiLJQqSlGbnxYezYipOJQx';
+
+
 let history = null;
 let serverState = false;
 let moralisStarted = false;
