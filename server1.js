@@ -3,6 +3,7 @@ const axios = require("axios");
 const { exit } = require('process');
 const express = require("express");
 const cors = require("cors");
+const clone = require('deep-clone');
 
 //server=defir_beta (preloaded with data for test wallet 0x...44a)
 // const serverUrl = "https://tjdngb7yqmm6.usemoralis.com:2053/server";
@@ -16,6 +17,25 @@ const appId = 'rLSZFQmw1hUwtAjRnjZnce5cxu1qcPJzy01TuyU1';
 
 // const serverUrl = 'https://nobftmga5e7k.usemoralis.com:2053/server';
 // const appId = '1ECvf1IwjzCgTFYXyD44lIeVKPMgV6ZYFoUHrPwS';
+
+const serverConfig = [
+  {
+    serverUrl: 'https://8dyuriovbupo.usemoralis.com:2053/server',
+    appId: 'rLSZFQmw1hUwtAjRnjZnce5cxu1qcPJzy01TuyU1',
+  },
+  {
+    serverUrl: 'https://ea4ql61igwkq.usemoralis.com:2053/server',
+    appId: 'ayFgiTCfWrFcBtgXqvwiLJQqSlGbnxYezYipOJQx',
+  },
+  {
+    serverUrl: 'https://nobftmga5e7k.usemoralis.com:2053/server',
+    appId: '1ECvf1IwjzCgTFYXyD44lIeVKPMgV6ZYFoUHrPwS',
+  },
+  {
+    serverUrl: 'https://vbzjxane7kas.usemoralis.com:2053/server',
+    appId: 't0WfujB8W5yIG984Eaa7zqIpOSX45pTGmi02dCgO', 
+  }
+]
 
 let history = null;
 let serverState = false;
@@ -66,7 +86,22 @@ app.get('/costbasis', function (req, res) {
     });
 })
 
-console.log('moralis starting...')
+let moralisServers = [];
+
+for (let i = 0; i < moralisServers.length; i++) {
+  moralisServers.push(Moralis.start(serverConfig[i]));
+  // promiseFunctions.push(moralisServers[i].start(serverConfig[i]));
+}
+
+async function start() {
+  console.log('moralis starting...')
+  await Promise.all(moralisServers).then(() => {
+    console.log('all moralis servers successfully started')
+  });
+}
+
+// start();
+
 Moralis.start({ serverUrl, appId })
   .then(() => {
     console.log('moralis successfully started');
@@ -407,6 +442,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
   const token_meta = global_token_meta.filter((meta) => meta.address == token.address)[0];
   const token_info = global_token_info_from_debank.filter((tk) => tk.id === token.address)[0];
   // console.log('token meta', token_meta);
+  console.log('token info', token_info);
 
   // get native price
   const native_price = await getTokenPrice(chain, chainCoins[chain].address, blockheight);
@@ -416,7 +452,6 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
   let price = await getTokenPrice(chain, token.address, blockheight);
   console.log('price', price);
   if (price) {
-    getTokenInfoByDebank(chain, chainCoins[chain].address)
     cost_basis = balance * price.usdPrice;
     newHistory.push({
       units: token.value / 10 ** (token_meta.decimals || 18),

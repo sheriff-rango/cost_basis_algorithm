@@ -14,9 +14,10 @@
 	},
 	"dependencies": {
 		"axios": "^0.24.0",
+		"deep-clone": "^3.0.3",
+		"express": "^4.17.2",
 		"moralis": "^0.0.176",
 		"nodemon": "^2.0.15",
-		"express": "^4.17.2",
 		"web3": "^1.6.1"
 	}
 }
