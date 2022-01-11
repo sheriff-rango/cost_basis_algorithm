@@ -5,11 +5,11 @@ const express = require("express");
 const cors = require("cors");
 
 //server=defir_beta (preloaded with data for test wallet 0x...44a)
-const serverUrl = "https://tjdngb7yqmm6.usemoralis.com:2053/server";
-const appId = "ZRFrzeWTDRmhMFszuq7VSWgM5hgJI4GOY7cY2Ebx";
+// const serverUrl = "https://tjdngb7yqmm6.usemoralis.com:2053/server";
+// const appId = "ZRFrzeWTDRmhMFszuq7VSWgM5hgJI4GOY7cY2Ebx";
 
-// const serverUrl = 'https://8dyuriovbupo.usemoralis.com:2053/server';
-// const appId = 'rLSZFQmw1hUwtAjRnjZnce5cxu1qcPJzy01TuyU1';
+const serverUrl = 'https://8dyuriovbupo.usemoralis.com:2053/server';
+const appId = 'rLSZFQmw1hUwtAjRnjZnce5cxu1qcPJzy01TuyU1';
 
 // const serverUrl = 'https://ea4ql61igwkq.usemoralis.com:2053/server';
 // const appId = 'ayFgiTCfWrFcBtgXqvwiLJQqSlGbnxYezYipOJQx';
