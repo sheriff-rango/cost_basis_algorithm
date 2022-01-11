@@ -145,6 +145,7 @@ const chainCoins = {
     decimals: 18,
     symbol: 'WMATIC',
     address: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
+    native_coin: 'MATIC',
   },
   eth: {
     chainId: 'eth',
@@ -152,6 +153,7 @@ const chainCoins = {
     decimals: 18,
     symbol: 'WETH',
     address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+    native_coin: 'ETH',
   },
   bsc: {
     chainId: 'bsc',
@@ -159,6 +161,7 @@ const chainCoins = {
     decimals: 18,
     symbol: 'WBNB',
     address: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
+    native_coin: 'BSC',
   },
 };
 
@@ -442,7 +445,6 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
   const token_meta = global_token_meta.filter((meta) => meta.address == token.address)[0];
   const token_info = global_token_info_from_debank.filter((tk) => tk.id === token.address)[0];
   // console.log('token meta', token_meta);
-  console.log('token info', token_info);
 
   // get native price
   const native_price = await getTokenPrice(chain, chainCoins[chain].address, blockheight);
@@ -461,7 +463,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
       token_id: token.address,
       token_name: token_meta.name,
       token_img: token_info?.logo_url || '',
-      fee_native_coin: 'MATIC',
+      fee_native_coin: chainCoins[chain].native_coin,
       cost_basis,
       hierarchy_level,
       valued_directly: true,
@@ -539,7 +541,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
       token_id: token.address,
       token_name: token_meta.name,
       token_img: token_info?.logo_url || '',
-      fee_native_coin: 'MATIC',
+      fee_native_coin: chainCoins[chain].native_coin,
       fee_native_units,
       fee_usd: fee_native_units * native_price.usdPrice,
       cost_basis,
