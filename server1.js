@@ -97,18 +97,21 @@ Moralis.start({ serverUrl, appId })
 // common data
 const chainCoins = {
   polygon: {
+    chainId: 'matic',
     name: 'Wrapped Matic',
     decimals: 18,
     symbol: 'WMATIC',
     address: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
   },
   eth: {
+    chainId: 'eth',
     name: 'Wrapped Ether',
     decimals: 18,
     symbol: 'WETH',
     address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
   },
   bsc: {
+    chainId: 'bsc',
     name: 'Wrapped BNB',
     decimals: 18,
     symbol: 'WBNB',
@@ -210,7 +213,7 @@ async function getTokenInfoByDebank(_chain, _address) {
     const result = await axios({
       method: 'get',
       header: {'content-type': 'application/json'},
-      url: `https://openapi.debank.com/v1/token?chain_id=${_chain}&id=${_address}`
+      url: `https://openapi.debank.com/v1/user/token_list?chain_id=${chainCoins[_chain].chainId}&id=${_address}&is_all=true`
     });
     return result.data;
   } catch(err) {
@@ -295,6 +298,7 @@ async function getWalletCostBasis(data) {
   global_balances = await getTokenBalances(data.chain, data.wallet.toLowerCase(), data.blockheight);
   global_transfers = await getTokenTransfers(data.chain, data.wallet.toLowerCase(), data.blockheight);
   global_tx = await getTransactions(data.chain, data.wallet.toLowerCase(), data.blockheight);
+  global_token_info_from_debank = await getTokenInfoByDebank(data.chain, data.wallet);
 
   //Copy native transfers to ERC20 transfers
   native_xfers = global_tx.filter((xfer) => xfer.value > 0);
@@ -389,6 +393,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
 
   // get token meta data
   const token_meta = global_token_meta.filter((meta) => meta.address == token.address)[0];
+  const token_info = global_token_info_from_debank.filter((tk) => tk.id === token.address)[0];
   // console.log('token meta', token_meta);
 
   // get native price
@@ -399,13 +404,16 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
   let price = await getTokenPrice(chain, token.address, blockheight);
   console.log('price', price);
   if (price) {
+    getTokenInfoByDebank(chain, chainCoins[chain].address)
     cost_basis = balance * price.usdPrice;
     newHistory.push({
       units: token.value / 10 ** (token_meta.decimals || 18),
       transaction_id: parent_transaction.transaction_hash,
+      transaction_url: `https://polygonscan.com/tx/${parent_transaction.transaction_hash}`,
       datetime: parent_transaction.block_timestamp,
       token_id: token.address,
       token_name: token_meta.name,
+      token_img: token_info?.logo_url || '',
       fee_native_coin: 'MATIC',
       cost_basis,
       hierarchy_level,
@@ -483,6 +491,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
       datetime: transaction.block_timestamp,
       token_id: token.address,
       token_name: token_meta.name,
+      token_img: token_info?.logo_url || '',
       fee_native_coin: 'MATIC',
       fee_native_units,
       fee_usd: fee_native_units * native_price.usdPrice,
