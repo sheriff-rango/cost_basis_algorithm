@@ -210,7 +210,6 @@ async function getTokenMetadata(_chain, _tokenAddresses) {
         chain: _chain,
         addresses: _tokenAddresses.splice(0, 10)
       }
-      console.log('get token meta data', options);
       result = await Moralis.Web3API.token.getTokenMetadata(options);
       // result = await sendRequest({
       //   apiKey: getApiKey(),
