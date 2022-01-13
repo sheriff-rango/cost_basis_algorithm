@@ -3,13 +3,9 @@ const axios = require("axios");
 const { exit } = require('process');
 const express = require("express");
 const cors = require("cors");
-const clone = require('deep-clone');
 const fs = require('fs');
 
 const sendRequest = require('./utils/fetch');
-
-// const apiKey = 'K6epf8Uh3ZlE1Q6d5fQUBbqEu1NDNOdmis0TTlvyYsRcc9im24qLDO51GAP5eto9';
-// const apiKey = 'ZvdJsqDv6WA1EfL156oHBPcAjhWzxkiL0zIIUxwOnYvmUmJDCjS2jkIKUHKmlzze';
 
 const apiKeys = [
   'K6epf8Uh3ZlE1Q6d5fQUBbqEu1NDNOdmis0TTlvyYsRcc9im24qLDO51GAP5eto9',
@@ -72,6 +68,7 @@ let testData = {
 };
 
 const DELAY = 1000;
+const TRANSACTION_MAX = 2000; // max length of fetched transaction to avoid error of rate exceed
 
 const app = express();
 app.use(cors());
@@ -178,6 +175,7 @@ function sleep(ms) {
 function getApiKey() {
   const result = apiKeys[GLOBAL_API_KEY_INDEX % apiKeys.length];
   GLOBAL_API_KEY_INDEX++;
+  console.log('api key: ', GLOBAL_API_KEY_INDEX, result);
   return result;
 }
 
@@ -241,7 +239,7 @@ async function getTransactions(_chain, _tokenAddress, _toBlock) {
     });
     if (Number(result.total) > 500) {
       let page = 1, txFunctions = [], mergeResult = result.result;
-      while (page < Math.ceil(result.total / 500)) {
+      while (page < Math.ceil(result.total / 500) && mergeResult.length <= TRANSACTION_MAX) {
         options.offset = page * 500;
         // txFunctions.push(Moralis.Web3API.account.getTransactions(options));
         txFunctions.push(sendRequest({
