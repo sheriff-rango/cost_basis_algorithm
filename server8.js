@@ -525,6 +525,7 @@ async function getWalletCostBasis(data) {
   global_balances = await getTokenBalances(data.chain, data.wallet.toLowerCase(), data.blockheight);
   global_transfers = await getTokenTransfers(data.chain, data.wallet.toLowerCase(), data.blockheight);
   global_tx = await getTransactions(data.chain, data.wallet.toLowerCase(), data.blockheight);
+  console.log('globle_tx length', global_tx.length)
   
 
   global_token_info_from_debank = await getTokenInfoByDebank(data.chain, data.wallet);
