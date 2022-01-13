@@ -7,6 +7,9 @@ const serverUrl = 'https://8dyuriovbupo.usemoralis.com:2053/server';
 const appId = 'rLSZFQmw1hUwtAjRnjZnce5cxu1qcPJzy01TuyU1';
 Moralis.start({ serverUrl, appId });
 
+function getMoralis() {
+    return Moralis;
+}
 // Moralis functions
 
 async function getTokenMetadata (_chain, _tokenAddress) {
@@ -296,4 +299,4 @@ const getTokenHistory = async (_chain, _wallet, _token, _startBlock, _endBlock, 
     return returnData;
 }
 
-module.exports = { getTokenLists, getTokenHistory, getTokenBalances, getComplexProtocolLists };
+module.exports = { getTokenLists, getTokenHistory, getTokenBalances, getComplexProtocolLists, getMoralis };

@@ -4,7 +4,19 @@ const { exit } = require('process');
 const express = require("express");
 const cors = require("cors");
 const clone = require('deep-clone');
-const { getMoralis } = require('./utils');
+const fs = require('fs');
+
+const sendRequest = require('./utils/fetch');
+
+// const apiKey = 'K6epf8Uh3ZlE1Q6d5fQUBbqEu1NDNOdmis0TTlvyYsRcc9im24qLDO51GAP5eto9';
+// const apiKey = 'ZvdJsqDv6WA1EfL156oHBPcAjhWzxkiL0zIIUxwOnYvmUmJDCjS2jkIKUHKmlzze';
+
+const apiKeys = [
+  'K6epf8Uh3ZlE1Q6d5fQUBbqEu1NDNOdmis0TTlvyYsRcc9im24qLDO51GAP5eto9',
+  'ZvdJsqDv6WA1EfL156oHBPcAjhWzxkiL0zIIUxwOnYvmUmJDCjS2jkIKUHKmlzze',
+  'ncvWaJOzaqmgCdFp7KuTqT7P1iEOt99W1lgTH4gcFC0QvdA9M1h8qivhPox84Gbw',
+  'ToPhBUKese30Env6Wz0Vcko5oRMW8Yi6KVQ685c6fT5TIcgqeCii9b0b7Fv7dKCc'
+]
 
 //server=defir_beta (preloaded with data for test wallet 0x...44a)
 // const serverUrl = "https://tjdngb7yqmm6.usemoralis.com:2053/server";
@@ -19,125 +31,9 @@ const appId = 'rLSZFQmw1hUwtAjRnjZnce5cxu1qcPJzy01TuyU1';
 // const serverUrl = 'https://nobftmga5e7k.usemoralis.com:2053/server';
 // const appId = '1ECvf1IwjzCgTFYXyD44lIeVKPMgV6ZYFoUHrPwS';
 
-const serverConfig = [
-  {
-    serverUrl: 'https://8dyuriovbupo.usemoralis.com:2053/server',
-    appId: 'rLSZFQmw1hUwtAjRnjZnce5cxu1qcPJzy01TuyU1',
-  },
-  {
-    serverUrl: 'https://ea4ql61igwkq.usemoralis.com:2053/server',
-    appId: 'ayFgiTCfWrFcBtgXqvwiLJQqSlGbnxYezYipOJQx',
-  },
-  {
-    serverUrl: 'https://nobftmga5e7k.usemoralis.com:2053/server',
-    appId: '1ECvf1IwjzCgTFYXyD44lIeVKPMgV6ZYFoUHrPwS',
-  },
-  {
-    serverUrl: 'https://vbzjxane7kas.usemoralis.com:2053/server',
-    appId: 't0WfujB8W5yIG984Eaa7zqIpOSX45pTGmi02dCgO', 
-  }
-]
-
 let history = null;
 let serverState = false;
 let moralisStarted = false;
-
-const DELAY = 1000;
-
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-const app = express();
-app.use(cors());
-const PORT = process.env?.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running at (http://localhost:${PORT}`);
-});
-app.get('/', function (req, res) {
-  // if (!history) return res.status(400).send("Getting data. Please wait...")
-  // res.send({ result: history})
-  const downloadContent = JSON.stringify(history);
-  res.setHeader('Content-Length', downloadContent.length);
-  res.write(downloadContent, 'binary');
-  res.end();
-})
-app.get('/costbasis', function (req, res) {
-  if (!moralisStarted) return res.status(400).send("Moralis server does not started yet. Please wait...")
-  if (serverState) return res.status(400).send("Moralis server is busy at the moment. Please wait...")
-  history = 'Loading...';
-  res.send({ result: 'Loading...'})
-  serverState = true;
-  getWalletCostBasis(testData)
-    .then((result) => {
-      console.log('final result', result);
-      history = result;
-      serverState = false;
-      // exit(1);
-    })
-    .catch((e) => {
-      console.log('get wallet cost basis error', e);
-      // history = 'get wallet cost basis error';
-      history = {
-        message: 'get wallet cost basis error',
-        error: e
-      };
-      serverState = false;
-      // exit(1);
-    });
-})
-
-let moralisServersRequests = [];
-
-for (let i = 0; i < serverConfig.length; i++) {
-  moralisServersRequests.push(Moralis.start(serverConfig[i]));
-  // promiseFunctions.push(moralisServersRequests[i].start(serverConfig[i]));
-}
-
-async function start() {
-  console.log('moralis starting...')
-  await Promise.all(moralisServersRequests).then(async (createdServers) => {
-    GLOBAL_MORALIS_SERVERS = createdServers;
-    console.log('here', Moralis.Web3API.serverUrl)
-    console.log('all moralis servers successfully started', createdServers.length)
-  });
-}
-
-start();
-
-// Moralis.start({ serverUrl, appId })
-//   .then(() => {
-//     console.log('moralis successfully started');
-//     serverState = true;
-//     moralisStarted = true;
-//     getWalletCostBasis(testData)
-//       .then((result) => {
-//         console.log('final result', result);
-//         history = result;
-//         serverState = false;
-//         // exit(1);
-//       })
-//       .catch((e) => {
-//         console.log('get wallet cost basis error', e);
-//         serverState = false;
-//         // history = 'get wallet cost basis error';
-//         // history = {
-//         //   message: 'get wallet cost basis error',
-//         //   error: e
-//         // };
-//         // exit(1);
-//       });
-//   })
-//   .catch((e) => {
-//     console.log('moralis start error', e);
-//     // history = 'moralis start error';
-//     history = {
-//       message: 'moralis start error',
-//       error: e
-//     };
-//     serverState = false;
-//     // exit(1);
-//   });
 
 
 // common data
@@ -175,6 +71,92 @@ let testData = {
   chain: 'polygon',
 };
 
+const DELAY = 1000;
+
+const app = express();
+app.use(cors());
+const PORT = process.env?.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running at (http://localhost:${PORT})`);
+});
+app.get('/', function (req, res) {
+  // if (!history) return res.status(400).send("Getting data. Please wait...")
+  // res.send({ result: history})
+  const downloadContent = JSON.stringify(history);
+  res.setHeader('Content-Length', downloadContent.length);
+  res.write(downloadContent, 'binary');
+  res.end();
+})
+app.get('/costbasis', function (req, res) {
+  // if (!moralisStarted) return res.status(400).send("Moralis server does not started yet. Please wait...")
+  if (serverState) return res.status(400).send("Moralis server is busy at the moment. Please wait...")
+  history = 'Loading...';
+  res.send({ result: 'Loading...'})
+  serverState = true;
+  main();
+})
+
+Moralis.start({ serverUrl, appId })
+  .then(() => {
+    console.log('moralis successfully started');
+    serverState = true;
+    moralisStarted = true;
+    getWalletCostBasis(testData)
+      .then((result) => {
+        console.log('final result ', result);
+        fs.writeFileSync('./result.json', JSON.stringify(result));
+        history = result;
+        serverState = false;
+        // exit(1);
+      })
+      .catch((e) => {
+        console.log('get wallet cost basis error', e);
+        serverState = false;
+        // history = 'get wallet cost basis error';
+        // history = {
+        //   message: 'get wallet cost basis error',
+        //   error: e
+        // };
+        // exit(1);
+      });
+  })
+  .catch((e) => {
+    console.log('moralis start error', e);
+    // history = 'moralis start error';
+    history = {
+      message: 'moralis start error',
+      error: e
+    };
+    serverState = false;
+    // exit(1);
+  });
+
+GLOBAL_API_KEY_INDEX = 0;
+serverState = true;
+function main() {
+  getWalletCostBasis(testData)
+  .then((result) => {
+    console.log('final result ', result);
+    // fs.writeFileSync('./result.json', JSON.stringify(result));
+    history = result;
+    serverState = false;
+    // exit(1);
+  })
+  .catch((e) => {
+    console.log('get wallet cost basis error', e);
+    serverState = false;
+    // history = 'get wallet cost basis error';
+    history = {
+      message: 'get wallet cost basis error',
+      error: e
+    };
+    // exit(1);
+  });
+}
+// main();
+
+
+// utils functions
 function sortBlockNumber_reverseChrono(a, b) {
   if (a.block_number > b.block_number) {
     return -1;
@@ -189,6 +171,35 @@ function convertDateTime(time) {
   return time.split('.')[0];
 }
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function getApiKey() {
+  const result = apiKeys[GLOBAL_API_KEY_INDEX % apiKeys.length];
+  GLOBAL_API_KEY_INDEX++;
+  return result;
+}
+
+function writeToFile(filename, data) {
+  fs.writeFileSync(`./_result_${filename}.json`, JSON.stringify(data))
+}
+
+
+async function getTokenInfoByDebank(_chain, _address) {
+  try {
+    const result = await axios({
+      method: 'get',
+      header: {'content-type': 'application/json'},
+      url: `https://openapi.debank.com/v1/user/token_list?chain_id=${chainCoins[_chain].chainId}&id=${_address}&is_all=true`
+    });
+    return result.data;
+  } catch(err) {
+    console.log('get token price', err);
+    return null;
+  }
+}
+
 // Moralis functions
 async function getTokenMetadata(_chain, _tokenAddresses) {
   let options;
@@ -199,7 +210,12 @@ async function getTokenMetadata(_chain, _tokenAddresses) {
         chain: _chain,
         addresses: _tokenAddresses.splice(0, 10)
       }
+      console.log('get token meta data', options);
       result = await Moralis.Web3API.token.getTokenMetadata(options);
+      // result = await sendRequest({
+      //   apiKey: getApiKey(),
+      //   url: `https://deep-index.moralis.io/api/v2/erc20/metadata?chain=${options.chain}&addresses=${options.addresses.join('&addresses=')}`
+      // })
       tokenMetadata = tokenMetadata.concat(result);
       page++;
     }
@@ -219,16 +235,24 @@ async function getTransactions(_chain, _tokenAddress, _toBlock) {
   };
   if (_toBlock) options.to_block = _toBlock;
   try {
-    const result = await Moralis.Web3API.account.getTransactions(options);
+    // const result = await Moralis.Web3API.account.getTransactions(options);
+    const result = await sendRequest({
+      apiKey: getApiKey(),
+      url: `https://deep-index.moralis.io/api/v2/${options.address}?chain=${options.chain}&to_block=${options.to_block || ''}&offset=${options.offset}`
+    });
     if (Number(result.total) > 500) {
       let page = 1, txFunctions = [], mergeResult = result.result;
       while (page < Math.ceil(result.total / 500)) {
         options.offset = page * 500;
-        txFunctions.push(Moralis.Web3API.account.getTransactions(options));
+        // txFunctions.push(Moralis.Web3API.account.getTransactions(options));
+        txFunctions.push(sendRequest({
+          apiKey: getApiKey(),
+          url: `https://deep-index.moralis.io/api/v2/${options.address}?chain=${options.chain}&to_block=${options.to_block || ''}&offset=${options.offset}`
+        }));
         if (page % 1 === 0) {
           await Promise.all(txFunctions).then(results => {
             results.map(each => {
-              mergeResult = mergeResult.concat(each.result);
+              mergeResult = mergeResult.concat(each?.result || []);
             })
           }).catch(e => console.log(e))
           txFunctions = [];
@@ -255,22 +279,12 @@ async function getTransactions(_chain, _tokenAddress, _toBlock) {
 async function getTokenPrice(_chain, _address, _toBlock) {
   const options = { address: _address, chain: _chain, to_block: _toBlock };
   try {
-    return await Moralis.Web3API.token.getTokenPrice(options);
-  } catch (e) {
-    return null;
-  }
-}
-
-async function getTokenInfoByDebank(_chain, _address) {
-  try {
-    const result = await axios({
-      method: 'get',
-      header: {'content-type': 'application/json'},
-      url: `https://openapi.debank.com/v1/user/token_list?chain_id=${chainCoins[_chain].chainId}&id=${_address}&is_all=true`
+    // return await Moralis.Web3API.token.getTokenPrice(options);
+    return await sendRequest({
+      apiKey: getApiKey(),
+      url: `https://deep-index.moralis.io/api/v2/erc20/${options.address}/price?chain=${options.chain}&to_block=${options.to_block}`
     });
-    return result.data;
-  } catch(err) {
-    console.log('get token price', err);
+  } catch (e) {
     return null;
   }
 }
@@ -283,8 +297,11 @@ async function getTokenBalances(_chain, _address, _toBlock) {
   if (_toBlock) options.to_block = _toBlock;
   try {
     // console.log('get token balances', Moralis.Web3API.account);
-    const getTokenBalancesResult = await Moralis.Web3API.account.getTokenBalances(options);
-    // console.log('get token balances result', getTokenBalancesResult);
+    // const getTokenBalancesResult = await Moralis.Web3API.account.getTokenBalances(options);
+    const getTokenBalancesResult = await sendRequest({
+      apiKey: getApiKey(),
+      url: `https://deep-index.moralis.io/api/v2/${options.address}/erc20?chain=${options.chain}&to_block=${options.to_block || ''}`
+    });
     return getTokenBalancesResult;
   } catch (e) {
     console.log('get token balances error', e);
@@ -300,13 +317,21 @@ async function getTokenTransfers(_chain, _address, _toBlock) {
   };
   if (_toBlock) options.to_block = _toBlock;
   try {
-    const result = await Moralis.Web3API.account.getTokenTransfers(options);
+    // const result = await Moralis.Web3API.account.getTokenTransfers(options);
+    const result = await sendRequest({
+      apiKey: getApiKey(),
+      url: `https://deep-index.moralis.io/api/v2/${options.address}/erc20/transfers?chain=${options.chain}&to_block=${options.to_block || ''}&offset=${options.offset}`
+    });
     // console.log('get token transfer result', result);
     if (Number(result.total) > 500) {
       let page = 1, transferFunctions = [], mergeResult = result.result;
       while (page < Math.ceil(result.total / 500)) {
         options.offset = page * 500;
-        transferFunctions.push(Moralis.Web3API.account.getTokenTransfers(options));
+        // transferFunctions.push(Moralis.Web3API.account.getTokenTransfers(options));
+        transferFunctions.push(sendRequest({
+          apiKey: getApiKey(),
+          url: `https://deep-index.moralis.io/api/v2/${options.address}/erc20/transfers?chain=${options.chain}&to_block=${options.to_block || ''}&offset=${options.offset}`
+        }));
         if (page % 1 === 0) {
           await Promise.all(transferFunctions).then(results => {
             results.map(each => {
@@ -323,12 +348,164 @@ async function getTokenTransfers(_chain, _address, _toBlock) {
             mergeResult = mergeResult.concat(each.result);
           }) 
           return mergeResult;
-        }).catch(e => console.log(e))
+        }).catch(e => console.log('get token transfers error 1', e))
       } else return mergeResult;
     }
     else return result.result;
   } catch (e) {
-    console.log('get token transfers error', e);
+    console.log('get token transfers error 2', e);
+    return null;
+  }
+}
+
+// Rest API functions
+async function getTokenMetadataRestApi(_chain, _tokenAddresses) {
+  let options;
+  try {
+    var page = 0, tokenMetadata = [], result;
+    while (page < Math.ceil(_tokenAddresses.length / 10)) {
+      options = {
+        chain: _chain,
+        addresses: _tokenAddresses.splice(0, 10)
+      }
+      // console.log('get token meta data', options);
+      result = await sendRequest({
+        apiKey: getApiKey(),
+        url: `https://deep-index.moralis.io/api/v2/erc20/metadata?chain=${options.chain}&addresses=${options.addresses.join('&addresses=')}`
+      })
+      tokenMetadata = tokenMetadata.concat(result);
+      page++;
+    }
+    return tokenMetadata;
+  } catch (e) {
+    console.log('get token meta data error', e);
+    return null;
+  }
+}
+
+async function getTransactionsRestApi(_chain, _tokenAddress, _toBlock) {
+  let options = {
+    chain: _chain,
+    address: _tokenAddress,
+    order: 'desc',
+    offset: 0
+  };
+  if (_toBlock) options.to_block = _toBlock;
+  try {
+    const result = await sendRequest({
+      apiKey: getApiKey(),
+      url: `https://deep-index.moralis.io/api/v2/${options.address}?chain=${options.chain}&to_block=${options.to_block || ''}&offset=${options.offset}`
+    });
+    if (Number(result.total) > 500) {
+      let page = 1, txFunctions = [], mergeResult = result.result;
+      while (page < Math.ceil(result.total / 500)) {
+        options.offset = page * 500;
+        txFunctions.push(sendRequest({
+          apiKey: getApiKey(),
+          url: `https://deep-index.moralis.io/api/v2/${options.address}?chain=${options.chain}&to_block=${options.to_block || ''}&offset=${options.offset}`
+        }));
+        if (page % 1 === 0) {
+          await Promise.all(txFunctions).then(results => {
+            results.map(each => {
+              mergeResult = mergeResult.concat(each?.result || []);
+            })
+          }).catch(e => console.log(e))
+          txFunctions = [];
+        }
+        page++;
+      }
+      if (txFunctions.length) {
+        await Promise.all(txFunctions).then(results => {
+          results.map(each => {
+            mergeResult = mergeResult.concat(each.result);
+          }) 
+          return mergeResult;
+        }).catch(e => console.log(e))
+      } else return mergeResult;
+    }
+    else return result.result;
+    return result.result;
+  } catch (e) {
+    console.log('get transactions error', e);
+    return null;
+  }
+}
+
+async function getTokenPriceRestApi(_chain, _address, _toBlock) {
+  const options = { address: _address, chain: _chain, to_block: _toBlock };
+  try {
+    return await sendRequest({
+      apiKey: getApiKey(),
+      url: `https://deep-index.moralis.io/api/v2/erc20/${options.address}/price?chain=${options.chain}&to_block=${options.to_block}`
+    });;
+  } catch (e) {
+    return null;
+  }
+}
+
+async function getTokenBalancesRestApi(_chain, _address, _toBlock) {
+  let options = {
+    chain: _chain,
+    address: _address
+  };
+  if (_toBlock) options.to_block = _toBlock;
+  try {
+    // console.log('get token balances', Moralis.Web3API.account);
+    const getTokenBalancesResult = await sendRequest({
+      apiKey: getApiKey(),
+      url: `https://deep-index.moralis.io/api/v2/${options.address}/erc20?chain=${options.chain}&to_block=${options.to_block || ''}`
+    });
+    return getTokenBalancesResult;
+  } catch (e) {
+    console.log('get token balances error', e);
+    return null;
+  }
+}
+
+async function getTokenTransfersRestApi(_chain, _address, _toBlock) {
+  let options = {
+    address: _address,
+    chain: _chain,
+    offset: 0
+  };
+  if (_toBlock) options.to_block = _toBlock;
+  try {
+    console.log('get token transfers', options)
+    const result = await sendRequest({
+      apiKey: getApiKey(),
+      url: `https://deep-index.moralis.io/api/v2/${options.address}/erc20/transfers?chain=${options.chain}&to_block=${options.to_block || ''}&offset=${options.offset}`
+    });
+    // console.log('get token transfer result', result);
+    if (Number(result.total) > 500) {
+      let page = 1, transferFunctions = [], mergeResult = result.result;
+      while (page < Math.ceil(result.total / 500)) {
+        options.offset = page * 500;
+        transferFunctions.push(sendRequest({
+          apiKey: getApiKey(),
+          url: `https://deep-index.moralis.io/api/v2/${options.address}/erc20/transfers?chain=${options.chain}&to_block=${options.to_block || ''}&offset=${options.offset}`
+        }));
+        if (page % 1 === 0) {
+          await Promise.all(transferFunctions).then(results => {
+            results.map(each => {
+              mergeResult = mergeResult.concat(each.result);
+            })
+          }).catch(e => console.log(e))
+          transferFunctions = [];
+        }
+        page++;
+      }
+      if (transferFunctions.length) {
+        await Promise.all(transferFunctions).then(results => {
+          results.map(each => {
+            mergeResult = mergeResult.concat(each.result);
+          }) 
+          return mergeResult;
+        }).catch(e => console.log('get token transfers error 1', e))
+      } else return mergeResult;
+    }
+    else return result.result;
+  } catch (e) {
+    console.log('get token transfers error 2', e);
     return null;
   }
 }
@@ -351,6 +528,8 @@ async function getWalletCostBasis(data) {
   global_balances = await getTokenBalances(data.chain, data.wallet.toLowerCase(), data.blockheight);
   global_transfers = await getTokenTransfers(data.chain, data.wallet.toLowerCase(), data.blockheight);
   global_tx = await getTransactions(data.chain, data.wallet.toLowerCase(), data.blockheight);
+  
+
   global_token_info_from_debank = await getTokenInfoByDebank(data.chain, data.wallet);
 
   //Copy native transfers to ERC20 transfers
@@ -380,6 +559,15 @@ async function getWalletCostBasis(data) {
   token_list = Array.from(new Set(token_list)); //de-dupe
   global_token_meta = await getTokenMetadata(data.chain, token_list);
 
+  // global_token_meta_rest = await getTokenMetadataRestApi(data.chain, token_list);
+  // writeToFile(`'getTokenMetaData_${Number(new Date())}`, {
+  //   option: {chain: data.chain, tokenList: token_list},
+  //   web3: global_token_meta,
+  //   rest: global_token_meta_rest,
+  // });
+
+  // console.log('global token meta', global_token_meta)
+
   //If token specified in request, just do that token instead of the whole wallet
   if (data.token) {
     global_balances = global_balances.filter((each) => each.token_address == data.token);
@@ -390,7 +578,7 @@ async function getWalletCostBasis(data) {
   //TODO: Make this loop asynchronous using Promise.allSettled
   for (let i = 0; i < global_balances.length; i++) {
     global_balances[i].usdPrice = null;
-    console.log('global balances', global_balances[i])
+    // console.log('global balances', global_balances[i])
     const tokenHistory = await getTokenCostBasis(
       data.chain,
       data.blockheight,
@@ -451,11 +639,11 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
 
   // get native price
   const native_price = await getTokenPrice(chain, chainCoins[chain].address, blockheight);
-  console.log('native price', native_price);
+  // console.log('native price', native_price);
 
   // confirm wether token is valued or not
   let price = await getTokenPrice(chain, token.address, blockheight);
-  console.log('price', price);
+  // console.log('price', price);
   if (price) {
     cost_basis = balance * price.usdPrice;
     newHistory.push({
@@ -471,13 +659,13 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
       hierarchy_level,
       valued_directly: true,
     })
-    console.log('Token: ' + token.address + ' Cost= ' + cost_basis);
+    // console.log('Token: ' + token.address + ' Cost= ' + cost_basis);
     return {cost_basis, history: newHistory};
   }
 
   // retrieve list of token transactions to/from wallet, prior to block
   let token_transactions = global_transfers.filter((xfer) => xfer.address == token.address && xfer.used == undefined && Number(xfer.block_number) <= Number(blockheight));
-  console.log('token transactions', token_transactions.length);
+  // console.log('token transactions', token_transactions.length);
 
   // process token transactions in reverse chronological order is skipped because global_transfers is already in that form
   token_transactions = token_transactions.sort(sortBlockNumber_reverseChrono);
@@ -485,7 +673,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
   // For each transactions
   for (let i = 0; i < token_transactions.length; i++) {
     const transaction = token_transactions[i];
-    console.log('transaction', transaction);
+    // console.log('transaction', transaction);
 
     const transaction_detail = global_tx.filter((tx) => tx.hash === transaction.transaction_hash)[0] || {};
 
@@ -503,7 +691,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
     //calculate the balance of token in wallet, just before transaction.
     const units_of_token = transaction.value / 10 ** (token_meta.decimals || 18);
     current_balance = current_balance + (isReceived? -1 : 1) * units_of_token;
-    console.log('current balance', current_balance);
+    // console.log('current balance', current_balance);
 
     // calculate the cost basis of current transaction
     const offsetting_coins = global_transfers.filter((xfer) =>
