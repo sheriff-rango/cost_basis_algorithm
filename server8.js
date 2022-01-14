@@ -202,7 +202,7 @@ function writeToFile(filename, data) {
   fs.writeFileSync(`./_result_${filename}.json`, JSON.stringify(data))
 }
 
-
+// Debank functions
 async function getTokenInfoByDebank(_chain, _address) {
   try {
     const result = await axios({
