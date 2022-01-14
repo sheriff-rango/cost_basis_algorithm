@@ -240,7 +240,7 @@ async function getTransactions(_chain, _tokenAddress, _toBlock) {
       apiKey: getApiKey(),
       url: `https://deep-index.moralis.io/api/v2/${options.address}?chain=${options.chain}&to_block=${options.to_block || ''}&offset=${options.offset}`
     });
-    if (Number(result.total) > 500) {
+    if (Number(result?.total) > 500) {
       let page = 1, txFunctions = [], mergeResult = result.result;
       while (page < Math.ceil(result.total / 500) && mergeResult.length <= TRANSACTION_MAX) {
         options.offset = page * 500;
@@ -335,7 +335,7 @@ async function getTokenTransfers(_chain, _address, _toBlock) {
         if (page % 1 === 0) {
           await Promise.all(transferFunctions).then(results => {
             results.map(each => {
-              mergeResult = mergeResult.concat(each.result);
+              mergeResult = mergeResult.concat(each?.result || []);
             })
           }).catch(e => console.log(e))
           transferFunctions = [];
@@ -528,7 +528,7 @@ async function getWalletCostBasis(data) {
   global_balances = await getTokenBalances(data.chain, data.wallet.toLowerCase(), data.blockheight);
   global_transfers = await getTokenTransfers(data.chain, data.wallet.toLowerCase(), data.blockheight);
   global_tx = await getTransactions(data.chain, data.wallet.toLowerCase(), data.blockheight);
-  console.log('globle_tx length', global_tx.length)
+  console.log('globle_tx length', global_tx?.length || 0)
   
 
   global_token_info_from_debank = await getTokenInfoByDebank(data.chain, data.wallet);
