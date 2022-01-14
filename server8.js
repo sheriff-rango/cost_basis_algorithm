@@ -329,7 +329,7 @@ async function getTokenTransfers(_chain, _address, _toBlock) {
     // console.log('get token transfer result', result);
     if (Number(result.total) > 500) {
       let page = 1, transferFunctions = [], mergeResult = result.result;
-      while (page < Math.ceil(result.total / 500)) {
+      while (page < Math.ceil(result.total / 500) && mergeResult.length <= TRANSACTION_MAX) {
         options.offset = page * 500;
         // transferFunctions.push(Moralis.Web3API.account.getTokenTransfers(options));
         transferFunctions.push(sendRequest({
