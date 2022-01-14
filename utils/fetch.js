@@ -14,7 +14,7 @@ module.exports = async function sendRequest({url, apiKey}) {
     const result = await fetch({url, headers: {'content-type': 'application/json', 'x-api-key': apiKey}, method: 'get'});
     return result.data;
   } catch (err) {
-    console.log('axios error: ', err.message, 'url: ', url);
+    console.log(`axios error at ${apiKey}: `, err.message, 'url: ', url);
     // async function retry() {
     //   setTimeout(() => {
     //     sendRequest({url, apiKey});

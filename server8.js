@@ -12,7 +12,8 @@ const apiKeys = [
   'ZvdJsqDv6WA1EfL156oHBPcAjhWzxkiL0zIIUxwOnYvmUmJDCjS2jkIKUHKmlzze',
   'ncvWaJOzaqmgCdFp7KuTqT7P1iEOt99W1lgTH4gcFC0QvdA9M1h8qivhPox84Gbw',
   'ToPhBUKese30Env6Wz0Vcko5oRMW8Yi6KVQ685c6fT5TIcgqeCii9b0b7Fv7dKCc',
-  'xgqbsMJcRSDBv3QJRDhKKb1O3FQmPNR2SFICj3XpbXFizRmuFVIkWUnJe6msefX3'
+  'xgqbsMJcRSDBv3QJRDhKKb1O3FQmPNR2SFICj3XpbXFizRmuFVIkWUnJe6msefX3',
+  '6VpvKY01acd6wWaNc4E8tDfa8acPGlUrCNhrB2Nzmxz2jEHzYx3d1GTvIdL2MXPn'
 ]
 
 //server=defir_beta (preloaded with data for test wallet 0x...44a)
