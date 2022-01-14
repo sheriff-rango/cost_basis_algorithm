@@ -69,6 +69,7 @@ const chainCoins = {
 let testData = {
   wallet: '0x704111eDBee29D79a92c4F21e70A5396AEDCc44a',
   blockheight: 20138207,
+  chain: 'polygon',
 };
 
 const DELAY = 1000;
