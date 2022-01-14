@@ -11,7 +11,8 @@ const apiKeys = [
   'K6epf8Uh3ZlE1Q6d5fQUBbqEu1NDNOdmis0TTlvyYsRcc9im24qLDO51GAP5eto9',
   'ZvdJsqDv6WA1EfL156oHBPcAjhWzxkiL0zIIUxwOnYvmUmJDCjS2jkIKUHKmlzze',
   'ncvWaJOzaqmgCdFp7KuTqT7P1iEOt99W1lgTH4gcFC0QvdA9M1h8qivhPox84Gbw',
-  'ToPhBUKese30Env6Wz0Vcko5oRMW8Yi6KVQ685c6fT5TIcgqeCii9b0b7Fv7dKCc'
+  'ToPhBUKese30Env6Wz0Vcko5oRMW8Yi6KVQ685c6fT5TIcgqeCii9b0b7Fv7dKCc',
+  'xgqbsMJcRSDBv3QJRDhKKb1O3FQmPNR2SFICj3XpbXFizRmuFVIkWUnJe6msefX3'
 ]
 
 //server=defir_beta (preloaded with data for test wallet 0x...44a)
@@ -173,6 +174,7 @@ function sleep(ms) {
 }
 
 function getApiKey() {
+  await sleep(DELAY);
   const result = apiKeys[GLOBAL_API_KEY_INDEX % apiKeys.length];
   GLOBAL_API_KEY_INDEX++;
   console.log('api key: ', GLOBAL_API_KEY_INDEX, result);
