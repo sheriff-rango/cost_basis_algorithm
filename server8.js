@@ -95,7 +95,12 @@ app.get('/costbasis', async function (req, res) {
   if (serverState) return res.status(400).send("Moralis server is busy at the moment. Please wait...")
   history = 'Loading...';
   serverState = true;
+  console.log('get costbasis request');
+  const startTime = new Date();
   const result = await getWalletCostHistory();
+  const endTime = new Date();
+  const duration  = (endTime - startTime) / 1000;
+  console.log('result in', duration, 's: ', result);
   res.send({ result, })
 })
 
