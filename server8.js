@@ -90,13 +90,13 @@ app.get('/', function (req, res) {
   res.write(downloadContent, 'binary');
   res.end();
 })
-app.get('/costbasis', function (req, res) {
+app.get('/costbasis', async function (req, res) {
   // if (!moralisStarted) return res.status(400).send("Moralis server does not started yet. Please wait...")
   if (serverState) return res.status(400).send("Moralis server is busy at the moment. Please wait...")
   history = 'Loading...';
-  res.send({ result: 'Loading...'})
   serverState = true;
-  getWalletCostHistory();
+  const result = await getWalletCostHistory();
+  res.send({ result, })
 })
 
 Moralis.start({ serverUrl, appId })
@@ -147,6 +147,7 @@ function getWalletCostHistory() {
     fs.writeFileSync('./result.json', JSON.stringify(result));
     history = result;
     serverState = false;
+    return result;
     // exit(1);
   })
   .catch((e) => {
@@ -158,6 +159,7 @@ function getWalletCostHistory() {
     //   error: e
     // };
     // exit(1);
+    return null;
   });
 }
 // main();
