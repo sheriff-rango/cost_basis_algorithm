@@ -177,7 +177,7 @@ function getApiKey() {
   await sleep(DELAY);
   const result = apiKeys[GLOBAL_API_KEY_INDEX % apiKeys.length];
   GLOBAL_API_KEY_INDEX++;
-  console.log('api key: ', GLOBAL_API_KEY_INDEX, result);
+  console.log('api key: ', GLOBAL_API_KEY_INDEX % apiKeys.length, result);
   return result;
 }
 
