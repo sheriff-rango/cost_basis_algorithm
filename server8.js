@@ -13,7 +13,11 @@ const apiKeys = [
   'ncvWaJOzaqmgCdFp7KuTqT7P1iEOt99W1lgTH4gcFC0QvdA9M1h8qivhPox84Gbw',
   'ToPhBUKese30Env6Wz0Vcko5oRMW8Yi6KVQ685c6fT5TIcgqeCii9b0b7Fv7dKCc',
   'xgqbsMJcRSDBv3QJRDhKKb1O3FQmPNR2SFICj3XpbXFizRmuFVIkWUnJe6msefX3',
-  '6VpvKY01acd6wWaNc4E8tDfa8acPGlUrCNhrB2Nzmxz2jEHzYx3d1GTvIdL2MXPn'
+  '6VpvKY01acd6wWaNc4E8tDfa8acPGlUrCNhrB2Nzmxz2jEHzYx3d1GTvIdL2MXPn',
+  'IT6Gaj3LZxFWkjXkdgxTqA7HlyDMDy5oZUO1oDAQLi1aLkETgNZcHV7yI4mOZjmB',
+  'bTPO9xE2un2yW33Z0v6AGkxH0E58ixzJk1FvBzLls11UhuilQrtWNkcCVl888JlQ',
+  'D8Cmgo0Y3veZwCvru3IqE2Z46UnC2fGsk0feLmXkHKiWY6K4g5MccWsxuwFjrXL7',
+  'zrdRW3z8YbmHVXzRHFh4wIbwmrJs9FQgdOVXbGw4ZWc52OiVCYqbQkR8NxoTgEV1'
 ]
 
 //server=defir_beta (preloaded with data for test wallet 0x...44a)
