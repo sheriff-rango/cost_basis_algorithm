@@ -591,7 +591,7 @@ async function getWalletCostBasis(data) {
   //   global_balances = global_balances.filter((each) => each.token_address == data.token);
   // }
   global_balances = global_balances.filter((each) => tokenList.includes(each.token_address));
-  console.log('GLOBAL_BALANCE', global_balance.length)
+  console.log('GLOBAL_BALANCE', global_balances.length)
 
   //Run cost basis for illiquid tokens
   let cost_basis = 0;
