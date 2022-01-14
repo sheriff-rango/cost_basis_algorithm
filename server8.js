@@ -268,8 +268,8 @@ async function getTransactions(_chain, _tokenAddress, _toBlock) {
         }).catch(e => console.log(e))
       } else return mergeResult;
     }
-    else return result.result;
-    return result.result;
+    else return result?.result;
+    return result?.result;
   } catch (e) {
     console.log('get transactions error', e);
     return null;
