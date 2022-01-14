@@ -96,7 +96,7 @@ app.get('/costbasis', function (req, res) {
   history = 'Loading...';
   res.send({ result: 'Loading...'})
   serverState = true;
-  main();
+  getWalletCostHistory();
 })
 
 Moralis.start({ serverUrl, appId })
@@ -104,24 +104,7 @@ Moralis.start({ serverUrl, appId })
     console.log('moralis successfully started');
     serverState = true;
     moralisStarted = true;
-    getWalletCostBasis(testData)
-      .then((result) => {
-        console.log('final result ', result);
-        fs.writeFileSync('./result.json', JSON.stringify(result));
-        history = result;
-        serverState = false;
-        // exit(1);
-      })
-      .catch((e) => {
-        console.log('get wallet cost basis error', e);
-        serverState = false;
-        // history = 'get wallet cost basis error';
-        // history = {
-        //   message: 'get wallet cost basis error',
-        //   error: e
-        // };
-        // exit(1);
-      });
+    getWalletCostHistory();
   })
   .catch((e) => {
     console.log('moralis start error', e);
@@ -153,6 +136,27 @@ function main() {
       message: 'get wallet cost basis error',
       error: e
     };
+    // exit(1);
+  });
+}
+
+function getWalletCostHistory() {
+  getWalletCostBasis(testData)
+  .then((result) => {
+    console.log('final result ', result);
+    fs.writeFileSync('./result.json', JSON.stringify(result));
+    history = result;
+    serverState = false;
+    // exit(1);
+  })
+  .catch((e) => {
+    console.log('get wallet cost basis error', e);
+    serverState = false;
+    // history = 'get wallet cost basis error';
+    // history = {
+    //   message: 'get wallet cost basis error',
+    //   error: e
+    // };
     // exit(1);
   });
 }
