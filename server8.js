@@ -90,18 +90,19 @@ app.get('/', function (req, res) {
   res.write(downloadContent, 'binary');
   res.end();
 })
-app.get('/costbasis', async function (req, res) {
+app.get('/costbasis', function (req, res) {
   // if (!moralisStarted) return res.status(400).send("Moralis server does not started yet. Please wait...")
   if (serverState) return res.status(400).send("Moralis server is busy at the moment. Please wait...")
   history = 'Loading...';
   serverState = true;
   console.log('get costbasis request');
   const startTime = new Date();
-  const result = await getWalletCostHistory();
-  const endTime = new Date();
-  const duration  = (endTime - startTime) / 1000;
-  console.log('result in', duration, 's: ', result);
-  res.send({ result, })
+  getWalletCostHistory((result) => {
+    const endTime = new Date();
+    const duration  = (endTime - startTime) / 1000;
+    console.log('result in', duration, 's: ', result);
+    res.send({ result, })
+  });
 })
 
 Moralis.start({ serverUrl, appId })
@@ -145,14 +146,14 @@ function main() {
   });
 }
 
-function getWalletCostHistory() {
+function getWalletCostHistory(callback) {
   getWalletCostBasis(testData)
   .then((result) => {
     console.log('final result ', result);
     fs.writeFileSync('./result.json', JSON.stringify(result));
     history = result;
     serverState = false;
-    return result;
+    if (callback) callback(result);
     // exit(1);
   })
   .catch((e) => {
@@ -164,7 +165,7 @@ function getWalletCostHistory() {
     //   error: e
     // };
     // exit(1);
-    return null;
+    if (callback) callback(null);
   });
 }
 // main();
