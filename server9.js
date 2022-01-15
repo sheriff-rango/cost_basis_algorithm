@@ -231,7 +231,7 @@ async function getTokenMetadata(_chain, _tokenAddresses) {
     return tokenMetadata;
   } catch (e) {
     console.log('get token meta data error', e);
-    return null;
+    return [];
   }
 }
 
@@ -277,11 +277,11 @@ async function getTransactions(_chain, _tokenAddress, _toBlock) {
         }).catch(e => console.log(e))
       } else return mergeResult;
     }
-    else return result?.result;
-    return result?.result;
+    else return result?.result || [];
+    return result?.result || [];
   } catch (e) {
     console.log('get transactions error', e);
-    return null;
+    return [];
   }
 }
 
