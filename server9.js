@@ -539,22 +539,23 @@ async function getWalletCostBasis(data) {
   global_token_info_from_debank = [];
 
   const walletChainlist = (await getWalletBalanceByDebank(data.wallet)).chain_list;
-  let tokenList = [], chainIdList = [];
+  let tokenList = [], chainIdList = [], chainIdListForMoralis = [];
   const filteredBalance = walletChainlist.filter(chain => {
     const matched = chain.usd_value > 0;
     if (matched) {
       tokenList.push(chain.wrapped_token_id);
-      chainIdList.push(chain.id === 'eth'? 'eth' : chain.name.toLowerCase());
+      chainIdList.push(chain.id);
+      chainIdListForMoralis.push(chain.id === 'eth'? 'eth' : chain.name.toLowerCase());
     }
     return matched;
   })
-  console.log('chain list =', chainIdList)
-  console.log('toke list =', tokenList)
-  /** 
-   
-   for (let i =0; i < chainIdList.length; i++) {
-     const crrTokenList = await getWalletTokenListByDebank(chainIdList[i], data.wallet);
-     crrTokenList.map(tokenItem => tokenList.push(tokenItem.id));
+  
+  for (let i =0; i < chainIdList.length; i++) {
+    const crrTokenList = await getWalletTokenListByDebank(chainIdList[i], data.wallet);
+    console.log(`token list of ${chainIdList[i]} = `, crrTokenList)
+  }
+    /** 
+    crrTokenList.map(tokenItem => tokenList.push(tokenItem.id));
      // tokenList.concat(crrTokenList);
      global_balances = global_balances.concat(await getTokenBalances(chainIdList[i], data.wallet.toLowerCase(), data.blockheight));
      global_transfers = global_transfers.concat(await getTokenTransfers(data.chain, data.wallet.toLowerCase(), data.blockheight));
