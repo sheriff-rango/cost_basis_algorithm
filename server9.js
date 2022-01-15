@@ -539,13 +539,12 @@ async function getWalletCostBasis(data) {
   global_token_info_from_debank = [];
 
   const walletChainlist = (await getWalletBalanceByDebank(data.wallet)).chain_list;
-  console.log('wallet balance =', walletChainlist)
   let tokenList = [], chainIdList = [];
   const filteredBalance = walletChainlist.filter(chain => {
     const matched = chain.usd_value > 0;
     if (matched) {
       tokenList.push(chain.wrapped_token_id);
-      chainIdList.push(chain.id)
+      chainIdList.push(chain.id === 'eth'? 'eth' : chain.name.toLowerCase());
     }
     return matched;
   })
