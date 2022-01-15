@@ -566,7 +566,6 @@ async function getWalletCostBasis(data) {
 
   global_token_info_from_debank = await getWalletTokenListByDebank(chainCoins[data.chain].chainId, data.wallet);
 
-   */
 
   //Copy native transfers to ERC20 transfers
   native_xfers = global_tx.filter((xfer) => xfer.value > 0);
@@ -662,6 +661,7 @@ async function getWalletCostBasis(data) {
 		value: 456,
     history: returnData.reverse(),
   }];
+   */
 }
 
 async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hierarchy_level, parent_transaction) {
