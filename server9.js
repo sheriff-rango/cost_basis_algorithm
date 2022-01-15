@@ -555,14 +555,13 @@ async function getWalletCostBasis(data) {
     global_token_info_from_debank = global_token_info_from_debank.concat(crrTokenList);
     
     crrTokenList.map(tokenItem => {if (tokenItem.id.substr(0, 2) === '0x') tokenList.push(tokenItem.id)});
+    global_balances = global_balances.concat(await getTokenBalances(chainIdList[i], data.wallet.toLowerCase(), data.blockheight));
+    global_transfers = global_transfers.concat(await getTokenTransfers(data.chain, data.wallet.toLowerCase(), data.blockheight));
+    const crrTx = await getTransactions(data.chain, data.wallet.toLowerCase(), data.blockheight);
+    global_tx = global_tx.concat(crrTx);
+    console.log('global balances = ', global_balances.length, 'global transfers = ', global_transfers.length, 'global tx = ', global_tx.length)
   }
-  console.log('token list = ', tokenList)
     /** 
-     // tokenList.concat(crrTokenList);
-     global_balances = global_balances.concat(await getTokenBalances(chainIdList[i], data.wallet.toLowerCase(), data.blockheight));
-     global_transfers = global_transfers.concat(await getTokenTransfers(data.chain, data.wallet.toLowerCase(), data.blockheight));
-     const crrTx = await getTransactions(data.chain, data.wallet.toLowerCase(), data.blockheight);
-     global_tx = global_tx.concat(crrTx);
      
      //Copy native transfers to ERC20 transfers
      const native_xfers = crrTx.filter((xfer) => xfer.value > 0);
