@@ -67,7 +67,8 @@ const chainCoins = {
 };
 
 let testData = {
-  wallet: '0x704111eDBee29D79a92c4F21e70A5396AEDCc44a',
+  wallet: '0xA85974BF3e80a2D3E5AAE6b223D7EDB7A1C73488',
+  // wallet: '0x704111eDBee29D79a92c4F21e70A5396AEDCc44a',
   blockheight: 20138207,
   chain: 'polygon',
 };
@@ -561,7 +562,6 @@ async function getWalletCostBasis(data) {
     global_balances = global_balances.concat(await getTokenBalances(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight));
     global_transfers = global_transfers.concat(await getTokenTransfers(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight));
     const crrTx = await getTransactions(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight);
-    console.log('current tx', crrTx?.length || crrTx);
     global_tx = global_tx.concat(crrTx);
     
     //Copy native transfers to ERC20 transfers
