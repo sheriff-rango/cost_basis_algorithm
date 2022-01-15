@@ -581,12 +581,9 @@ async function getWalletCostBasis(data) {
         gas_price: tx.gas_price
       });
     }
-    console.log('global balances = ', global_balances.length, 'global transfers = ', global_transfers.length, 'global tx = ', global_tx.length)
     //Get token metadata
     global_token_meta = global_token_meta.concat(await getTokenMetadata(chainIdListForMoralis[i], addedTokenList));
   }
-  console.log('global token meta = ', global_token_meta)
-  console.log('total', global_token_meta.length)
 
     /**
     global_balances = await getTokenBalances(data.chain, data.wallet.toLowerCase(), data.blockheight);
@@ -601,24 +598,11 @@ async function getWalletCostBasis(data) {
  //Sort global_transfers reverse-chronological by block_number
   global_transfers = global_transfers.sort(sortBlockNumber_reverseChrono);
  
-  /**
-  
-  // global_token_meta_rest = await getTokenMetadataRestApi(data.chain, token_list);
-  // writeToFile(`getTokenMetaData_${Number(new Date())}`, {
-    //   option: {chain: data.chain, tokenList: token_list},
-  //   web3: global_token_meta,
-  //   rest: global_token_meta_rest,
-  // });
-  
-  // console.log('global token meta', global_token_meta)
-  
-  // If token specified in request, just do that token instead of the whole wallet
-  // if (data.token) {
-    //   global_balances = global_balances.filter((each) => each.token_address == data.token);
-  // }
+  console.log('GLOBAL_BALANCE BEFORE FILTER', global_balances.length)
   global_balances = global_balances.filter((each) => each && tokenList.includes(each.token_address));
-  console.log('GLOBAL_BALANCE', global_balances.length)
-
+  console.log('GLOBAL_BALANCE AFTER FILTER', global_balances.length)
+  
+  /**
   //Run cost basis for illiquid tokens
   let cost_basis = 0;
   //TODO: Make this loop asynchronous using Promise.allSettled
