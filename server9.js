@@ -211,6 +211,7 @@ async function getWalletTokenListByDebank(_chain, _address) {
 
 // Moralis functions
 async function getTokenMetadata(_chain, _tokenAddresses) {
+  if (_chain.substr(0, 2) !== '0x') return [];
   let options;
   try {
     var page = 0, tokenMetadata = [], result;
