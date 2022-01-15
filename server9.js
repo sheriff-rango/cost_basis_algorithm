@@ -548,7 +548,7 @@ async function getWalletCostBasis(data) {
     }
     return matched;
   })
-  console.log('chain list=', chainList, 'toke list =', tokenList)
+  console.log('chain list=', chainIdList, 'toke list =', tokenList)
   /** 
    
    for (let i =0; i < chainIdList.length; i++) {
