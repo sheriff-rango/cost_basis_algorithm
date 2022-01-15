@@ -559,7 +559,6 @@ async function getWalletCostBasis(data) {
     global_transfers = global_transfers.concat(await getTokenTransfers(data.chain, data.wallet.toLowerCase(), data.blockheight));
     const crrTx = await getTransactions(data.chain, data.wallet.toLowerCase(), data.blockheight);
     global_tx = global_tx.concat(crrTx);
-    console.log('global balances = ', global_balances.length, 'global transfers = ', global_transfers.length, 'global tx = ', global_tx.length)
     
     //Copy native transfers to ERC20 transfers
     const native_xfers = crrTx.filter((xfer) => xfer.value > 0);
@@ -578,31 +577,27 @@ async function getWalletCostBasis(data) {
         gas_price: tx.gas_price
       });
     }
-    console.log('global transfers again = ', global_transfers.length)
   }
-    /** 
-    
-    }
-    console.log('token list', tokenList)
-    */
 
     /**
-  global_balances = await getTokenBalances(data.chain, data.wallet.toLowerCase(), data.blockheight);
-  global_transfers = await getTokenTransfers(data.chain, data.wallet.toLowerCase(), data.blockheight);
-  global_tx = await getTransactions(data.chain, data.wallet.toLowerCase(), data.blockheight);
-  console.log('globle_tx length', global_tx?.length || 0)
-  
-  global_token_info_from_debank = await getWalletTokenListByDebank(chainCoins[data.chain].chainId, data.wallet);
+    global_balances = await getTokenBalances(data.chain, data.wallet.toLowerCase(), data.blockheight);
+    global_transfers = await getTokenTransfers(data.chain, data.wallet.toLowerCase(), data.blockheight);
+    global_tx = await getTransactions(data.chain, data.wallet.toLowerCase(), data.blockheight);
+    console.log('globle_tx length', global_tx?.length || 0)
 
+    global_token_info_from_debank = await getWalletTokenListByDebank(chainCoins[data.chain].chainId, data.wallet);
   
-  //Sort global_transfers reverse-chronological by block_number
+  */
+ 
+ //Sort global_transfers reverse-chronological by block_number
   global_transfers = global_transfers.sort(sortBlockNumber_reverseChrono);
+ 
   
   //Get token metadata
-  // var token_list = global_transfers.map((xfer) => xfer.address);
-  // token_list.push(chainCoins[data.chain].address); //add native token
-  // token_list = Array.from(new Set(token_list)); //de-dupe
   global_token_meta = await getTokenMetadata(data.chain, tokenList);
+  console.log('global token meta = ', global_token_meta)
+  console.log('total', global_token_meta.length)
+  /**
   
   // global_token_meta_rest = await getTokenMetadataRestApi(data.chain, token_list);
   // writeToFile(`getTokenMetaData_${Number(new Date())}`, {
