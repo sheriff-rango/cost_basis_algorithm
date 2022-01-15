@@ -211,7 +211,6 @@ async function getWalletTokenListByDebank(_chain, _address) {
 
 // Moralis functions
 async function getTokenMetadata(_chain, _tokenAddresses) {
-  if (_chain.substr(0, 2) !== '0x') return [];
   let options;
   try {
     var page = 0, tokenMetadata = [], result;
@@ -228,7 +227,6 @@ async function getTokenMetadata(_chain, _tokenAddresses) {
       tokenMetadata = tokenMetadata.concat(result);
       page++;
     }
-    console.log('get token meta data', options, tokenMetadata)
     return tokenMetadata;
   } catch (e) {
     console.log('get token meta data error', e);
@@ -587,6 +585,8 @@ async function getWalletCostBasis(data) {
     //Get token metadata
     global_token_meta = global_token_meta.concat(await getTokenMetadata(chainIdListForMoralis[i], addedTokenList));
   }
+  console.log('global token meta = ', global_token_meta)
+  console.log('total', global_token_meta.length)
 
     /**
     global_balances = await getTokenBalances(data.chain, data.wallet.toLowerCase(), data.blockheight);
@@ -601,9 +601,6 @@ async function getWalletCostBasis(data) {
  //Sort global_transfers reverse-chronological by block_number
   global_transfers = global_transfers.sort(sortBlockNumber_reverseChrono);
  
-  
-  console.log('global token meta = ', global_token_meta)
-  console.log('total', global_token_meta.length)
   /**
   
   // global_token_meta_rest = await getTokenMetadataRestApi(data.chain, token_list);
