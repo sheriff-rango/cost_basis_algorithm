@@ -559,6 +559,7 @@ async function getWalletCostBasis(data) {
     global_balances = global_balances.concat(await getTokenBalances(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight));
     global_transfers = global_transfers.concat(await getTokenTransfers(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight));
     const crrTx = await getTransactions(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight);
+    console.log('current tx', crrTx);
     global_tx = global_tx.concat(crrTx);
     
     //Copy native transfers to ERC20 transfers
