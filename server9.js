@@ -124,7 +124,6 @@ Moralis.start({ serverUrl, appId })
     // exit(1);
   });
 
-
 function getWalletCostHistory(callback) {
   getWalletCostBasis(testData)
   .then((result) => {
@@ -182,12 +181,12 @@ function writeToFile(filename, data) {
 }
 
 // Debank functions
-async function getTokenInfoByDebank(_chain, _address) {
+async function getWalletBalanceByDebank(_address) {
   try {
     const result = await axios({
       method: 'get',
       header: {'content-type': 'application/json'},
-      url: `https://openapi.debank.com/v1/user/token_list?chain_id=${chainCoins[_chain].chainId}&id=${_address}&is_all=true`
+      url: `https://openapi.debank.com/v1/user/total_balance?id=${_address}`
     });
     return result.data;
   } catch(err) {
@@ -196,12 +195,12 @@ async function getTokenInfoByDebank(_chain, _address) {
   }
 }
 
-async function getWalletBalanceByDebank(_address) {
+async function getWalletTokenListByDebank(_chain, _address) {
   try {
     const result = await axios({
       method: 'get',
       header: {'content-type': 'application/json'},
-      url: `https://openapi.debank.com/v1/user/total_balance?id=${_address}`
+      url: `https://openapi.debank.com/v1/user/token_list?id=${_address}&chain_id=${_chain}&is_all=false`
     });
     return result.data;
   } catch(err) {
@@ -534,21 +533,32 @@ async function getWalletCostBasis(data) {
   //   global_tx = result[2];
   // });
 
-  const walletBalance = (await getWalletBalanceByDebank(data.wallet)).chain_list;
-  let tokenList = [];
-  const filteredBalance = walletBalance.filter(balance => {
-    const matched = balance.usd_value > 0;
-    if (matched) tokenList.push(balance.wrapped_token_id);
+  const walletChainlist = (await getWalletBalanceByDebank(data.wallet)).chain_list;
+  let tokenList = [], chainIdList = [];
+  const filteredBalance = walletChainlist.filter(chain => {
+    const matched = chain.usd_value > 0;
+    if (matched) {
+      tokenList.push(chain.wrapped_token_id);
+      chainIdList.push(chain.id)
+    }
     return matched;
   })
-
+  for (let i =0; i < chainIdList.length; i++) {
+    const crrTokenList = await getWalletTokenListByDebank(chainIdList[i], data.wallet);
+    crrTokenList.map(tokenItem => tokenList.push(tokenItem.id));
+    tokenList.concat(crrTokenList);
+    global_balances = (global_balances || []).concat(await getTokenBalances(chainIdList[i], data.wallet.toLowerCase(), data.blockheight))
+    console.log(chainIdList[i], ':', crrTokenList.length, global_balances.length);
+  }
+  console.log('token list', tokenList)
+  /**
   global_balances = await getTokenBalances(data.chain, data.wallet.toLowerCase(), data.blockheight);
   global_transfers = await getTokenTransfers(data.chain, data.wallet.toLowerCase(), data.blockheight);
   global_tx = await getTransactions(data.chain, data.wallet.toLowerCase(), data.blockheight);
   console.log('globle_tx length', global_tx?.length || 0)
   
 
-  global_token_info_from_debank = await getTokenInfoByDebank(data.chain, data.wallet);
+  global_token_info_from_debank = await getWalletTokenListByDebank(chainCoins[data.chain].chainId, data.wallet);
 
   //Copy native transfers to ERC20 transfers
   native_xfers = global_tx.filter((xfer) => xfer.value > 0);
@@ -578,7 +588,7 @@ async function getWalletCostBasis(data) {
   global_token_meta = await getTokenMetadata(data.chain, token_list);
 
   // global_token_meta_rest = await getTokenMetadataRestApi(data.chain, token_list);
-  // writeToFile(`'getTokenMetaData_${Number(new Date())}`, {
+  // writeToFile(`getTokenMetaData_${Number(new Date())}`, {
   //   option: {chain: data.chain, tokenList: token_list},
   //   web3: global_token_meta,
   //   rest: global_token_meta_rest,
@@ -586,7 +596,7 @@ async function getWalletCostBasis(data) {
 
   // console.log('global token meta', global_token_meta)
 
-  //If token specified in request, just do that token instead of the whole wallet
+  // If token specified in request, just do that token instead of the whole wallet
   // if (data.token) {
   //   global_balances = global_balances.filter((each) => each.token_address == data.token);
   // }
@@ -644,6 +654,7 @@ async function getWalletCostBasis(data) {
 		value: 456,
     history: returnData.reverse(),
   }];
+   */
 }
 
 async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hierarchy_level, parent_transaction) {
