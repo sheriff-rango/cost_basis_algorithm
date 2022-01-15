@@ -548,37 +548,42 @@ async function getWalletCostBasis(data) {
     }
     return matched;
   })
-  for (let i =0; i < chainIdList.length; i++) {
-    const crrTokenList = await getWalletTokenListByDebank(chainIdList[i], data.wallet);
-    crrTokenList.map(tokenItem => tokenList.push(tokenItem.id));
-    // tokenList.concat(crrTokenList);
-    global_balances = global_balances.concat(await getTokenBalances(chainIdList[i], data.wallet.toLowerCase(), data.blockheight));
-    global_transfers = global_transfers.concat(await getTokenTransfers(data.chain, data.wallet.toLowerCase(), data.blockheight));
-    const crrTx = await getTransactions(data.chain, data.wallet.toLowerCase(), data.blockheight);
-    global_tx = global_tx.concat(crrTx);
-
-    //Copy native transfers to ERC20 transfers
-    const native_xfers = crrTx.filter((xfer) => xfer.value > 0);
-    for (let i = 0; i < native_xfers.length; i++) {
-      const tx = native_xfers[i];
-      global_transfers.push({
-        address: chainIdList[i], //token address = wmatic
-        block_hash: tx.block_hash,
-        block_number: tx.block_number,
-        block_timestamp: tx.block_timestamp,
-        from_address: tx.from_address,
-        to_address: tx.to_address,
-        transaction_hash: tx.hash,
-        value: tx.value, //tx value
-        gas: tx.gas,
-        gas_price: tx.gas_price
-      });
+  console.log('chain list=', chainList, 'toke list =', tokenList)
+  /** 
+   
+   for (let i =0; i < chainIdList.length; i++) {
+     const crrTokenList = await getWalletTokenListByDebank(chainIdList[i], data.wallet);
+     crrTokenList.map(tokenItem => tokenList.push(tokenItem.id));
+     // tokenList.concat(crrTokenList);
+     global_balances = global_balances.concat(await getTokenBalances(chainIdList[i], data.wallet.toLowerCase(), data.blockheight));
+     global_transfers = global_transfers.concat(await getTokenTransfers(data.chain, data.wallet.toLowerCase(), data.blockheight));
+     const crrTx = await getTransactions(data.chain, data.wallet.toLowerCase(), data.blockheight);
+     global_tx = global_tx.concat(crrTx);
+     
+     //Copy native transfers to ERC20 transfers
+     const native_xfers = crrTx.filter((xfer) => xfer.value > 0);
+     for (let i = 0; i < native_xfers.length; i++) {
+       const tx = native_xfers[i];
+       global_transfers.push({
+         address: chainIdList[i], //token address = wmatic
+         block_hash: tx.block_hash,
+         block_number: tx.block_number,
+         block_timestamp: tx.block_timestamp,
+         from_address: tx.from_address,
+         to_address: tx.to_address,
+         transaction_hash: tx.hash,
+         value: tx.value, //tx value
+         gas: tx.gas,
+         gas_price: tx.gas_price
+        });
+      }
+      
+      global_token_info_from_debank = global_token_info_from_debank.concat(crrTokenList);
     }
+    console.log('token list', tokenList)
+    */
 
-    global_token_info_from_debank = global_token_info_from_debank.concat(crrTokenList);
-  }
-  console.log('token list', tokenList)
-  /**
+    /**
   global_balances = await getTokenBalances(data.chain, data.wallet.toLowerCase(), data.blockheight);
   global_transfers = await getTokenTransfers(data.chain, data.wallet.toLowerCase(), data.blockheight);
   global_tx = await getTransactions(data.chain, data.wallet.toLowerCase(), data.blockheight);
