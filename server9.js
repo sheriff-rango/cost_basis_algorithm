@@ -228,6 +228,7 @@ async function getTokenMetadata(_chain, _tokenAddresses) {
       tokenMetadata = tokenMetadata.concat(result);
       page++;
     }
+    console.log('get token meta data', options, tokenMetadata)
     return tokenMetadata;
   } catch (e) {
     console.log('get token meta data error', e);
@@ -555,7 +556,10 @@ async function getWalletCostBasis(data) {
     const crrTokenList = await getWalletTokenListByDebank(chainIdList[i], data.wallet);
     global_token_info_from_debank = global_token_info_from_debank.concat(crrTokenList);
     
-    crrTokenList.map(tokenItem => {if (tokenItem.id.substr(0, 2) === '0x') tokenList.push(tokenItem.id)});
+    let addedTokenList = [];
+    crrTokenList.map(tokenItem => {if (tokenItem.id.substr(0, 2) === '0x') addedTokenList.push(tokenItem.id)});
+    tokenList = tokenList.concat(addedTokenList);
+
     global_balances = global_balances.concat(await getTokenBalances(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight));
     global_transfers = global_transfers.concat(await getTokenTransfers(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight));
     const crrTx = await getTransactions(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight);
@@ -581,7 +585,7 @@ async function getWalletCostBasis(data) {
     }
     console.log('global balances = ', global_balances.length, 'global transfers = ', global_transfers.length, 'global tx = ', global_tx.length)
     //Get token metadata
-    global_token_meta = global_token_meta.concat(await getTokenMetadata(chainIdListForMoralis[i], tokenList));
+    global_token_meta = global_token_meta.concat(await getTokenMetadata(chainIdListForMoralis[i], addedTokenList));
   }
 
     /**
