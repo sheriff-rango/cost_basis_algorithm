@@ -591,29 +591,28 @@ async function getWalletCostBasis(data) {
   
   global_token_info_from_debank = await getWalletTokenListByDebank(chainCoins[data.chain].chainId, data.wallet);
 
-  */
-
+  
   //Sort global_transfers reverse-chronological by block_number
   global_transfers = global_transfers.sort(sortBlockNumber_reverseChrono);
-
+  
   //Get token metadata
   // var token_list = global_transfers.map((xfer) => xfer.address);
   // token_list.push(chainCoins[data.chain].address); //add native token
   // token_list = Array.from(new Set(token_list)); //de-dupe
   global_token_meta = await getTokenMetadata(data.chain, tokenList);
-
+  
   // global_token_meta_rest = await getTokenMetadataRestApi(data.chain, token_list);
   // writeToFile(`getTokenMetaData_${Number(new Date())}`, {
-  //   option: {chain: data.chain, tokenList: token_list},
+    //   option: {chain: data.chain, tokenList: token_list},
   //   web3: global_token_meta,
   //   rest: global_token_meta_rest,
   // });
-
+  
   // console.log('global token meta', global_token_meta)
-
+  
   // If token specified in request, just do that token instead of the whole wallet
   // if (data.token) {
-  //   global_balances = global_balances.filter((each) => each.token_address == data.token);
+    //   global_balances = global_balances.filter((each) => each.token_address == data.token);
   // }
   global_balances = global_balances.filter((each) => each && tokenList.includes(each.token_address));
   console.log('GLOBAL_BALANCE', global_balances.length)
@@ -668,6 +667,7 @@ async function getWalletCostBasis(data) {
       history: returnData.reverse(),
     })
   }
+  */
   return result;
 }
 
