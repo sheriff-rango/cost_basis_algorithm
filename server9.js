@@ -539,6 +539,7 @@ async function getWalletCostBasis(data) {
   global_token_info_from_debank = [];
 
   const walletChainlist = (await getWalletBalanceByDebank(data.wallet)).chain_list;
+  console.log('wallet balance =', walletChainlist)
   let tokenList = [], chainIdList = [];
   const filteredBalance = walletChainlist.filter(chain => {
     const matched = chain.usd_value > 0;
@@ -548,7 +549,8 @@ async function getWalletCostBasis(data) {
     }
     return matched;
   })
-  console.log('chain list=', chainIdList, 'toke list =', tokenList)
+  console.log('chain list =', chainIdList)
+  console.log('toke list =', tokenList)
   /** 
    
    for (let i =0; i < chainIdList.length; i++) {
