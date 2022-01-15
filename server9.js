@@ -535,6 +535,7 @@ async function getWalletCostBasis(data) {
   global_balances = [];
   global_transfers = [];
   global_tx = [];
+  global_token_info_from_debank = [];
 
   const walletChainlist = (await getWalletBalanceByDebank(data.wallet)).chain_list;
   let tokenList = [], chainIdList = [];
@@ -553,8 +554,7 @@ async function getWalletCostBasis(data) {
     global_balances = global_balances.concat(await getTokenBalances(chainIdList[i], data.wallet.toLowerCase(), data.blockheight));
     global_transfers = global_transfers.concat(await getTokenTransfers(data.chain, data.wallet.toLowerCase(), data.blockheight));
     global_tx = global_tx.concat(await getTransactions(data.chain, data.wallet.toLowerCase(), data.blockheight));
-
-    console.log(chainIdList[i], ':', crrTokenList.length, 'global_balances: ', global_balances.length, 'global_transfers: ', global_transfers.length, 'global_tx: ', global_tx.length);
+    global_token_info_from_debank = global_token_info_from_debank.concat(crrTokenList);
   }
   console.log('token list', tokenList)
   /**
@@ -565,6 +565,8 @@ async function getWalletCostBasis(data) {
   
 
   global_token_info_from_debank = await getWalletTokenListByDebank(chainCoins[data.chain].chainId, data.wallet);
+
+   */
 
   //Copy native transfers to ERC20 transfers
   native_xfers = global_tx.filter((xfer) => xfer.value > 0);
@@ -660,7 +662,6 @@ async function getWalletCostBasis(data) {
 		value: 456,
     history: returnData.reverse(),
   }];
-   */
 }
 
 async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hierarchy_level, parent_transaction) {
