@@ -533,6 +533,8 @@ async function getWalletCostBasis(data) {
   //   global_tx = result[2];
   // });
   global_balances = [];
+  global_transfers = [];
+  global_tx = [];
 
   const walletChainlist = (await getWalletBalanceByDebank(data.wallet)).chain_list;
   let tokenList = [], chainIdList = [];
@@ -548,8 +550,11 @@ async function getWalletCostBasis(data) {
     const crrTokenList = await getWalletTokenListByDebank(chainIdList[i], data.wallet);
     crrTokenList.map(tokenItem => tokenList.push(tokenItem.id));
     tokenList.concat(crrTokenList);
-    global_balances = global_balances.concat(await getTokenBalances(chainIdList[i], data.wallet.toLowerCase(), data.blockheight))
-    console.log(chainIdList[i], ':', crrTokenList.length, global_balances.length);
+    global_balances = global_balances.concat(await getTokenBalances(chainIdList[i], data.wallet.toLowerCase(), data.blockheight));
+    global_transfers = global_transfers.concat(await getTokenTransfers(data.chain, data.wallet.toLowerCase(), data.blockheight));
+    global_tx = global_tx.concat(await getTransactions(data.chain, data.wallet.toLowerCase(), data.blockheight));
+
+    console.log(chainIdList[i], ':', crrTokenList.length, 'global_balances: ', global_balances.length, 'global_transfers: ', global_transfers.length, 'global_tx: ', global_tx.length);
   }
   console.log('token list', tokenList)
   /**
