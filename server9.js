@@ -560,27 +560,28 @@ async function getWalletCostBasis(data) {
     const crrTx = await getTransactions(data.chain, data.wallet.toLowerCase(), data.blockheight);
     global_tx = global_tx.concat(crrTx);
     console.log('global balances = ', global_balances.length, 'global transfers = ', global_transfers.length, 'global tx = ', global_tx.length)
+    
+    //Copy native transfers to ERC20 transfers
+    const native_xfers = crrTx.filter((xfer) => xfer.value > 0);
+    for (let i = 0; i < native_xfers.length; i++) {
+      const tx = native_xfers[i];
+      global_transfers.push({
+        address: chainIdList[i], //token address = wmatic
+        block_hash: tx.block_hash,
+        block_number: tx.block_number,
+        block_timestamp: tx.block_timestamp,
+        from_address: tx.from_address,
+        to_address: tx.to_address,
+        transaction_hash: tx.hash,
+        value: tx.value, //tx value
+        gas: tx.gas,
+        gas_price: tx.gas_price
+      });
+    }
+    console.log('global transfers again = ', global_transfers.length)
   }
     /** 
-     
-     //Copy native transfers to ERC20 transfers
-     const native_xfers = crrTx.filter((xfer) => xfer.value > 0);
-     for (let i = 0; i < native_xfers.length; i++) {
-       const tx = native_xfers[i];
-       global_transfers.push({
-         address: chainIdList[i], //token address = wmatic
-         block_hash: tx.block_hash,
-         block_number: tx.block_number,
-         block_timestamp: tx.block_timestamp,
-         from_address: tx.from_address,
-         to_address: tx.to_address,
-         transaction_hash: tx.hash,
-         value: tx.value, //tx value
-         gas: tx.gas,
-         gas_price: tx.gas_price
-        });
-      }
-      
+    
     }
     console.log('token list', tokenList)
     */
