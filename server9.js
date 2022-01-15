@@ -520,8 +520,8 @@ async function getTokenTransfersRestApi(_chain, _address, _toBlock) {
 
 // main function
 async function getWalletCostBasis(data) {
-  let returnData = [];
 
+  let result = [];
   //Get global data
   // await Promise.all([
   //   getTokenBalances(data.chain, data.wallet.toLowerCase(), data.blockheight),
@@ -550,10 +550,30 @@ async function getWalletCostBasis(data) {
   for (let i =0; i < chainIdList.length; i++) {
     const crrTokenList = await getWalletTokenListByDebank(chainIdList[i], data.wallet);
     crrTokenList.map(tokenItem => tokenList.push(tokenItem.id));
-    tokenList.concat(crrTokenList);
+    // tokenList.concat(crrTokenList);
     global_balances = global_balances.concat(await getTokenBalances(chainIdList[i], data.wallet.toLowerCase(), data.blockheight));
     global_transfers = global_transfers.concat(await getTokenTransfers(data.chain, data.wallet.toLowerCase(), data.blockheight));
-    global_tx = global_tx.concat(await getTransactions(data.chain, data.wallet.toLowerCase(), data.blockheight));
+    const crrTx = await getTransactions(data.chain, data.wallet.toLowerCase(), data.blockheight);
+    global_tx = global_tx.concat(crrTx);
+
+    //Copy native transfers to ERC20 transfers
+    const native_xfers = crrTx.filter((xfer) => xfer.value > 0);
+    for (let i = 0; i < native_xfers.length; i++) {
+      const tx = native_xfers[i];
+      global_transfers.push({
+        address: chainIdList[i], //token address = wmatic
+        block_hash: tx.block_hash,
+        block_number: tx.block_number,
+        block_timestamp: tx.block_timestamp,
+        from_address: tx.from_address,
+        to_address: tx.to_address,
+        transaction_hash: tx.hash,
+        value: tx.value, //tx value
+        gas: tx.gas,
+        gas_price: tx.gas_price
+      });
+    }
+
     global_token_info_from_debank = global_token_info_from_debank.concat(crrTokenList);
   }
   console.log('token list', tokenList)
@@ -563,36 +583,18 @@ async function getWalletCostBasis(data) {
   global_tx = await getTransactions(data.chain, data.wallet.toLowerCase(), data.blockheight);
   console.log('globle_tx length', global_tx?.length || 0)
   
-
   global_token_info_from_debank = await getWalletTokenListByDebank(chainCoins[data.chain].chainId, data.wallet);
 
-
-  //Copy native transfers to ERC20 transfers
-  native_xfers = global_tx.filter((xfer) => xfer.value > 0);
-  for (let i = 0; i < native_xfers.length; i++) {
-    const tx = native_xfers[i];
-    global_transfers.push({
-      address: chainCoins[data.chain].address, //token address = wmatic
-      block_hash: tx.block_hash,
-      block_number: tx.block_number,
-      block_timestamp: tx.block_timestamp,
-      from_address: tx.from_address,
-      to_address: tx.to_address,
-      transaction_hash: tx.hash,
-      value: tx.value, //tx value
-      gas: tx.gas,
-      gas_price: tx.gas_price
-    });
-  }
+  */
 
   //Sort global_transfers reverse-chronological by block_number
   global_transfers = global_transfers.sort(sortBlockNumber_reverseChrono);
 
   //Get token metadata
-  var token_list = global_transfers.map((xfer) => xfer.address);
-  token_list.push(chainCoins[data.chain].address); //add native token
-  token_list = Array.from(new Set(token_list)); //de-dupe
-  global_token_meta = await getTokenMetadata(data.chain, token_list);
+  // var token_list = global_transfers.map((xfer) => xfer.address);
+  // token_list.push(chainCoins[data.chain].address); //add native token
+  // token_list = Array.from(new Set(token_list)); //de-dupe
+  global_token_meta = await getTokenMetadata(data.chain, tokenList);
 
   // global_token_meta_rest = await getTokenMetadataRestApi(data.chain, token_list);
   // writeToFile(`getTokenMetaData_${Number(new Date())}`, {
@@ -614,6 +616,7 @@ async function getWalletCostBasis(data) {
   let cost_basis = 0;
   //TODO: Make this loop asynchronous using Promise.allSettled
   for (let i = 0; i < global_balances.length; i++) {
+    let returnData = [];
     global_balances[i].usdPrice = null;
     // console.log('global balances', global_balances[i])
     const tokenHistory = await getTokenCostBasis(
@@ -630,38 +633,36 @@ async function getWalletCostBasis(data) {
     );
     cost_basis = tokenHistory.cost_basis;
     returnData = returnData.concat(tokenHistory.history);
+    result.push({
+      id: "p2",
+      chain: "Polygon",
+      chain_id: 123,
+      chain_logo: "https://debank.com/static/media/polygon.23445189.svg",
+      type: "Yield",
+      type_img: "../assets/images/yield.jpg",
+      protocol: "Kogefarm",
+      protocol_logo: "https://static.debank.com/image/project/logo_url/ftm_kogefarm/55341a6e10b63e331441928a6bb19572.png",
+      protocol_url: "https://kogefarm.io/vaults",
+      assets: [
+        {
+          id: "0x123",
+          ticker: "WMATIC",
+          logo: "https://static.debank.com/image/matic_token/logo_url/matic/e5a8a2860ba5cf740a474dcab796dc63.png"
+        },
+        {
+          id: "0x8a953cfe442c5e8855cc6c61b1293fa648bae472",
+          ticker: "POLYDOGE",
+          logo: "https://assets.coingecko.com/coins/images/15146/small/p1kSco1h_400x400.jpg?1619842715"
+        }
+      ],
+      units: 123,
+      cost_basis,
+      _comment: "No cost info yet for wallet positions",
+      value: 456,
+      history: returnData.reverse(),
+    })
   }
-
-  // return returnData.reverse();
-  return [{
-    id: "p2",
-		chain: "Polygon",
-		chain_id: 123,
-		chain_logo: "https://debank.com/static/media/polygon.23445189.svg",
-		type: "Yield",
-		type_img: "../assets/images/yield.jpg",
-		protocol: "Kogefarm",
-		protocol_logo: "https://static.debank.com/image/project/logo_url/ftm_kogefarm/55341a6e10b63e331441928a6bb19572.png",
-		protocol_url: "https://kogefarm.io/vaults",
-		assets: [
-			{
-				id: "0x123",
-				ticker: "WMATIC",
-				logo: "https://static.debank.com/image/matic_token/logo_url/matic/e5a8a2860ba5cf740a474dcab796dc63.png"
-			},
-			{
-				id: "0x8a953cfe442c5e8855cc6c61b1293fa648bae472",
-				ticker: "POLYDOGE",
-				logo: "https://assets.coingecko.com/coins/images/15146/small/p1kSco1h_400x400.jpg?1619842715"
-			}
-		],
-		units: 123,
-		cost_basis,
-		_comment: "No cost info yet for wallet positions",
-		value: 456,
-    history: returnData.reverse(),
-  }];
-   */
+  return result;
 }
 
 async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hierarchy_level, parent_transaction) {
