@@ -555,9 +555,9 @@ async function getWalletCostBasis(data) {
     global_token_info_from_debank = global_token_info_from_debank.concat(crrTokenList);
     
     crrTokenList.map(tokenItem => {if (tokenItem.id.substr(0, 2) === '0x') tokenList.push(tokenItem.id)});
-    global_balances = global_balances.concat(await getTokenBalances(chainIdList[i], data.wallet.toLowerCase(), data.blockheight));
-    global_transfers = global_transfers.concat(await getTokenTransfers(data.chain, data.wallet.toLowerCase(), data.blockheight));
-    const crrTx = await getTransactions(data.chain, data.wallet.toLowerCase(), data.blockheight);
+    global_balances = global_balances.concat(await getTokenBalances(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight));
+    global_transfers = global_transfers.concat(await getTokenTransfers(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight));
+    const crrTx = await getTransactions(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight);
     global_tx = global_tx.concat(crrTx);
     
     //Copy native transfers to ERC20 transfers
@@ -577,6 +577,9 @@ async function getWalletCostBasis(data) {
         gas_price: tx.gas_price
       });
     }
+    console.log('global balances = ', global_balances.length, 'global transfers = ', global_transfers.length, 'global tx = ', global_tx.length)
+    //Get token metadata
+    global_token_meta = global_token_meta.concat(await getTokenMetadata(chainIdListForMoralis[i], tokenList));
   }
 
     /**
@@ -593,8 +596,6 @@ async function getWalletCostBasis(data) {
   global_transfers = global_transfers.sort(sortBlockNumber_reverseChrono);
  
   
-  //Get token metadata
-  global_token_meta = await getTokenMetadata(data.chain, tokenList);
   console.log('global token meta = ', global_token_meta)
   console.log('total', global_token_meta.length)
   /**

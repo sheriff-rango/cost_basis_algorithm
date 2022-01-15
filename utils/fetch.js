@@ -21,6 +21,6 @@ module.exports = async function sendRequest({url, apiKey}) {
     //   }, 300);
     // }
     // await retry();
-    return null;
+    return [];
   }
 }
