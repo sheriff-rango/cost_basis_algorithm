@@ -67,10 +67,10 @@ const chainCoins = {
 };
 
 let testData = {
-  wallet: '0x3ddfa8ec3052539b6c9549f12cea2c295cff5296',
-  // wallet: '0x704111eDBee29D79a92c4F21e70A5396AEDCc44a',
+  // wallet: '0x3ddfa8ec3052539b6c9549f12cea2c295cff5296',
+  wallet: '0x704111eDBee29D79a92c4F21e70A5396AEDCc44a',
   blockheight: 20138207,
-  chain: 'polygon',
+  // chain: 'polygon',
 };
 
 const DELAY = 1000;
@@ -247,7 +247,7 @@ async function getTransactions(_chain, _tokenAddress, _toBlock) {
     // const result = await Moralis.Web3API.account.getTransactions(options);
     const result = await sendRequest({
       apiKey: getApiKey(),
-      url: `https://deep-index.moralis.io/api/v2/${options.address}?chain=${options.chain}&to_block=${options.to_block || ''}&offset=${options.offset}`
+      url: `https://deep-index.moralis.io/api/v2/${options.address}?chain=${options.chain}${option.to_block? `&to_block=${options.to_block}` : ''}&offset=${options.offset}`
     });
     if (Number(result?.total) > 500) {
       let page = 1, txFunctions = [], mergeResult = result.result;
@@ -256,7 +256,7 @@ async function getTransactions(_chain, _tokenAddress, _toBlock) {
         // txFunctions.push(Moralis.Web3API.account.getTransactions(options));
         txFunctions.push(sendRequest({
           apiKey: getApiKey(),
-          url: `https://deep-index.moralis.io/api/v2/${options.address}?chain=${options.chain}&to_block=${options.to_block || ''}&offset=${options.offset}`
+          url: `https://deep-index.moralis.io/api/v2/${options.address}?chain=${options.chain}${option.to_block? `&to_block=${options.to_block}` : ''}&offset=${options.offset}`
         }));
         if (page % 1 === 0) {
           await Promise.all(txFunctions).then(results => {
@@ -291,7 +291,7 @@ async function getTokenPrice(_chain, _address, _toBlock) {
     // return await Moralis.Web3API.token.getTokenPrice(options);
     return await sendRequest({
       apiKey: getApiKey(),
-      url: `https://deep-index.moralis.io/api/v2/erc20/${options.address}/price?chain=${options.chain}&to_block=${options.to_block}`
+      url: `https://deep-index.moralis.io/api/v2/erc20/${options.address}/price?chain=${options.chain}${option.to_block? `&to_block=${options.to_block}` : ''}`
     });
   } catch (e) {
     return null;
@@ -309,7 +309,7 @@ async function getTokenBalances(_chain, _address, _toBlock) {
     // const getTokenBalancesResult = await Moralis.Web3API.account.getTokenBalances(options);
     const getTokenBalancesResult = await sendRequest({
       apiKey: getApiKey(),
-      url: `https://deep-index.moralis.io/api/v2/${options.address}/erc20?chain=${options.chain}&to_block=${options.to_block || ''}`
+      url: `https://deep-index.moralis.io/api/v2/${options.address}/erc20?chain=${options.chain}${option.to_block? `&to_block=${options.to_block}` : ''}`
     });
     return getTokenBalancesResult;
   } catch (e) {
@@ -329,7 +329,7 @@ async function getTokenTransfers(_chain, _address, _toBlock) {
     // const result = await Moralis.Web3API.account.getTokenTransfers(options);
     const result = await sendRequest({
       apiKey: getApiKey(),
-      url: `https://deep-index.moralis.io/api/v2/${options.address}/erc20/transfers?chain=${options.chain}&to_block=${options.to_block || ''}&offset=${options.offset}`
+      url: `https://deep-index.moralis.io/api/v2/${options.address}/erc20/transfers?chain=${options.chain}${option.to_block? `&to_block=${options.to_block}` : ''}&offset=${options.offset}`
     });
     // console.log('get token transfer result', result);
     if (Number(result.total) > 500) {
@@ -339,7 +339,7 @@ async function getTokenTransfers(_chain, _address, _toBlock) {
         // transferFunctions.push(Moralis.Web3API.account.getTokenTransfers(options));
         transferFunctions.push(sendRequest({
           apiKey: getApiKey(),
-          url: `https://deep-index.moralis.io/api/v2/${options.address}/erc20/transfers?chain=${options.chain}&to_block=${options.to_block || ''}&offset=${options.offset}`
+          url: `https://deep-index.moralis.io/api/v2/${options.address}/erc20/transfers?chain=${options.chain}${option.to_block? `&to_block=${options.to_block}` : ''}&offset=${options.offset}`
         }));
         if (page % 1 === 0) {
           await Promise.all(transferFunctions).then(results => {
