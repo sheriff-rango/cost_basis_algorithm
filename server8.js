@@ -183,6 +183,7 @@ function sortBlockNumber_reverseChrono(a, b) {
 }
 
 function convertDateTime(time) {
+  if (!time) return '';
   return time.split('.')[0];
 }
 
