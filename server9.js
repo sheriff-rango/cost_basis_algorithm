@@ -537,6 +537,7 @@ async function getWalletCostBasis(data) {
   global_transfers = [];
   global_tx = [];
   global_token_info_from_debank = [];
+  global_token_meta = [];
 
   const walletChainlist = (await getWalletBalanceByDebank(data.wallet)).chain_list;
   let tokenList = [], chainIdList = [], chainIdListForMoralis = [];
