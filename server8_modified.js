@@ -529,7 +529,7 @@ async function getTokenTransfersRestApi(_chain, _address, _toBlock) {
 
 // main function
 async function getWalletCostBasis(data) {
-  let returnData = [];
+  let result = [];
 
   //Get global data
   // await Promise.all([
@@ -587,16 +587,17 @@ async function getWalletCostBasis(data) {
   // console.log('global token meta', global_token_meta)
 
   //If token specified in request, just do that token instead of the whole wallet
-  if (data.token) {
-    global_balances = global_balances.filter((each) => each.token_address == data.token);
-  }
+  // if (data.token) {
+  //   global_balances = global_balances.filter((each) => each.token_address == data.token);
+  // }
 
-  console.log('global balance', global_balances)
+  console.log('global balance', global_balances.length)
 
   //Run cost basis for illiquid tokens
   let cost_basis = 0;
   //TODO: Make this loop asynchronous using Promise.allSettled
   for (let i = 0; i < global_balances.length; i++) {
+    let returnData = [];
     global_balances[i].usdPrice = null;
     // console.log('global balances', global_balances[i])
     const tokenHistory = await getTokenCostBasis(
@@ -613,37 +614,38 @@ async function getWalletCostBasis(data) {
     );
     cost_basis = tokenHistory.cost_basis;
     returnData = returnData.concat(tokenHistory.history);
+    result.push({
+      id: "p2",
+      chain: "Polygon",
+      chain_id: 123,
+      chain_logo: "https://debank.com/static/media/polygon.23445189.svg",
+      type: "Yield",
+      type_img: "../assets/images/yield.jpg",
+      protocol: "Kogefarm",
+      protocol_logo: "https://static.debank.com/image/project/logo_url/ftm_kogefarm/55341a6e10b63e331441928a6bb19572.png",
+      protocol_url: "https://kogefarm.io/vaults",
+      assets: [
+        {
+          id: "0x123",
+          ticker: "WMATIC",
+          logo: "https://static.debank.com/image/matic_token/logo_url/matic/e5a8a2860ba5cf740a474dcab796dc63.png"
+        },
+        {
+          id: "0x8a953cfe442c5e8855cc6c61b1293fa648bae472",
+          ticker: "POLYDOGE",
+          logo: "https://assets.coingecko.com/coins/images/15146/small/p1kSco1h_400x400.jpg?1619842715"
+        }
+      ],
+      units: 123,
+      cost_basis,
+      _comment: "No cost info yet for wallet positions",
+      value: 456,
+      history: returnData.reverse(),
+    })
   }
 
   // return returnData.reverse();
-  return [{
-    id: "p2",
-		chain: "Polygon",
-		chain_id: 123,
-		chain_logo: "https://debank.com/static/media/polygon.23445189.svg",
-		type: "Yield",
-		type_img: "../assets/images/yield.jpg",
-		protocol: "Kogefarm",
-		protocol_logo: "https://static.debank.com/image/project/logo_url/ftm_kogefarm/55341a6e10b63e331441928a6bb19572.png",
-		protocol_url: "https://kogefarm.io/vaults",
-		assets: [
-			{
-				id: "0x123",
-				ticker: "WMATIC",
-				logo: "https://static.debank.com/image/matic_token/logo_url/matic/e5a8a2860ba5cf740a474dcab796dc63.png"
-			},
-			{
-				id: "0x8a953cfe442c5e8855cc6c61b1293fa648bae472",
-				ticker: "POLYDOGE",
-				logo: "https://assets.coingecko.com/coins/images/15146/small/p1kSco1h_400x400.jpg?1619842715"
-			}
-		],
-		units: 123,
-		cost_basis,
-		_comment: "No cost info yet for wallet positions",
-		value: 456,
-    history: returnData.reverse(),
-  }];
+  return result;
 }
 
 async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hierarchy_level, parent_transaction) {
@@ -667,16 +669,15 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
 
   // confirm wether token is valued or not
   let price = await getTokenPrice(chain, token.address, blockheight);
-  console.log('price', price);
   if (price) {
     cost_basis = balance * price.usdPrice;
     newHistory.push({
-      units: token.value / 10 ** (token_meta.decimals || 18),
+      units: token.value / 10 ** (token_meta?.decimals || 18),
       transaction_id: parent_transaction.transaction_hash,
       transaction_url: `https://polygonscan.com/tx/${parent_transaction.transaction_hash}`,
       datetime: convertDateTime(parent_transaction.block_timestamp),
       token_id: token.address,
-      token_name: token_meta.name,
+      token_name: token_meta?.name,
       token_img: token_info?.logo_url || '',
       fee_native_coin: chainCoins[chain].native_coin,
       cost_basis,
@@ -709,7 +710,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
     }
 
     //calculate the balance of token in wallet, just before transaction.
-    const units_of_token = transaction.value / 10 ** (token_meta.decimals || 18);
+    const units_of_token = transaction.value / 10 ** (token_meta?.decimals || 18);
     current_balance = current_balance + (isReceived? -1 : 1) * units_of_token;
     // console.log('current balance', current_balance);
 
@@ -728,7 +729,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
       // console.log('offsetting coin', offsetting_coin);
       offsetting_coin.used = true;
       const coin_meta = global_token_meta.filter((t) => t.address == offsetting_coin.address)[0];
-      const balance_of_offsetting_coin = offsetting_coin.value / 10 ** (coin_meta.decimals || 18);
+      const balance_of_offsetting_coin = offsetting_coin.value / 10 ** (coin_meta?.decimals || 18);
       const getTokenCostBasisResult = await getTokenCostBasis(
         chain,
         offsetting_coin.block_number,
@@ -743,14 +744,14 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
       childHistory = childHistory.concat(getTokenCostBasisResult.history);
       // childHistory.push(getTokenCostBasisResult.history);
     }
-    const fee_native_units = transaction_detail.gas * transaction_detail.gas_price / 10 ** (token_meta.decimals || 18);
+    const fee_native_units = transaction_detail.gas * transaction_detail.gas_price / 10 ** (token_meta?.decimals || 18);
     newHistory.push({
-      units: transaction.value / 10 ** (token_meta.decimals || 18),
+      units: transaction.value / 10 ** (token_meta?.decimals || 18),
       transaction_id: transaction.transaction_hash,
       transaction_url: `https://polygonscan.com/tx/${transaction.transaction_hash}`,
       datetime: convertDateTime(transaction.block_timestamp),
       token_id: token.address,
-      token_name: token_meta.name,
+      token_name: token_meta?.name,
       token_img: token_info?.logo_url || '',
       fee_native_coin: chainCoins[chain].native_coin,
       fee_native_units,

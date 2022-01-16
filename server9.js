@@ -64,7 +64,26 @@ const chainCoins = {
     address: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
     native_coin: 'BSC',
   },
+  xdai: {
+    chainId: 'xdai',
+    address: '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d',
+    native_coin: 'Gnosis'
+  }
 };
+
+const chainExplorer = {
+  eth: {
+    main: 'https://etherscan.io/',
+  },
+  polygon: {
+    main: 'https://polygonscan.com/',
+    test: 'https://mumbai.polygonscan.com/',
+  },
+  fantom: {
+    main: 'https://ftmscan.com/',
+    test: 'https://testnet.ftmscan.com/',
+  }
+}
 
 let testData = {
   // wallet: '0x3ddfa8ec3052539b6c9549f12cea2c295cff5296',
@@ -162,7 +181,7 @@ function sortBlockNumber_reverseChrono(a, b) {
 }
 
 function convertDateTime(time) {
-  return time.split('.')[0];
+  return time? time.split('.')[0] : '';
 }
 
 function sleep(ms) {
@@ -178,7 +197,7 @@ function getApiKey() {
 }
 
 function writeToFile(filename, data) {
-  fs.writeFileSync(`./_result_${filename}.json`, JSON.stringify(data))
+  fs.writeFileSync(`./result_${filename}.json`, JSON.stringify(data))
 }
 
 // Debank functions
@@ -210,6 +229,20 @@ async function getWalletTokenListByDebank(_chain, _address) {
   }
 }
 
+async function getProtocolListByDebank() {
+  try {
+    const result = await axios({
+      method: 'get',
+      header: {'content-type': 'application/json'},
+      url: 'https://openapi.debank.com/v1/protocol/list'
+    });
+    return result.data;
+  } catch(err) {
+    console.log('get protocol list by debank', err);
+    return null;
+  }
+}
+
 // Moralis functions
 async function getTokenMetadata(_chain, _tokenAddresses) {
   let options;
@@ -225,7 +258,7 @@ async function getTokenMetadata(_chain, _tokenAddresses) {
       //   apiKey: getApiKey(),
       //   url: `https://deep-index.moralis.io/api/v2/erc20/metadata?chain=${options.chain}&addresses=${options.addresses.join('&addresses=')}`
       // })
-      tokenMetadata = tokenMetadata.concat(result);
+      tokenMetadata = tokenMetadata.concat(result || []);
       page++;
     }
     return tokenMetadata;
@@ -311,10 +344,10 @@ async function getTokenBalances(_chain, _address, _toBlock) {
       apiKey: getApiKey(),
       url: `https://deep-index.moralis.io/api/v2/${options.address}/erc20?chain=${options.chain}${options.to_block? `&to_block=${options.to_block}` : ''}`
     });
-    return getTokenBalancesResult;
+    return getTokenBalancesResult || [];
   } catch (e) {
     console.log('get token balances error', e);
-    return null;
+    return [];
   }
 }
 
@@ -332,7 +365,7 @@ async function getTokenTransfers(_chain, _address, _toBlock) {
       url: `https://deep-index.moralis.io/api/v2/${options.address}/erc20/transfers?chain=${options.chain}${options.to_block? `&to_block=${options.to_block}` : ''}&offset=${options.offset}`
     });
     // console.log('get token transfer result', result);
-    if (Number(result.total) > 500) {
+    if (Number(result?.total) > 500) {
       let page = 1, transferFunctions = [], mergeResult = result.result;
       while (page < Math.ceil(result.total / 500) && mergeResult.length <= TRANSACTION_MAX) {
         options.offset = page * 500;
@@ -360,10 +393,10 @@ async function getTokenTransfers(_chain, _address, _toBlock) {
         }).catch(e => console.log('get token transfers error 1', e))
       } else return mergeResult;
     }
-    else return result.result;
+    else return result?.result || [];
   } catch (e) {
     console.log('get token transfers error 2', e);
-    return null;
+    return [];
   }
 }
 
@@ -538,10 +571,13 @@ async function getWalletCostBasis(data) {
   global_tx = [];
   global_token_info_from_debank = [];
   global_token_meta = [];
+  global_chain_list = {};
 
+  const protocolList = await getProtocolListByDebank();
   const walletChainlist = (await getWalletBalanceByDebank(data.wallet)).chain_list;
   let tokenList = [], chainIdList = [], chainIdListForMoralis = [];
   const filteredBalance = walletChainlist.filter(chain => {
+    global_chain_list[chain.id === 'eth'? 'eth' : chain.name.toLowerCase()] = chain;
     const matched = chain.usd_value > 0;
     if (matched) {
       tokenList.push(chain.wrapped_token_id);
@@ -559,7 +595,9 @@ async function getWalletCostBasis(data) {
     crrTokenList.map(tokenItem => {if (tokenItem.id.substr(0, 2) === '0x') addedTokenList.push(tokenItem.id)});
     tokenList = tokenList.concat(addedTokenList);
 
-    global_balances = global_balances.concat(await getTokenBalances(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight));
+    let crrBalance = await getTokenBalances(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight);
+    crrBalance = crrBalance.map(item => ({...item, chain: chainIdListForMoralis[i]}))
+    global_balances = global_balances.concat(crrBalance);
     global_transfers = global_transfers.concat(await getTokenTransfers(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight));
     const crrTx = await getTransactions(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight);
     global_tx = global_tx.concat(crrTx);
@@ -598,42 +636,48 @@ async function getWalletCostBasis(data) {
  //Sort global_transfers reverse-chronological by block_number
   global_transfers = global_transfers.sort(sortBlockNumber_reverseChrono);
  
-  console.log('GLOBAL_BALANCE BEFORE FILTER', global_balances.length)
-  global_balances = global_balances.filter((each) => each && tokenList.includes(each.token_address));
-  console.log('GLOBAL_BALANCE AFTER FILTER', global_balances)
+  // console.log('GLOBAL_BALANCE BEFORE FILTER', global_balances.length)
+  // global_balances = global_balances.filter((each) => each && tokenList.includes(each.token_address));
+  // console.log('GLOBAL_BALANCE AFTER FILTER', global_balances)
   
-  /**
   //Run cost basis for illiquid tokens
   let cost_basis = 0;
   //TODO: Make this loop asynchronous using Promise.allSettled
   for (let i = 0; i < global_balances.length; i++) {
     let returnData = [];
-    global_balances[i].usdPrice = null;
-    // console.log('global balances', global_balances[i])
+    const crrBalance = global_balances[i];
+    crrBalance.usdPrice = null;
+    // console.log('global balances', crrBalance)
     const tokenHistory = await getTokenCostBasis(
-      data.chain,
+      crrBalance.chain,
       data.blockheight,
       data.wallet.toLowerCase(),
       {
-        ...global_balances[i],
-        address: global_balances[i].token_address
+        ...crrBalance,
+        address: crrBalance.token_address
       },
-      global_balances[i].balance / 10 ** global_balances[i].decimals,
+      crrBalance.balance / 10 ** crrBalance.decimals,
       1,
       {}
     );
     cost_basis = tokenHistory.cost_basis;
     returnData = returnData.concat(tokenHistory.history);
+
+    const tokenInfo = global_token_info_from_debank.filter(token => token.id === crrBalance.token_address)[0];
+    const protocolId = tokenInfo?.protocol_id || '';
+    const protocolInfo = protocolList.filter(protocol => protocol.id === protocolId)[0] || {};
+    const chainInfo = global_chain_list[crrBalance.chain] || {};
+
     result.push({
-      id: "p2",
-      chain: "Polygon",
-      chain_id: 123,
-      chain_logo: "https://debank.com/static/media/polygon.23445189.svg",
+      id: chainInfo.id || '',
+      chain: chainInfo.name || '',
+      chain_id: chainInfo.community_id || '',
+      chain_logo: chainInfo.logo_url || null,
       type: "Yield",
       type_img: "../assets/images/yield.jpg",
-      protocol: "Kogefarm",
-      protocol_logo: "https://static.debank.com/image/project/logo_url/ftm_kogefarm/55341a6e10b63e331441928a6bb19572.png",
-      protocol_url: "https://kogefarm.io/vaults",
+      protocol: protocolInfo.name || '',
+      protocol_logo: protocolInfo.logo_url || null,
+      protocol_url: protocolInfo.site_url || null,
       assets: [
         {
           id: "0x123",
@@ -653,15 +697,18 @@ async function getWalletCostBasis(data) {
       history: returnData.reverse(),
     })
   }
-  */
   return result;
 }
 
 async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hierarchy_level, parent_transaction) {
-  console.log('Cost basis for: Token:' + token.address + ' Block:' + blockheight + ' balance: ' + balance);
+  console.log('Cost basis for: Chain:' + chain + ' Token:' + token.address + ' Block:' + blockheight + ' balance: ' + balance);
 
   // initialize cost_basis and balance
   let cost_basis = 0, current_balance = balance, newHistory = [];
+
+  // retrieve list of token transactions to/from wallet, prior to block
+  let token_transactions = global_transfers.filter((xfer) => xfer && xfer.address == token.address && xfer.used == undefined && Number(xfer.block_number) <= Number(blockheight));
+  // console.log('token transactions', token_transactions.length);
 
   // get token meta data
   const token_meta = global_token_meta.filter((meta) => meta.address == token.address)[0];
@@ -669,23 +716,22 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
   // console.log('token meta', token_meta);
 
   // get native price
-  const native_price = await getTokenPrice(chain, chainCoins[chain].address, blockheight);
+  const native_price = global_chain_list[chain]? (await getTokenPrice(chain, global_chain_list[chain].wrapped_token_id, blockheight)) : {};
   // console.log('native price', native_price);
 
   // confirm wether token is valued or not
   let price = await getTokenPrice(chain, token.address, blockheight);
-  // console.log('price', price);
   if (price) {
     cost_basis = balance * price.usdPrice;
     newHistory.push({
-      units: token.value / 10 ** (token_meta.decimals || 18),
+      units: token.value / 10 ** (token_meta?.decimals || 18),
       transaction_id: parent_transaction.transaction_hash,
       transaction_url: `https://polygonscan.com/tx/${parent_transaction.transaction_hash}`,
       datetime: convertDateTime(parent_transaction.block_timestamp),
       token_id: token.address,
-      token_name: token_meta.name,
+      token_name: token_meta?.name,
       token_img: token_info?.logo_url || '',
-      fee_native_coin: chainCoins[chain].native_coin,
+      fee_native_coin: global_chain_list[chain]?.native_token_id || chain,
       cost_basis,
       hierarchy_level,
       valued_directly: true,
@@ -693,10 +739,6 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
     // console.log('Token: ' + token.address + ' Cost= ' + cost_basis);
     return {cost_basis, history: newHistory};
   }
-
-  // retrieve list of token transactions to/from wallet, prior to block
-  let token_transactions = global_transfers.filter((xfer) => xfer.address == token.address && xfer.used == undefined && Number(xfer.block_number) <= Number(blockheight));
-  // console.log('token transactions', token_transactions.length);
 
   // process token transactions in reverse chronological order is skipped because global_transfers is already in that form
   token_transactions = token_transactions.sort(sortBlockNumber_reverseChrono);
@@ -720,7 +762,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
     }
 
     //calculate the balance of token in wallet, just before transaction.
-    const units_of_token = transaction.value / 10 ** (token_meta.decimals || 18);
+    const units_of_token = transaction.value / 10 ** (token_meta?.decimals || 18);
     current_balance = current_balance + (isReceived? -1 : 1) * units_of_token;
     // console.log('current balance', current_balance);
 
@@ -738,8 +780,8 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
       let offsetting_coin = offsetting_coins[i];
       // console.log('offsetting coin', offsetting_coin);
       offsetting_coin.used = true;
-      const coin_meta = global_token_meta.filter((t) => t.address == offsetting_coin.address)[0];
-      const balance_of_offsetting_coin = offsetting_coin.value / 10 ** (coin_meta.decimals || 18);
+      const coin_meta = global_token_meta?.filter((t) => t.address == offsetting_coin.address)[0];
+      const balance_of_offsetting_coin = offsetting_coin.value / 10 ** (coin_meta?.decimals || 18);
       const getTokenCostBasisResult = await getTokenCostBasis(
         chain,
         offsetting_coin.block_number,
@@ -754,18 +796,18 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
       childHistory = childHistory.concat(getTokenCostBasisResult.history);
       // childHistory.push(getTokenCostBasisResult.history);
     }
-    const fee_native_units = transaction_detail.gas * transaction_detail.gas_price / 10 ** (token_meta.decimals || 18);
+    const fee_native_units = transaction_detail.gas * transaction_detail.gas_price / 10 ** (token_meta?.decimals || 18);
     newHistory.push({
-      units: transaction.value / 10 ** (token_meta.decimals || 18),
+      units: transaction.value / 10 ** (token_meta?.decimals || 18),
       transaction_id: transaction.transaction_hash,
       transaction_url: `https://polygonscan.com/tx/${transaction.transaction_hash}`,
       datetime: convertDateTime(transaction.block_timestamp),
       token_id: token.address,
-      token_name: token_meta.name,
+      token_name: token_meta?.name,
       token_img: token_info?.logo_url || '',
-      fee_native_coin: chainCoins[chain].native_coin,
+      fee_native_coin: global_chain_list[chain]?.native_token_id || chain,
       fee_native_units,
-      fee_usd: fee_native_units * native_price.usdPrice,
+      fee_usd: fee_native_units * native_price.usdPrice || 0,
       cost_basis,
       hierarchy_level,
       valued_directly: false,
