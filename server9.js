@@ -648,6 +648,12 @@ async function getWalletCostBasis(data) {
     const crrBalance = global_balances[i];
     crrBalance.usdPrice = null;
     // console.log('global balances', crrBalance)
+    const price = await getTokenPrice(
+      crrBalance.chain,
+      crrBalance.token_address,
+      data.blockheight
+    );
+    if (price) continue;
     const tokenHistory = await getTokenCostBasis(
       crrBalance.chain,
       data.blockheight,
@@ -807,7 +813,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
       token_img: token_info?.logo_url || '',
       fee_native_coin: global_chain_list[chain]?.native_token_id || chain,
       fee_native_units,
-      fee_usd: fee_native_units * native_price.usdPrice || 0,
+      fee_usd: fee_native_units * native_price?.usdPrice || 0,
       cost_basis,
       hierarchy_level,
       valued_directly: false,
