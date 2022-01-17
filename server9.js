@@ -731,7 +731,7 @@ async function getWalletCostBasis(data) {
       protocol: protocolInfo.name || '',
       protocol_logo: protocolInfo.logo_url || null,
       protocol_url: protocolInfo.site_url || null,
-      assets: tokenHistory.assets,
+      assets: tokenHistory.assets || [],
       units: 123,
       cost_basis,
       _comment: 'No cost info yet for wallet positions',
