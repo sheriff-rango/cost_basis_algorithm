@@ -1,1 +1,200 @@
-[{"token_address":"0x8b09b6eb1d263644a267dfb2b2bc8d6b0fb72e7d","name":"Matic Pie Network","symbol":"mPie","logo":null,"thumbnail":null,"decimals":"18","balance":"1000000000000000000000","chain":"polygon"},{"token_address":"0x8ae127d224094cb1b27e1b28a472e588cbcc7620","name":"aaxexchange.org","symbol":"AAX","logo":null,"thumbnail":null,"decimals":"18","balance":"26347543096503948200000000000","chain":"polygon"},{"token_address":"0xe4fb1bb8423417a460286b0ed44b64e104c5fae5","name":"Zepe.io","symbol":"Zepe.io","logo":null,"thumbnail":null,"decimals":"18","balance":"750000000000000000000000","chain":"polygon"},{"token_address":"0x4ab66a7138f50db9b7adaf8ce8afb3f638b22f7f","name":"SushiSwap LP Token","symbol":"SLP","logo":null,"thumbnail":null,"decimals":"18","balance":"499999999999999000","chain":"polygon"},{"token_address":"0x0b91b07beb67333225a5ba0259d55aee10e3a578","name":"Minereum Polygon","symbol":"MNEP","logo":null,"thumbnail":null,"decimals":"8","balance":"30000000000000","chain":"polygon"},{"token_address":"0xcbf4ab00b6aa19b4d5d29c7c3508b393a1c01fe3","name":"MegaDoge.Org","symbol":"MegaDoge","logo":null,"thumbnail":null,"decimals":"18","balance":"1000000000000000000000","chain":"polygon"},{"token_address":"0x81067076dcb7d3168ccf7036117b9d72051205e2","name":"DxDex.io","symbol":"DxDex.io","logo":null,"thumbnail":null,"decimals":"18","balance":"800000000000000000000000","chain":"polygon"},{"token_address":"0x940f41f0ec9ba1a34cf001cc03347ac092f5f6b5","name":"Geist fUSDT","symbol":"gfUSDT","logo":null,"thumbnail":null,"decimals":"6","balance":"59046228752447","chain":"fantom"},{"token_address":"0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83","name":"Wrapped Fantom","symbol":"WFTM","logo":null,"thumbnail":null,"decimals":"18","balance":"200942788690444430","chain":"fantom"},{"token_address":"0x8d11ec38a3eb5e956b052f67da8bdc9bef8abf3e","name":"Dai Stablecoin","symbol":"DAI","logo":null,"thumbnail":null,"decimals":"18","balance":"77472219740164963961","chain":"fantom"},{"token_address":"0x39b3bd37208cbade74d0fcbdbb12d606295b430a","name":"Geist FTM","symbol":"gFTM","logo":null,"thumbnail":null,"decimals":"18","balance":"30071284650584000876800","chain":"fantom"},{"token_address":"0x25c130b2624cf12a4ea30143ef50c5d68cefa22f","name":"Geist ETH","symbol":"gETH","logo":null,"thumbnail":null,"decimals":"18","balance":"5535085453616482654","chain":"fantom"},{"token_address":"0x4318d7ad332a0fee9db6d2b9b4b021fda865abdb","name":"Geist variable debt WBTC","symbol":"variableDebtgWBTC","logo":null,"thumbnail":null,"decimals":"8","balance":"150250961862","chain":"fantom"},{"token_address":"0x3eef981640064d63bb7ead4c6e3c0457e5c2934d","name":"Geist variable debt USDC","symbol":"variableDebtgUSDC","logo":null,"thumbnail":null,"decimals":"6","balance":"75814810330883","chain":"fantom"},{"token_address":"0x07e6332dd090d287d3489245038daf987955dcfb","name":"Geist DAI","symbol":"gDAI","logo":null,"thumbnail":null,"decimals":"18","balance":"80040631060828518494693593","chain":"fantom"},{"token_address":"0x5cc61a78f164885776aa610fb0fe1257df78e59b","name":"SpiritSwap Token","symbol":"SPIRIT","logo":null,"thumbnail":null,"decimals":"18","balance":"1000000000000000000","chain":"fantom"},{"token_address":"0xe578c856933d8e1082740bf7661e379aa2a30b26","name":"Geist USDC","symbol":"gUSDC","logo":null,"thumbnail":null,"decimals":"6","balance":"75600584773400","chain":"fantom"},{"token_address":"0x38aca5484b8603373acc6961ecd57a6a594510a3","name":"Geist WBTC","symbol":"gWBTC","logo":null,"thumbnail":null,"decimals":"8","balance":"150087505603","chain":"fantom"}]
+[
+  {
+    "token_address": "0x8b09b6eb1d263644a267dfb2b2bc8d6b0fb72e7d",
+    "name": "Matic Pie Network",
+    "symbol": "mPie",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "1000000000000000000000",
+    "chain": "polygon",
+    "chainForDebank": "matic"
+  },
+  {
+    "token_address": "0x8ae127d224094cb1b27e1b28a472e588cbcc7620",
+    "name": "aaxexchange.org",
+    "symbol": "AAX",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "26347543096503948200000000000",
+    "chain": "polygon",
+    "chainForDebank": "matic"
+  },
+  {
+    "token_address": "0xe4fb1bb8423417a460286b0ed44b64e104c5fae5",
+    "name": "Zepe.io",
+    "symbol": "Zepe.io",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "750000000000000000000000",
+    "chain": "polygon",
+    "chainForDebank": "matic"
+  },
+  {
+    "token_address": "0x4ab66a7138f50db9b7adaf8ce8afb3f638b22f7f",
+    "name": "SushiSwap LP Token",
+    "symbol": "SLP",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "499999999999999000",
+    "chain": "polygon",
+    "chainForDebank": "matic"
+  },
+  {
+    "token_address": "0x0b91b07beb67333225a5ba0259d55aee10e3a578",
+    "name": "Minereum Polygon",
+    "symbol": "MNEP",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "8",
+    "balance": "30000000000000",
+    "chain": "polygon",
+    "chainForDebank": "matic"
+  },
+  {
+    "token_address": "0xcbf4ab00b6aa19b4d5d29c7c3508b393a1c01fe3",
+    "name": "MegaDoge.Org",
+    "symbol": "MegaDoge",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "1000000000000000000000",
+    "chain": "polygon",
+    "chainForDebank": "matic"
+  },
+  {
+    "token_address": "0x81067076dcb7d3168ccf7036117b9d72051205e2",
+    "name": "DxDex.io",
+    "symbol": "DxDex.io",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "800000000000000000000000",
+    "chain": "polygon",
+    "chainForDebank": "matic"
+  },
+  {
+    "token_address": "0x940f41f0ec9ba1a34cf001cc03347ac092f5f6b5",
+    "name": "Geist fUSDT",
+    "symbol": "gfUSDT",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "6",
+    "balance": "59046228752447",
+    "chain": "fantom",
+    "chainForDebank": "ftm"
+  },
+  {
+    "token_address": "0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83",
+    "name": "Wrapped Fantom",
+    "symbol": "WFTM",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "200942788690444430",
+    "chain": "fantom",
+    "chainForDebank": "ftm"
+  },
+  {
+    "token_address": "0x8d11ec38a3eb5e956b052f67da8bdc9bef8abf3e",
+    "name": "Dai Stablecoin",
+    "symbol": "DAI",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "77472219740164963961",
+    "chain": "fantom",
+    "chainForDebank": "ftm"
+  },
+  {
+    "token_address": "0x39b3bd37208cbade74d0fcbdbb12d606295b430a",
+    "name": "Geist FTM",
+    "symbol": "gFTM",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "30071284650584000876800",
+    "chain": "fantom",
+    "chainForDebank": "ftm"
+  },
+  {
+    "token_address": "0x25c130b2624cf12a4ea30143ef50c5d68cefa22f",
+    "name": "Geist ETH",
+    "symbol": "gETH",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "5535085453616482654",
+    "chain": "fantom",
+    "chainForDebank": "ftm"
+  },
+  {
+    "token_address": "0x4318d7ad332a0fee9db6d2b9b4b021fda865abdb",
+    "name": "Geist variable debt WBTC",
+    "symbol": "variableDebtgWBTC",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "8",
+    "balance": "150250961862",
+    "chain": "fantom",
+    "chainForDebank": "ftm"
+  },
+  {
+    "token_address": "0x3eef981640064d63bb7ead4c6e3c0457e5c2934d",
+    "name": "Geist variable debt USDC",
+    "symbol": "variableDebtgUSDC",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "6",
+    "balance": "75814810330883",
+    "chain": "fantom",
+    "chainForDebank": "ftm"
+  },
+  {
+    "token_address": "0x07e6332dd090d287d3489245038daf987955dcfb",
+    "name": "Geist DAI",
+    "symbol": "gDAI",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "80040631060828518494693593",
+    "chain": "fantom",
+    "chainForDebank": "ftm"
+  },
+  {
+    "token_address": "0x5cc61a78f164885776aa610fb0fe1257df78e59b",
+    "name": "SpiritSwap Token",
+    "symbol": "SPIRIT",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "1000000000000000000",
+    "chain": "fantom",
+    "chainForDebank": "ftm"
+  },
+  {
+    "token_address": "0xe578c856933d8e1082740bf7661e379aa2a30b26",
+    "name": "Geist USDC",
+    "symbol": "gUSDC",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "6",
+    "balance": "75600584773400",
+    "chain": "fantom",
+    "chainForDebank": "ftm"
+  },
+  {
+    "token_address": "0x38aca5484b8603373acc6961ecd57a6a594510a3",
+    "name": "Geist WBTC",
+    "symbol": "gWBTC",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "8",
+    "balance": "150087505603",
+    "chain": "fantom",
+    "chainForDebank": "ftm"
+  }
+]

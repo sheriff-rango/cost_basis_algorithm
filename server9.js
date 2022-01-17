@@ -670,6 +670,7 @@ async function getWalletCostBasis(data) {
   // console.log('GLOBAL_BALANCE AFTER FILTER', global_balances)
   serverProcess.total_step = global_balances.length + 1;
   serverProcess.current_step = 1;
+  writeToFile('global_balances', global_balances)
 
   //Run cost basis for illiquid tokens
   let cost_basis = 0;
@@ -775,11 +776,11 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
     if (token_meta) global_token_meta.push(token_meta);
   }
   let token_info = global_token_info_from_debank.filter((tk) => tk.id === token.address)[0];
-  if (!token_info) {
+  if (!token_info && token.chainForDebank) {
     token_info = await getTokenInfoByDebank(token.chainForDebank, token.address);
+    if (token_info) global_token_info_from_debank.push(token_info);
   }
   if (token_info) {
-    global_token_info_from_debank.push(token_info);
     assets.push({
       id: token_info.id,
       ticker: token_info.symbol,
@@ -853,6 +854,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
       let offsetting_coin = offsetting_coins[i];
       // console.log('offsetting coin', offsetting_coin);
       offsetting_coin.used = true;
+      offsetting_coin.chainForDebank = token.chainForDebank;
       const coin_meta = global_token_meta?.filter((t) => t.address == offsetting_coin.address)[0];
       const balance_of_offsetting_coin = offsetting_coin.value / 10 ** (coin_meta?.decimals || 18);
       const getTokenCostBasisResult = await getTokenCostBasis(
