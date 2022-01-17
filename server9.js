@@ -651,8 +651,8 @@ async function getWalletCostBasis(data) {
  
   // console.log('GLOBAL_BALANCE BEFORE FILTER', global_balances.length)
   writeToFile('global_balances', global_balances)
-  global_balances = global_balances.filter((each) => each && tokenList.includes(each.token_address));
-  // global_balances = global_balances.filter((each) => each && chainIdListForMoralis.includes(each.chain));
+  // global_balances = global_balances.filter((each) => each && tokenList.includes(each.token_address));
+  global_balances = global_balances.filter((each) => each && chainIdListForMoralis.includes(each.chain));
   // console.log('GLOBAL_BALANCE AFTER FILTER', global_balances)
   serverProcess.total_step = global_balances.length + 1;
   serverProcess.current_step = 1;
