@@ -1,8 +1,8 @@
 const Moralis = require('moralis/node');
-const axios = require("axios");
+const axios = require('axios');
 const { exit } = require('process');
-const express = require("express");
-const cors = require("cors");
+const express = require('express');
+const cors = require('cors');
 const fs = require('fs');
 
 const sendRequest = require('./utils/fetch');
@@ -21,8 +21,8 @@ const apiKeys = [
 ]
 
 //server=defir_beta (preloaded with data for test wallet 0x...44a)
-// const serverUrl = "https://tjdngb7yqmm6.usemoralis.com:2053/server";
-// const appId = "ZRFrzeWTDRmhMFszuq7VSWgM5hgJI4GOY7cY2Ebx";
+// const serverUrl = 'https://tjdngb7yqmm6.usemoralis.com:2053/server';
+// const appId = 'ZRFrzeWTDRmhMFszuq7VSWgM5hgJI4GOY7cY2Ebx';
 
 const serverUrl = 'https://8dyuriovbupo.usemoralis.com:2053/server';
 const appId = 'rLSZFQmw1hUwtAjRnjZnce5cxu1qcPJzy01TuyU1';
@@ -34,9 +34,13 @@ const appId = 'rLSZFQmw1hUwtAjRnjZnce5cxu1qcPJzy01TuyU1';
 // const appId = '1ECvf1IwjzCgTFYXyD44lIeVKPMgV6ZYFoUHrPwS';
 
 let history = null;
-let serverState = false;
-let moralisStarted = false;
-
+let serverProcess = {
+  moralis_started: false,
+  isRunning: false,
+  current_step: 0,
+  total_step: 0,
+  message: '',
+};
 
 // common data
 const chainCoins = {
@@ -86,8 +90,8 @@ const chainExplorer = {
 }
 
 let testData = {
-  // wallet: '0x3ddfa8ec3052539b6c9549f12cea2c295cff5296',
-  wallet: '0x704111eDBee29D79a92c4F21e70A5396AEDCc44a',
+  wallet: '0x3ddfa8ec3052539b6c9549f12cea2c295cff5296',
+  // wallet: '0x704111eDBee29D79a92c4F21e70A5396AEDCc44a',
   blockheight: 20138207,
   // chain: 'polygon',
 };
@@ -101,27 +105,34 @@ const PORT = process.env?.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running at (http://localhost:${PORT})`);
 });
-app.get('/', function (req, res) {
-  // if (!history) return res.status(400).send("Getting data. Please wait...")
-  // res.send({ result: history})
-  const downloadContent = JSON.stringify(history);
-  res.setHeader('Content-Length', downloadContent.length);
-  res.write(downloadContent, 'binary');
-  res.end();
-})
+// app.get('/', function (req, res) {
+//   // if (!history) return res.status(400).send('Getting data. Please wait...')
+//   // res.send({ result: history})
+//   const downloadContent = JSON.stringify(history);
+//   res.setHeader('Content-Length', downloadContent.length);
+//   res.write(downloadContent, 'binary');
+//   res.end();
+// })
 app.get('/costbasis', function (req, res) {
-  // if (!moralisStarted) return res.status(400).send("Moralis server does not started yet. Please wait...")
-  if (serverState) return res.status(400).send("Moralis server is busy at the moment. Please wait...")
-  history = 'Loading...';
-  serverState = true;
-  console.log('get costbasis request');
-  const startTime = new Date();
-  getWalletCostHistory((result) => {
-    const endTime = new Date();
-    const duration  = (endTime - startTime) / 1000;
-    console.log('result in', duration, 's: ', result);
-    res.send({ result, })
-  });
+  if (!serverProcess.moralis_started) return res.status(400).send({status: false, message: 'Moralis server does not started yet. Please wait...'})
+  if (serverProcess.isRunning) return res.status(400).send({status: false, message: 'Moralis server is busy at the moment. Please wait...'})
+  // const startTime = new Date();
+  // getWalletCostHistory((result) => {
+  //   const endTime = new Date();
+  //   const duration  = (endTime - startTime) / 1000;
+  //   console.log('result in', duration, 's: ', result);
+  //   res.send({ result, })
+  // });
+  getWalletCostHistory();
+  res.send({status: true});
+})
+
+app.get('/status', function (req, res) {
+  res.send(serverProcess);
+})
+
+app.get('/history', function (req, res) {
+  res.send({result: history});
 })
 
 GLOBAL_API_KEY_INDEX = 0;
@@ -129,34 +140,32 @@ GLOBAL_API_KEY_INDEX = 0;
 Moralis.start({ serverUrl, appId })
   .then(() => {
     console.log('moralis successfully started');
-    serverState = true;
-    moralisStarted = true;
-    getWalletCostHistory();
+    serverProcess.moralis_started = true;
   })
   .catch((e) => {
     console.log('moralis start error', e);
     // history = 'moralis start error';
-    history = {
-      message: 'moralis start error',
-      error: e
-    };
-    serverState = false;
+    serverProcess.isRunning = false;
     // exit(1);
   });
 
 function getWalletCostHistory(callback) {
+  serverProcess.isRunning = true;
+  history = null;
+  const startTime = new Date();
   getWalletCostBasis(testData)
   .then((result) => {
-    console.log('final result ', result);
+    const endTime = new Date();
+    console.log('final result ', result, `in ${(endTime - startTime) / 1000}s`);
     fs.writeFileSync('./result.json', JSON.stringify(result || ''));
     history = result;
-    serverState = false;
+    serverProcess.isRunning = false;
     if (callback) callback(result);
     // exit(1);
   })
   .catch((e) => {
     console.log('get wallet cost basis error', e);
-    serverState = false;
+    serverProcess.isRunning = false;
     // history = 'get wallet cost basis error';
     // history = {
     //   message: 'get wallet cost basis error',
@@ -554,7 +563,10 @@ async function getTokenTransfersRestApi(_chain, _address, _toBlock) {
 
 // main function
 async function getWalletCostBasis(data) {
-
+  console.log('started getting wallet cost basis...');
+  serverProcess.total_step = 1;
+  serverProcess.current_step = 0;
+  serverProcess.message = 'preparing data for calculation...';
   let result = [];
   //Get global data
   // await Promise.all([
@@ -579,11 +591,11 @@ async function getWalletCostBasis(data) {
   const filteredBalance = walletChainlist.filter(chain => {
     global_chain_list[chain.id === 'eth'? 'eth' : chain.name.toLowerCase()] = chain;
     const matched = chain.usd_value > 0;
-    if (matched) {
-      tokenList.push(chain.wrapped_token_id);
-      chainIdList.push(chain.id);
-      chainIdListForMoralis.push(chain.id === 'eth'? 'eth' : chain.name.toLowerCase());
-    }
+    tokenList.push(chain.wrapped_token_id || chain.native_token_id);
+    chainIdList.push(chain.id);
+    chainIdListForMoralis.push(chain.id === 'eth'? 'eth' : chain.name.toLowerCase());
+    // if (matched) {
+    // }
     return matched;
   })
 
@@ -638,14 +650,18 @@ async function getWalletCostBasis(data) {
   global_transfers = global_transfers.sort(sortBlockNumber_reverseChrono);
  
   // console.log('GLOBAL_BALANCE BEFORE FILTER', global_balances.length)
-  // global_balances = global_balances.filter((each) => each && tokenList.includes(each.token_address));
-  global_balances = global_balances.filter((each) => each && chainIdListForMoralis.includes(each.chain));
+  writeToFile('global_balances', global_balances)
+  global_balances = global_balances.filter((each) => each && tokenList.includes(each.token_address));
+  // global_balances = global_balances.filter((each) => each && chainIdListForMoralis.includes(each.chain));
   // console.log('GLOBAL_BALANCE AFTER FILTER', global_balances)
-  
+  serverProcess.total_step = global_balances.length + 1;
+  serverProcess.current_step = 1;
+
   //Run cost basis for illiquid tokens
   let cost_basis = 0;
   //TODO: Make this loop asynchronous using Promise.allSettled
   for (let i = 0; i < global_balances.length; i++) {
+    serverProcess.message = `calculating cost basis (${i + 1}/${global_balances.length})...`
     let returnData = [];
     const crrBalance = global_balances[i];
     crrBalance.usdPrice = null;
@@ -662,13 +678,15 @@ async function getWalletCostBasis(data) {
       data.blockheight
     );
     if (price) {
+      serverProcess.current_step = (i + 1) + 1;
+
       result.push({
         id: chainInfo.id || '',
         chain: chainInfo.name || '',
         chain_id: chainInfo.community_id || '',
         chain_logo: chainInfo.logo_url || null,
-        type: "Wallet",
-        type_img: "../assets/images/wallet.jpg",
+        type: 'Wallet',
+        type_img: '../assets/images/wallet.jpg',
         protocol: protocolInfo.name || '',
         protocol_logo: protocolInfo.logo_url || null,
         protocol_url: protocolInfo.site_url || null,
@@ -679,7 +697,7 @@ async function getWalletCostBasis(data) {
         }],
         units: 123,
         cost_basis: price.usdPrice,
-        _comment: "No cost info yet for wallet positions",
+        _comment: 'No cost info yet for wallet positions',
         value: price.usdPrice,
         history: [],
       })
@@ -701,20 +719,22 @@ async function getWalletCostBasis(data) {
     cost_basis = tokenHistory.cost_basis;
     returnData = returnData.concat(tokenHistory.history);
 
+    serverProcess.current_step = (i + 1) + 1;
+    
     result.push({
       id: chainInfo.id || '',
       chain: chainInfo.name || '',
       chain_id: chainInfo.community_id || '',
       chain_logo: chainInfo.logo_url || null,
-      type: "Yield",
-      type_img: "../assets/images/yield.jpg",
+      type: 'Yield',
+      type_img: '../assets/images/yield.jpg',
       protocol: protocolInfo.name || '',
       protocol_logo: protocolInfo.logo_url || null,
       protocol_url: protocolInfo.site_url || null,
       assets: tokenHistory.assets,
       units: 123,
       cost_basis,
-      _comment: "No cost info yet for wallet positions",
+      _comment: 'No cost info yet for wallet positions',
       value: tokenInfo.price? cost_basis * tokenInfo.price : 456,
       history: returnData.reverse(),
     })
