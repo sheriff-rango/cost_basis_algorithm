@@ -698,7 +698,8 @@ async function getWalletCostBasis(data) {
       console.log('111111111111111111\n', '\n', '\n', '\n');
       console.log('token info', tokenInfo)
       console.log('current balance', crrBalance);
-      console.log('\n', '\n', '\n', '\n111111111111111111');
+      console.log('1111', tokenInfo.log_url || crrBalance.logo || null)
+      console.log('\n', '\n', '\n', '\n');
 
       result.push({
         id: chainInfo.id || '',
