@@ -252,6 +252,20 @@ async function getProtocolListByDebank() {
   }
 }
 
+async function getTokenInfoByDebank(_chain, _address) {
+  try {
+    const result = await axios({
+      method: 'get',
+      header: {'content-type': 'application/json'},
+      url: `https://openapi.debank.com/v1/token?chain_id=${_chain}&id=${_address}`
+    });
+    return result.data;
+  } catch(err) {
+    console.log('get token info by debank', err);
+    return null;
+  }
+}
+
 // Moralis functions
 async function getTokenMetadata(_chain, _tokenAddresses) {
   let options;
@@ -608,7 +622,7 @@ async function getWalletCostBasis(data) {
     tokenList = tokenList.concat(addedTokenList);
 
     let crrBalance = await getTokenBalances(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight);
-    crrBalance = crrBalance.map(item => ({...item, chain: chainIdListForMoralis[i]}))
+    crrBalance = crrBalance.map(item => ({...item, chain: chainIdListForMoralis[i], chainForDebank: chainIdList[i]}))
     global_balances = global_balances.concat(crrBalance);
     global_transfers = global_transfers.concat(await getTokenTransfers(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight));
     const crrTx = await getTransactions(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight);
@@ -650,7 +664,7 @@ async function getWalletCostBasis(data) {
   global_transfers = global_transfers.sort(sortBlockNumber_reverseChrono);
  
   // console.log('GLOBAL_BALANCE BEFORE FILTER', global_balances.length)
-  writeToFile('global_balances', global_balances)
+  // writeToFile('global_balances', global_balances)
   // global_balances = global_balances.filter((each) => each && tokenList.includes(each.token_address));
   global_balances = global_balances.filter((each) => each && chainIdListForMoralis.includes(each.chain));
   // console.log('GLOBAL_BALANCE AFTER FILTER', global_balances)
@@ -668,6 +682,7 @@ async function getWalletCostBasis(data) {
     // console.log('global balances', crrBalance)
 
     const tokenInfo = global_token_info_from_debank.filter(token => token.id === crrBalance.token_address)[0] || {};
+    // can get protocol id by this. tokenInfo includes crrBalance
     const protocolId = tokenInfo?.protocol_id || '';
     const protocolInfo = protocolList.filter(protocol => protocol.id === protocolId)[0] || {};
     const chainInfo = global_chain_list[crrBalance.chain] || {};
@@ -678,6 +693,7 @@ async function getWalletCostBasis(data) {
       data.blockheight
     );
     if (price) {
+
       serverProcess.current_step = (i + 1) + 1;
 
       result.push({
@@ -691,9 +707,9 @@ async function getWalletCostBasis(data) {
         protocol_logo: protocolInfo.logo_url || null,
         protocol_url: protocolInfo.site_url || null,
         assets: [{
-          id: tokenInfo.id,
-          ticker: tokenInfo.symbol,
-          logo: tokenInfo.logo_url
+          id: crrBalance.token_address,
+          ticker: crrBalance.symbol,
+          logo: crrBalance.logo || tokenInfo.log_url || null,
         }],
         units: 123,
         cost_basis: price.usdPrice,
@@ -753,9 +769,17 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
   // console.log('token transactions', token_transactions.length);
 
   // get token meta data
-  const token_meta = global_token_meta.filter((meta) => meta.address == token.address)[0];
-  const token_info = global_token_info_from_debank.filter((tk) => tk.id === token.address)[0];
+  let token_meta = global_token_meta.filter((meta) => meta.address == token.address)[0];
+  if (!token_meta) {
+    token_meta = await getTokenMetadata(chainIdListForMoralis[i], [token.address]);
+    if (token_meta) global_token_meta.push(token_meta);
+  }
+  let token_info = global_token_info_from_debank.filter((tk) => tk.id === token.address)[0];
+  if (!token_info) {
+    token_info = await getTokenInfoByDebank(token.chainForDebank, token.address);
+  }
   if (token_info) {
+    global_token_info_from_debank.push(token_info);
     assets.push({
       id: token_info.id,
       ticker: token_info.symbol,
