@@ -86,8 +86,8 @@ const chainExplorer = {
 }
 
 let testData = {
-  // wallet: '0x3ddfa8ec3052539b6c9549f12cea2c295cff5296',
-  wallet: '0x704111eDBee29D79a92c4F21e70A5396AEDCc44a',
+  wallet: '0x3ddfa8ec3052539b6c9549f12cea2c295cff5296',
+  // wallet: '0x704111eDBee29D79a92c4F21e70A5396AEDCc44a',
   blockheight: 20138207,
   // chain: 'polygon',
 };
@@ -638,8 +638,8 @@ async function getWalletCostBasis(data) {
   global_transfers = global_transfers.sort(sortBlockNumber_reverseChrono);
  
   // console.log('GLOBAL_BALANCE BEFORE FILTER', global_balances.length)
-  global_balances = global_balances.filter((each) => each && tokenList.includes(each.token_address));
-  // global_balances = global_balances.filter((each) => each && chainIdListForMoralis.includes(each.chain));
+  // global_balances = global_balances.filter((each) => each && tokenList.includes(each.token_address));
+  global_balances = global_balances.filter((each) => each && chainIdListForMoralis.includes(each.chain));
   // console.log('GLOBAL_BALANCE AFTER FILTER', global_balances)
   
   //Run cost basis for illiquid tokens
@@ -735,11 +735,13 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
   // get token meta data
   const token_meta = global_token_meta.filter((meta) => meta.address == token.address)[0];
   const token_info = global_token_info_from_debank.filter((tk) => tk.id === token.address)[0];
-  assets.push({
-    id: token_info.id,
-    ticker: token_info.symbol,
-    logo: token_info.logo_url
-  });
+  if (token_info) {
+    assets.push({
+      id: token_info.id,
+      ticker: token_info.symbol,
+      logo: token_info.logo_url
+    });
+  }
   // console.log('token meta', token_meta);
 
   // get native price
