@@ -586,7 +586,7 @@ async function getWalletCostBasis(data) {
     }
     return matched;
   })
-  
+
   for (let i =0; i < chainIdList.length; i++) {
     const crrTokenList = await getWalletTokenListByDebank(chainIdList[i], data.wallet);
     global_token_info_from_debank = global_token_info_from_debank.concat(crrTokenList);
@@ -620,7 +620,8 @@ async function getWalletCostBasis(data) {
       });
     }
     //Get token metadata
-    global_token_meta = global_token_meta.concat(await getTokenMetadata(chainIdListForMoralis[i], addedTokenList));
+    const crrTokenMeta = await getTokenMetadata(chainIdListForMoralis[i], addedTokenList);
+    global_token_meta = global_token_meta.concat(crrTokenMeta);
   }
 
     /**
@@ -637,7 +638,8 @@ async function getWalletCostBasis(data) {
   global_transfers = global_transfers.sort(sortBlockNumber_reverseChrono);
  
   // console.log('GLOBAL_BALANCE BEFORE FILTER', global_balances.length)
-  // global_balances = global_balances.filter((each) => each && tokenList.includes(each.token_address));
+  global_balances = global_balances.filter((each) => each && tokenList.includes(each.token_address));
+  // global_balances = global_balances.filter((each) => each && chainIdListForMoralis.includes(each.chain));
   // console.log('GLOBAL_BALANCE AFTER FILTER', global_balances)
   
   //Run cost basis for illiquid tokens
@@ -648,12 +650,41 @@ async function getWalletCostBasis(data) {
     const crrBalance = global_balances[i];
     crrBalance.usdPrice = null;
     // console.log('global balances', crrBalance)
+
+    const tokenInfo = global_token_info_from_debank.filter(token => token.id === crrBalance.token_address)[0] || {};
+    const protocolId = tokenInfo?.protocol_id || '';
+    const protocolInfo = protocolList.filter(protocol => protocol.id === protocolId)[0] || {};
+    const chainInfo = global_chain_list[crrBalance.chain] || {};
+
     const price = await getTokenPrice(
       crrBalance.chain,
       crrBalance.token_address,
       data.blockheight
     );
-    if (price) continue;
+    if (price) {
+      result.push({
+        id: chainInfo.id || '',
+        chain: chainInfo.name || '',
+        chain_id: chainInfo.community_id || '',
+        chain_logo: chainInfo.logo_url || null,
+        type: "Wallet",
+        type_img: "../assets/images/wallet.jpg",
+        protocol: protocolInfo.name || '',
+        protocol_logo: protocolInfo.logo_url || null,
+        protocol_url: protocolInfo.site_url || null,
+        assets: [{
+          id: tokenInfo.id,
+          ticker: tokenInfo.symbol,
+          logo: tokenInfo.logo_url
+        }],
+        units: 123,
+        cost_basis: price.usdPrice,
+        _comment: "No cost info yet for wallet positions",
+        value: price.usdPrice,
+        history: [],
+      })
+      continue;
+    }
     const tokenHistory = await getTokenCostBasis(
       crrBalance.chain,
       data.blockheight,
@@ -664,15 +695,11 @@ async function getWalletCostBasis(data) {
       },
       crrBalance.balance / 10 ** crrBalance.decimals,
       1,
-      {}
+      {},
+      [],
     );
     cost_basis = tokenHistory.cost_basis;
     returnData = returnData.concat(tokenHistory.history);
-
-    const tokenInfo = global_token_info_from_debank.filter(token => token.id === crrBalance.token_address)[0];
-    const protocolId = tokenInfo?.protocol_id || '';
-    const protocolInfo = protocolList.filter(protocol => protocol.id === protocolId)[0] || {};
-    const chainInfo = global_chain_list[crrBalance.chain] || {};
 
     result.push({
       id: chainInfo.id || '',
@@ -684,29 +711,18 @@ async function getWalletCostBasis(data) {
       protocol: protocolInfo.name || '',
       protocol_logo: protocolInfo.logo_url || null,
       protocol_url: protocolInfo.site_url || null,
-      assets: [
-        {
-          id: "0x123",
-          ticker: "WMATIC",
-          logo: "https://static.debank.com/image/matic_token/logo_url/matic/e5a8a2860ba5cf740a474dcab796dc63.png"
-        },
-        {
-          id: "0x8a953cfe442c5e8855cc6c61b1293fa648bae472",
-          ticker: "POLYDOGE",
-          logo: "https://assets.coingecko.com/coins/images/15146/small/p1kSco1h_400x400.jpg?1619842715"
-        }
-      ],
+      assets: tokenHistory.assets,
       units: 123,
       cost_basis,
       _comment: "No cost info yet for wallet positions",
-      value: 456,
+      value: tokenInfo.price? cost_basis * tokenInfo.price : 456,
       history: returnData.reverse(),
     })
   }
   return result;
 }
 
-async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hierarchy_level, parent_transaction) {
+async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hierarchy_level, parent_transaction, assets) {
   console.log('Cost basis for: Chain:' + chain + ' Token:' + token.address + ' Block:' + blockheight + ' balance: ' + balance);
 
   // initialize cost_basis and balance
@@ -719,6 +735,11 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
   // get token meta data
   const token_meta = global_token_meta.filter((meta) => meta.address == token.address)[0];
   const token_info = global_token_info_from_debank.filter((tk) => tk.id === token.address)[0];
+  assets.push({
+    id: token_info.id,
+    ticker: token_info.symbol,
+    logo: token_info.logo_url
+  });
   // console.log('token meta', token_meta);
 
   // get native price
@@ -796,6 +817,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
         balance_of_offsetting_coin,
         hierarchy_level + 1,
         transaction,
+        assets,
       );
       cost_basis = cost_basis + (isReceived? 1 : -1) * getTokenCostBasisResult.cost_basis;
       // newHistory = newHistory.concat(getTokenCostBasisResult.history);
