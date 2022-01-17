@@ -694,7 +694,6 @@ async function getWalletCostBasis(data) {
       data.blockheight
     );
     if (price) {
-
       serverProcess.current_step = (i + 1) + 1;
 
       result.push({
@@ -708,9 +707,9 @@ async function getWalletCostBasis(data) {
         protocol_logo: protocolInfo.logo_url || null,
         protocol_url: protocolInfo.site_url || null,
         assets: [{
-          id: crrBalance.token_address,
-          ticker: crrBalance.symbol,
-          logo: crrBalance.logo || tokenInfo.log_url || null,
+          id: tokenInfo.id || crrBalance.token_address,
+          ticker: tokenInfo.symbol || crrBalance.symbol,
+          logo: tokenInfo.log_url || crrBalance.logo || null,
         }],
         units: 123,
         cost_basis: price.usdPrice,
