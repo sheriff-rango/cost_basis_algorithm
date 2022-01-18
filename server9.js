@@ -852,13 +852,13 @@ async function getWalletCostBasis(data) {
         crrBalance.chainForDebank,
         crrBalance.token_address
       );
-      console.log('111111111111111111', result)
       price = {
         usdPrice: result.price
       };
     }
     
     if (price) {
+      console.log('11111111111111111111')
       serverProcess.current_step = (i + 1) + 1;
 
       result.push({
@@ -886,6 +886,7 @@ async function getWalletCostBasis(data) {
       })
       continue;
     }
+    console.log('22222222222222222222222')
     const tokenHistory = await getTokenCostBasis(
       crrBalance.chain,
       data.blockheight,
