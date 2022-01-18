@@ -344,7 +344,8 @@ async function getWalletTokenListByDebank(_address, _chain, _isAll) {
     const result = await axios({
       method: 'get',
       header: {'content-type': 'application/json'},
-      url: `https://openapi.debank.com/v1/user/token_list?id=${_address}${_chain? `&chain_id=${_chain}` : ''}&is_all=${_isAll === undefined? 'true' : isAll}`
+      // url: `https://openapi.debank.com/v1/user/token_list?id=${_address}${_chain? `&chain_id=${_chain}` : ''}&is_all=${_isAll === undefined? 'true' : isAll}`
+      url: `https://openapi.debank.com/v1/user/token_list?id=${_address}${_chain? `&chain_id=${_chain}` : ''}&is_all=${_isAll || false}`
     });
     return result.data;
   } catch(err) {
