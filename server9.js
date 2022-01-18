@@ -424,11 +424,11 @@ async function getTransactions(_chain, _tokenAddress, _toBlock) {
       let page = 1, txFunctions = [], mergeResult = result.result;
       while (page < Math.ceil(result.total / 500) && mergeResult.length <= TRANSACTION_MAX) {
         options.offset = page * 500;
-        // txFunctions.push(Moralis.Web3API.account.getTransactions(options));
-        txFunctions.push(sendRequest({
-          apiKey: getApiKey(),
-          url: `https://deep-index.moralis.io/api/v2/${options.address}?chain=${options.chain}${options.to_block? `&to_block=${options.to_block}` : ''}&offset=${options.offset}`
-        }));
+        txFunctions.push(Moralis.Web3API.account.getTransactions(options));
+        // txFunctions.push(sendRequest({
+        //   apiKey: getApiKey(),
+        //   url: `https://deep-index.moralis.io/api/v2/${options.address}?chain=${options.chain}${options.to_block? `&to_block=${options.to_block}` : ''}&offset=${options.offset}`
+        // }));
         if (page % 1 === 0) {
           await Promise.all(txFunctions).then(results => {
             results.map(each => {
@@ -527,11 +527,11 @@ async function getTokenTransfers(_chain, _address, _toBlock) {
       let page = 1, transferFunctions = [], mergeResult = result.result;
       while (page < Math.ceil(result.total / 500) && mergeResult.length <= TRANSACTION_MAX) {
         options.offset = page * 500;
-        // transferFunctions.push(Moralis.Web3API.account.getTokenTransfers(options));
-        transferFunctions.push(sendRequest({
-          apiKey: getApiKey(),
-          url: `https://deep-index.moralis.io/api/v2/${options.address}/erc20/transfers?chain=${options.chain}${options.to_block? `&to_block=${options.to_block}` : ''}&offset=${options.offset}`
-        }));
+        transferFunctions.push(Moralis.Web3API.account.getTokenTransfers(options));
+        // transferFunctions.push(sendRequest({
+        //   apiKey: getApiKey(),
+        //   url: `https://deep-index.moralis.io/api/v2/${options.address}/erc20/transfers?chain=${options.chain}${options.to_block? `&to_block=${options.to_block}` : ''}&offset=${options.offset}`
+        // }));
         if (page % 1 === 0) {
           await Promise.all(transferFunctions).then(results => {
             results.map(each => {
@@ -861,6 +861,8 @@ async function getWalletCostBasis(data) {
     
     if (price) {
       serverProcess.current_step = (i + 1) + 1;
+      console.log('1111111111111')
+      console.log('current balance', crrBalance)
 
       result.push({
         id: chainInfo.id || '',
