@@ -816,6 +816,7 @@ async function getWalletCostBasis(data) {
  
  //Sort global_transfers reverse-chronological by block_number
   global_transfers = global_transfers.sort(sortBlockNumber_reverseChrono);
+  writeToFile('global_transfer', global_transfers)
  
   // console.log('GLOBAL_BALANCE BEFORE FILTER', global_balances.length)
   global_balances = global_balances.filter((each) => each && tokenList.includes(each.token_address));
@@ -884,12 +885,6 @@ async function getWalletCostBasis(data) {
       })
       continue;
     }
-
-    if (!crrBalance.token_address) {
-      console.log('\n','\n','\n','\n','\n')
-      console.log('1111111111111111111111')
-      console.log('current balance', crrBalance)
-    }
     
     const tokenHistory = await getTokenCostBasis(
       crrBalance.chain,
@@ -939,7 +934,6 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
   // retrieve list of token transactions to/from wallet, prior to block
   let token_transactions = global_transfers.filter((xfer) => xfer && xfer.address == token.address && xfer.used == undefined && (!blockheight || Number(xfer.block_number) <= Number(blockheight)));
   // console.log('token transactions', token_transactions.length);
-  writeToFile('token_transactions', token_transactions)
 
   // get token meta data
   let token_meta = global_token_meta.filter((meta) => meta.address == token.address)[0];
@@ -1016,6 +1010,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
 
     // calculate the cost basis of current transaction
     const offsetting_coins = global_transfers.filter((xfer) =>
+      xfer.address &&
       xfer.transaction_hash == transaction.transaction_hash &&
       xfer.used == undefined &&
       (isReceived? (xfer.from_address.toLowerCase() == wallet) : (xfer.to_address.toLowerCase() == wallet))
@@ -1031,11 +1026,6 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
       offsetting_coin.chainForDebank = token.chainForDebank;
       const coin_meta = global_token_meta?.filter((t) => t.address == offsetting_coin.address)[0];
       const balance_of_offsetting_coin = offsetting_coin.value / 10 ** (coin_meta?.decimals || 18);
-      if (!offsetting_coin.address) {
-        console.log('\n','\n','\n','\n','\n')
-        console.log('2222222222222222222222')
-        console.log('offsetting coin', offsetting_coin)
-      }
       const getTokenCostBasisResult = await getTokenCostBasis(
         chain,
         offsetting_coin.block_number,
