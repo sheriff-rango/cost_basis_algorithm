@@ -839,6 +839,13 @@ async function getWalletCostBasis(data) {
     const protocolId = tokenInfo?.protocol_id || '';
     const protocolInfo = protocolList.filter(protocol => protocol.id === protocolId)[0] || {};
     const chainInfo = global_chain_list[crrBalance.chain] || {};
+    if (!crrBalance.token_address) {
+      console.log('\n','\n','\n','\n','\n','\n','\n','\n','\n');
+      console.log('current balance', crrBalance)
+      console.log('token info', tokenInfo)
+      console.log('protocol info', protocolInfo)
+      console.log('chain info', chainInfo)
+    }
 
     let price = null;
     if (crrBalance.token_address.substr(0, 2) === '0x') {
