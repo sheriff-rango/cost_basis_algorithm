@@ -852,6 +852,7 @@ async function getWalletCostBasis(data) {
         crrBalance.chainForDebank,
         crrBalance.token_address
       );
+      console.log('111111111111111111', result)
       price = {
         usdPrice: result.price
       };
