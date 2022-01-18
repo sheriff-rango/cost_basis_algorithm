@@ -339,12 +339,12 @@ async function getWalletBalanceByDebank(_address) {
   }
 }
 
-async function getWalletTokenListByDebank(_chain, _address) {
+async function getWalletTokenListByDebank(_address, _chain, _isAll) {
   try {
     const result = await axios({
       method: 'get',
       header: {'content-type': 'application/json'},
-      url: `https://openapi.debank.com/v1/user/token_list?id=${_address}&chain_id=${_chain}&is_all=false`
+      url: `https://openapi.debank.com/v1/user/token_list?id=${_address}${_chain? `&chain_id=${_chain}` : ''}&is_all=${_isAll === undefined? 'true' : isAll}`
     });
     return result.data;
   } catch(err) {
@@ -727,14 +727,17 @@ async function getWalletCostBasis(data) {
     return matched;
   })
 
-  for (let i =0; i < chainIdList.length; i++) {
-    const crrTokenList = await getWalletTokenListByDebank(chainIdList[i], data.wallet);
-    global_token_info_from_debank = global_token_info_from_debank.concat(crrTokenList);
-    
-    let addedTokenList = [];
-    crrTokenList.map(tokenItem => {if (tokenItem.id.substr(0, 2) === '0x') addedTokenList.push(tokenItem.id)});
-    tokenList = tokenList.concat(addedTokenList);
+  const tokenListOfWallet = await getWalletTokenListByDebank(data.wallet);
+  global_token_info_from_debank = global_token_info_from_debank.concat(tokenListOfWallet);
+  let addedTokenList = [];
+  tokenListOfWallet.map(tokenItem => {if (tokenItem.id.substr(0, 2) === '0x') addedTokenList.push(tokenItem.id)});
+  tokenList = tokenList.concat(addedTokenList);
 
+  //Get token metadata
+  const crrTokenMeta = await getTokenMetadata(chainIdListForMoralis[i], addedTokenList);
+  global_token_meta = global_token_meta.concat(crrTokenMeta);
+
+  for (let i =0; i < chainIdList.length; i++) {
     let crrBalance = await getTokenBalances(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight);
     crrBalance = crrBalance.map(item => ({...item, chain: chainIdListForMoralis[i], chainForDebank: chainIdList[i]}))
     global_balances = global_balances.concat(crrBalance);
@@ -759,9 +762,6 @@ async function getWalletCostBasis(data) {
         gas_price: tx.gas_price
       });
     }
-    //Get token metadata
-    const crrTokenMeta = await getTokenMetadata(chainIdListForMoralis[i], addedTokenList);
-    global_token_meta = global_token_meta.concat(crrTokenMeta);
   }
 
     /**
@@ -784,7 +784,6 @@ async function getWalletCostBasis(data) {
   // console.log('GLOBAL_BALANCE AFTER FILTER', global_balances)
   serverProcess.total_step = global_balances.length + 1;
   serverProcess.current_step = 1;
-  writeToFile('global_balances', global_balances)
 
   //Run cost basis for illiquid tokens
   let cost_basis = 0;
