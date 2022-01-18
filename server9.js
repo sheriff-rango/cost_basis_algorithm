@@ -415,11 +415,11 @@ async function getTransactions(_chain, _tokenAddress, _toBlock) {
   };
   if (_toBlock) options.to_block = _toBlock;
   try {
-    // const result = await Moralis.Web3API.account.getTransactions(options);
-    const result = await sendRequest({
-      apiKey: getApiKey(),
-      url: `https://deep-index.moralis.io/api/v2/${options.address}?chain=${options.chain}${options.to_block? `&to_block=${options.to_block}` : ''}&offset=${options.offset}`
-    });
+    const result = await Moralis.Web3API.account.getTransactions(options);
+    // const result = await sendRequest({
+    //   apiKey: getApiKey(),
+    //   url: `https://deep-index.moralis.io/api/v2/${options.address}?chain=${options.chain}${options.to_block? `&to_block=${options.to_block}` : ''}&offset=${options.offset}`
+    // });
     if (Number(result?.total) > 500) {
       let page = 1, txFunctions = [], mergeResult = result.result;
       while (page < Math.ceil(result.total / 500) && mergeResult.length <= TRANSACTION_MAX) {
@@ -459,11 +459,11 @@ async function getTransactions(_chain, _tokenAddress, _toBlock) {
 async function getTokenPrice(_chain, _address, _toBlock) {
   const options = { address: _address, chain: _chain, to_block: _toBlock };
   try {
-    // return await Moralis.Web3API.token.getTokenPrice(options);
-    return await sendRequest({
-      apiKey: getApiKey(),
-      url: `https://deep-index.moralis.io/api/v2/erc20/${options.address}/price?chain=${options.chain}${options.to_block? `&to_block=${options.to_block}` : ''}`
-    });
+    return await Moralis.Web3API.token.getTokenPrice(options);
+    // return await sendRequest({
+    //   apiKey: getApiKey(),
+    //   url: `https://deep-index.moralis.io/api/v2/erc20/${options.address}/price?chain=${options.chain}${options.to_block? `&to_block=${options.to_block}` : ''}`
+    // });
   } catch (e) {
     return null;
   }
@@ -477,11 +477,11 @@ async function getTokenBalances(_chain, _address, _toBlock) {
   if (_toBlock) options.to_block = _toBlock;
   try {
     // console.log('get token balances', Moralis.Web3API.account);
-    // const getTokenBalancesResult = await Moralis.Web3API.account.getTokenBalances(options);
-    const getTokenBalancesResult = await sendRequest({
-      apiKey: getApiKey(),
-      url: `https://deep-index.moralis.io/api/v2/${options.address}/erc20?chain=${options.chain}${options.to_block? `&to_block=${options.to_block}` : ''}`
-    });
+    const getTokenBalancesResult = await Moralis.Web3API.account.getTokenBalances(options);
+    // const getTokenBalancesResult = await sendRequest({
+    //   apiKey: getApiKey(),
+    //   url: `https://deep-index.moralis.io/api/v2/${options.address}/erc20?chain=${options.chain}${options.to_block? `&to_block=${options.to_block}` : ''}`
+    // });
     return getTokenBalancesResult || [];
   } catch (e) {
     console.log('get token balances error', e);
@@ -497,11 +497,11 @@ async function getNativeTokenBalances(_chain, _address, _toBlock) {
   if (_toBlock) options.to_block = _toBlock;
   try {
     // console.log('get token balances', Moralis.Web3API.account);
-    // const getTokenBalancesResult = await Moralis.Web3API.account.getTokenBalances(options);
-    const getTokenBalancesResult = await sendRequest({
-      apiKey: getApiKey(),
-      url: `https://deep-index.moralis.io/api/v2/${options.address}/balance?chain=${options.chain}${options.to_block? `&to_block=${options.to_block}` : ''}`
-    });
+    const getTokenBalancesResult = await Moralis.Web3API.account.getTokenBalances(options);
+    // const getTokenBalancesResult = await sendRequest({
+    //   apiKey: getApiKey(),
+    //   url: `https://deep-index.moralis.io/api/v2/${options.address}/balance?chain=${options.chain}${options.to_block? `&to_block=${options.to_block}` : ''}`
+    // });
     return getTokenBalancesResult || [];
   } catch (e) {
     console.log('get token balances error', e);
@@ -517,11 +517,11 @@ async function getTokenTransfers(_chain, _address, _toBlock) {
   };
   if (_toBlock) options.to_block = _toBlock;
   try {
-    // const result = await Moralis.Web3API.account.getTokenTransfers(options);
-    const result = await sendRequest({
-      apiKey: getApiKey(),
-      url: `https://deep-index.moralis.io/api/v2/${options.address}/erc20/transfers?chain=${options.chain}${options.to_block? `&to_block=${options.to_block}` : ''}&offset=${options.offset}`
-    });
+    const result = await Moralis.Web3API.account.getTokenTransfers(options);
+    // const result = await sendRequest({
+    //   apiKey: getApiKey(),
+    //   url: `https://deep-index.moralis.io/api/v2/${options.address}/erc20/transfers?chain=${options.chain}${options.to_block? `&to_block=${options.to_block}` : ''}&offset=${options.offset}`
+    // });
     // console.log('get token transfer result', result);
     if (Number(result?.total) > 500) {
       let page = 1, transferFunctions = [], mergeResult = result.result;
