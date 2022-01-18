@@ -733,10 +733,6 @@ async function getWalletCostBasis(data) {
   tokenListOfWallet.map(tokenItem => {if (tokenItem.id.substr(0, 2) === '0x') addedTokenList.push(tokenItem.id)});
   tokenList = tokenList.concat(addedTokenList);
 
-  //Get token metadata
-  const crrTokenMeta = await getTokenMetadata(chainIdListForMoralis[i], addedTokenList);
-  global_token_meta = global_token_meta.concat(crrTokenMeta);
-
   for (let i =0; i < chainIdList.length; i++) {
     let crrBalance = await getTokenBalances(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight);
     crrBalance = crrBalance.map(item => ({...item, chain: chainIdListForMoralis[i], chainForDebank: chainIdList[i]}))
@@ -762,6 +758,10 @@ async function getWalletCostBasis(data) {
         gas_price: tx.gas_price
       });
     }
+
+    //Get token metadata
+    const crrTokenMeta = await getTokenMetadata(chainIdListForMoralis[i], addedTokenList);
+    global_token_meta = global_token_meta.concat(crrTokenMeta);
   }
 
     /**
