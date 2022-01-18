@@ -774,6 +774,7 @@ async function getWalletCostBasis(data) {
     global_balances = global_balances.concat(crrBalance);
 
     // add native token balance to global_balance
+    console.log('chain id', chainIdListForMoralis[i])
     let crrNativeTokenBalance = await getNativeTokenBalances(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight);
     console.log('crrent native token balance', crrNativeTokenBalance)
     global_balances.push({...crrNativeTokenBalance, token_address: chainIdList[i], chain: chainIdListForMoralis[i], chainForDebank: chainIdList[i]});
