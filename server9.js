@@ -982,6 +982,8 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
     return {cost_basis, history: newHistory};
   }
 
+  console.log('33333333333333333333333')
+
   // process token transactions in reverse chronological order is skipped because global_transfers is already in that form
   token_transactions = token_transactions.sort(sortBlockNumber_reverseChrono);
   
