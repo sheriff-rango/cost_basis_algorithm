@@ -862,6 +862,9 @@ async function getWalletCostBasis(data) {
     if (price) {
       serverProcess.current_step = (i + 1) + 1;
       console.log('1111111111111')
+      console.log('token info', tokenInfo)
+      console.log('protocol info', protocolInfo)
+      console.log('price', price)
       console.log('current balance', crrBalance)
 
       result.push({
