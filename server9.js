@@ -879,11 +879,18 @@ async function getWalletCostBasis(data) {
         units: 123,
         cost_basis: price.usdPrice || 0,
         _comment: 'No cost info yet for wallet positions',
-        value: (price.usdPrice || 0) * (crrBalance.balance) / 10 ** 18,
+        value: (price.usdPrice || 0) * (crrBalance.balance || 0) / 10 ** 18,
         history: [],
       })
       continue;
     }
+
+    if (!crrBalance.token_address) {
+      console.log('\n','\n','\n','\n','\n')
+      console.log('1111111111111111111111')
+      console.log('current balance', crrBalance)
+    }
+    
     const tokenHistory = await getTokenCostBasis(
       crrBalance.chain,
       data.blockheight,
@@ -1024,6 +1031,11 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
       offsetting_coin.chainForDebank = token.chainForDebank;
       const coin_meta = global_token_meta?.filter((t) => t.address == offsetting_coin.address)[0];
       const balance_of_offsetting_coin = offsetting_coin.value / 10 ** (coin_meta?.decimals || 18);
+      if (!offsetting_coin.address) {
+        console.log('\n','\n','\n','\n','\n')
+        console.log('2222222222222222222222')
+        console.log('offsetting coin', offsetting_coin)
+      }
       const getTokenCostBasisResult = await getTokenCostBasis(
         chain,
         offsetting_coin.block_number,
