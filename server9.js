@@ -817,7 +817,6 @@ async function getWalletCostBasis(data) {
  
  //Sort global_transfers reverse-chronological by block_number
   global_transfers = global_transfers.sort(sortBlockNumber_reverseChrono);
-  writeToFile('global_transfer', global_transfers)
  
   // console.log('GLOBAL_BALANCE BEFORE FILTER', global_balances.length)
   global_balances = global_balances.filter((each) => each && tokenList.includes(each.token_address));
@@ -886,7 +885,7 @@ async function getWalletCostBasis(data) {
         units: 123,
         cost_basis: price.usdPrice || 0,
         _comment: 'No cost info yet for wallet positions',
-        value: (price.usdPrice || 0) * (crrBalance.balance || 0) / 10 ** 18,
+        value: (price.usdPrice || 0) * (crrBalance.balance || 0) / 10 ** (crrBalance.decimals || 18),
         history: [],
       })
       continue;
