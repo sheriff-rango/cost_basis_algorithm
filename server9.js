@@ -205,9 +205,9 @@ const chainExplorer = {
 }
 
 let testData = {
-  // wallet: '0x3ddfa8ec3052539b6c9549f12cea2c295cff5296',
-  wallet: '0x704111eDBee29D79a92c4F21e70A5396AEDCc44a',
-  blockheight: 20138207,
+  wallet: '0x3ddfa8ec3052539b6c9549f12cea2c295cff5296',
+  // wallet: '0x704111eDBee29D79a92c4F21e70A5396AEDCc44a',
+  // blockheight: 20138207,
   // chain: 'polygon',
 };
 
@@ -727,13 +727,20 @@ async function getWalletCostBasis(data) {
     return matched;
   })
 
-  const tokenListOfWallet = await getWalletTokenListByDebank(data.wallet);
-  global_token_info_from_debank = global_token_info_from_debank.concat(tokenListOfWallet);
-  let addedTokenList = [];
-  tokenListOfWallet.map(tokenItem => {if (tokenItem.id.substr(0, 2) === '0x') addedTokenList.push(tokenItem.id)});
-  tokenList = tokenList.concat(addedTokenList);
+  // const tokenListOfWallet = await getWalletTokenListByDebank(data.wallet);
+  // global_token_info_from_debank = global_token_info_from_debank.concat(tokenListOfWallet);
+  // let addedTokenList = [];
+  // tokenListOfWallet.map(tokenItem => {if (tokenItem.id.substr(0, 2) === '0x') addedTokenList.push(tokenItem.id)});
+  // tokenList = tokenList.concat(addedTokenList);
 
   for (let i =0; i < chainIdList.length; i++) {
+    const crrTokenList = await getWalletTokenListByDebank(chainIdList[i], data.wallet);
+    global_token_info_from_debank = global_token_info_from_debank.concat(crrTokenList);
+    
+    let addedTokenList = [];
+    crrTokenList.map(tokenItem => {if (tokenItem.id.substr(0, 2) === '0x') addedTokenList.push(tokenItem.id)});
+    tokenList = tokenList.concat(addedTokenList);
+    
     let crrBalance = await getTokenBalances(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight);
     crrBalance = crrBalance.map(item => ({...item, chain: chainIdListForMoralis[i], chainForDebank: chainIdList[i]}))
     global_balances = global_balances.concat(crrBalance);
