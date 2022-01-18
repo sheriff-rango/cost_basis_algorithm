@@ -205,8 +205,8 @@ const chainExplorer = {
 }
 
 let testData = {
-  wallet: '0x3ddfa8ec3052539b6c9549f12cea2c295cff5296',
-  // wallet: '0x704111eDBee29D79a92c4F21e70A5396AEDCc44a',
+  // wallet: '0x3ddfa8ec3052539b6c9549f12cea2c295cff5296',
+  wallet: '0x704111eDBee29D79a92c4F21e70A5396AEDCc44a',
   blockheight: 20138207,
   // chain: 'polygon',
 };
@@ -910,7 +910,6 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
   // confirm wether token is valued or not
   let price = await getTokenPrice(chain, token.address, blockheight);
   if (price) {
-    console.log('\n1111111111111 balance', balance, 'price', price)
     cost_basis = balance * price.usdPrice;
     newHistory.push({
       units: token.value / 10 ** (token_meta?.decimals || 18),
@@ -941,7 +940,6 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
 
     // confirm whether token is received or not
     let isReceived = true;
-    console.log('\n222222222222222222222222 transaction', transaction, 'wallet', wallet)
     if (transaction.from_address.toLowerCase() == wallet) {
       isReceived = false; //from my wallet. debit outflow
     } else if (transaction.to_address.toLowerCase() == wallet) {
