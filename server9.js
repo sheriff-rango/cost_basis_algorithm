@@ -910,6 +910,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
   // confirm wether token is valued or not
   let price = await getTokenPrice(chain, token.address, blockheight);
   if (price) {
+    console.log('\n1111111111111 balance', balance, 'price', price)
     cost_basis = balance * price.usdPrice;
     newHistory.push({
       units: token.value / 10 ** (token_meta?.decimals || 18),
@@ -940,6 +941,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
 
     // confirm whether token is received or not
     let isReceived = true;
+    console.log('\n222222222222222222222222 transaction', transaction, 'wallet', wallet)
     if (transaction.from_address.toLowerCase() == wallet) {
       isReceived = false; //from my wallet. debit outflow
     } else if (transaction.to_address.toLowerCase() == wallet) {
@@ -948,6 +950,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
       console.log('Error: wallet address ' + wallet + ' not found in transaction ' + transaction.transaction_hash);
       continue;
     }
+    console.log('isReceived', isReceived)
 
     //calculate the balance of token in wallet, just before transaction.
     const units_of_token = transaction.value / 10 ** (token_meta?.decimals || 18);
