@@ -804,9 +804,6 @@ async function getWalletCostBasis(data) {
     global_token_meta = global_token_meta.concat(crrTokenMeta);
   }
 
-  writeToFile('global_balances', global_balances)
-  writeToFile('token list', tokenList);
-
     /**
     global_balances = await getTokenBalances(data.chain, data.wallet.toLowerCase(), data.blockheight);
     global_transfers = await getTokenTransfers(data.chain, data.wallet.toLowerCase(), data.blockheight);
@@ -822,7 +819,6 @@ async function getWalletCostBasis(data) {
  
   // console.log('GLOBAL_BALANCE BEFORE FILTER', global_balances.length)
   global_balances = global_balances.filter((each) => each && tokenList.includes(each.token_address));
-  writeToFile('filtered_global_balances', global_balances)
   // global_balances = global_balances.filter((each) => each && chainIdListForMoralis.includes(each.chain));
   // console.log('GLOBAL_BALANCE AFTER FILTER', global_balances)
   serverProcess.total_step = global_balances.length + 1;
@@ -844,11 +840,23 @@ async function getWalletCostBasis(data) {
     const protocolInfo = protocolList.filter(protocol => protocol.id === protocolId)[0] || {};
     const chainInfo = global_chain_list[crrBalance.chain] || {};
 
-    const price = await getTokenPrice(
-      crrBalance.chain,
-      crrBalance.token_address,
-      data.blockheight
-    );
+    let price = null;
+    if (crrBalance.token_address.substr(0, 2) === '0x') {
+      price = await getTokenPrice(
+        crrBalance.chain,
+        crrBalance.token_address,
+        data.blockheight
+      );
+    } else {
+      const result = await getTokenInfoByDebank(
+        crrBalance.chainForDebank,
+        crrBalance.token_address
+      );
+      price = {
+        usdPrice: result.price
+      };
+    }
+    
     if (price) {
       serverProcess.current_step = (i + 1) + 1;
 
@@ -952,6 +960,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
 
   // confirm wether token is valued or not
   let price = await getTokenPrice(chain, token.address, blockheight);
+
   if (price) {
     cost_basis = balance * price.usdPrice;
     newHistory.push({
