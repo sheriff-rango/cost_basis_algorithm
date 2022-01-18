@@ -839,13 +839,6 @@ async function getWalletCostBasis(data) {
     const protocolId = tokenInfo?.protocol_id || '';
     const protocolInfo = protocolList.filter(protocol => protocol.id === protocolId)[0] || {};
     const chainInfo = global_chain_list[crrBalance.chain] || {};
-    if (!crrBalance.token_address) {
-      console.log('\n','\n','\n','\n','\n','\n','\n','\n','\n');
-      console.log('current balance', crrBalance)
-      console.log('token info', tokenInfo)
-      console.log('protocol info', protocolInfo)
-      console.log('chain info', chainInfo)
-    }
 
     let price = null;
     if (crrBalance.token_address.substr(0, 2) === '0x') {
@@ -886,7 +879,7 @@ async function getWalletCostBasis(data) {
         units: 123,
         cost_basis: price.usdPrice || 0,
         _comment: 'No cost info yet for wallet positions',
-        value: price.usdPrice || 0,
+        value: (price.usdPrice || 0) * (crrBalance.balance) / 10 ** 18,
         history: [],
       })
       continue;
@@ -939,6 +932,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
   // retrieve list of token transactions to/from wallet, prior to block
   let token_transactions = global_transfers.filter((xfer) => xfer && xfer.address == token.address && xfer.used == undefined && (!blockheight || Number(xfer.block_number) <= Number(blockheight)));
   // console.log('token transactions', token_transactions.length);
+  writeToFile('token_transactions', token_transactions)
 
   // get token meta data
   let token_meta = global_token_meta.filter((meta) => meta.address == token.address)[0];
