@@ -775,7 +775,7 @@ async function getWalletCostBasis(data) {
 
     // add native token balance to global_balance
     let crrNativeTokenvBalance = await getNativeTokenBalances(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight);
-    global_balances.push({...crrNativeTokenvBalance, token_address: chainIdListForMoralis[i], chain: chainIdListForMoralis[i], chainForDebank: chainIdList[i]});
+    global_balances.push({...crrNativeTokenvBalance, token_address: chainIdList[i], chain: chainIdListForMoralis[i], chainForDebank: chainIdList[i]});
 
     global_transfers = global_transfers.concat(await getTokenTransfers(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight));
     const crrTx = await getTransactions(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight);
@@ -804,6 +804,9 @@ async function getWalletCostBasis(data) {
     global_token_meta = global_token_meta.concat(crrTokenMeta);
   }
 
+  writeToFile('global_balances', global_balances)
+  writeToFile('token list', tokenList);
+
     /**
     global_balances = await getTokenBalances(data.chain, data.wallet.toLowerCase(), data.blockheight);
     global_transfers = await getTokenTransfers(data.chain, data.wallet.toLowerCase(), data.blockheight);
@@ -819,6 +822,7 @@ async function getWalletCostBasis(data) {
  
   // console.log('GLOBAL_BALANCE BEFORE FILTER', global_balances.length)
   global_balances = global_balances.filter((each) => each && tokenList.includes(each.token_address));
+  writeToFile('filtered_global_balances', global_balances)
   // global_balances = global_balances.filter((each) => each && chainIdListForMoralis.includes(each.chain));
   // console.log('GLOBAL_BALANCE AFTER FILTER', global_balances)
   serverProcess.total_step = global_balances.length + 1;
