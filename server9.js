@@ -721,6 +721,7 @@ async function getWalletCostBasis(data) {
     global_chain_list[chain.id === 'eth'? 'eth' : chain.name.toLowerCase()] = chain;
     const matched = chain.usd_value > 0;
     tokenList.push(chain.wrapped_token_id || chain.native_token_id);
+    console.log(chain)
     if (chain_details[chain.id].wrapped_token.address) tokenList.push(chain_details[chain.id].wrapped_token.address);
     chainIdList.push(chain.id);
     chainIdListForMoralis.push(chain.id === 'eth'? 'eth' : chain.name.toLowerCase());
