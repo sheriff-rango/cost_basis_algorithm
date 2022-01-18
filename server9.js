@@ -497,7 +497,7 @@ async function getNativeTokenBalances(_chain, _address, _toBlock) {
   if (_toBlock) options.to_block = _toBlock;
   try {
     // console.log('get token balances', Moralis.Web3API.account);
-    const getTokenBalancesResult = await Moralis.Web3API.account.getTokenBalances(options);
+    const getTokenBalancesResult = await Moralis.Web3API.account.getNativeBalance(options);
     // const getTokenBalancesResult = await sendRequest({
     //   apiKey: getApiKey(),
     //   url: `https://deep-index.moralis.io/api/v2/${options.address}/balance?chain=${options.chain}${options.to_block? `&to_block=${options.to_block}` : ''}`
@@ -774,9 +774,8 @@ async function getWalletCostBasis(data) {
     global_balances = global_balances.concat(crrBalance);
 
     // add native token balance to global_balance
-    console.log('chain id', chainIdListForMoralis[i])
     let crrNativeTokenBalance = await getNativeTokenBalances(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight);
-    console.log('crrent native token balance', crrNativeTokenBalance)
+    writeToFile(`current_native_token_balance_${chainIdListForMoralis[i]}`, crrNativeTokenBalance)
     global_balances.push({...crrNativeTokenBalance, token_address: chainIdList[i], chain: chainIdListForMoralis[i], chainForDebank: chainIdList[i]});
 
     global_transfers = global_transfers.concat(await getTokenTransfers(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight));
