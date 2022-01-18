@@ -775,11 +775,8 @@ async function getWalletCostBasis(data) {
 
     // add native token balance to global_balance
     let crrNativeTokenBalance = await getNativeTokenBalances(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight);
-    if (crrNativeTokenBalance.length > 0) {
-      crrNativeTokenBalance.map(item => global_balances.push({...item, token_address: chainIdList[i], chain: chainIdListForMoralis[i], chainForDebank: chainIdList[i]}))
-    } else {
-      global_balances.push({...crrNativeTokenBalance, token_address: chainIdList[i], chain: chainIdListForMoralis[i], chainForDebank: chainIdList[i]});
-    }
+    console.log('crrent native token balance', crrNativeTokenBalance)
+    global_balances.push({...crrNativeTokenBalance, token_address: chainIdList[i], chain: chainIdListForMoralis[i], chainForDebank: chainIdList[i]});
 
     global_transfers = global_transfers.concat(await getTokenTransfers(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight));
     const crrTx = await getTransactions(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight);
