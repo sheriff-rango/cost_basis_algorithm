@@ -489,6 +489,26 @@ async function getTokenBalances(_chain, _address, _toBlock) {
   }
 }
 
+async function getNativeTokenBalances(_chain, _address, _toBlock) {
+  let options = {
+    chain: _chain,
+    address: _address
+  };
+  if (_toBlock) options.to_block = _toBlock;
+  try {
+    // console.log('get token balances', Moralis.Web3API.account);
+    // const getTokenBalancesResult = await Moralis.Web3API.account.getTokenBalances(options);
+    const getTokenBalancesResult = await sendRequest({
+      apiKey: getApiKey(),
+      url: `https://deep-index.moralis.io/api/v2/${options.address}/balance?chain=${options.chain}${options.to_block? `&to_block=${options.to_block}` : ''}`
+    });
+    return getTokenBalancesResult || [];
+  } catch (e) {
+    console.log('get token balances error', e);
+    return [];
+  }
+}
+
 async function getTokenTransfers(_chain, _address, _toBlock) {
   let options = {
     address: _address,
@@ -743,7 +763,7 @@ async function getWalletCostBasis(data) {
     let addedTokenList = [];
     crrTokenList.map(tokenItem => {
       if (tokenItem.price > 0) {
-        if (tokenItem.id.substr(0, 2) === '0x') addedTokenList.push(tokenItem.id)
+        addedTokenList.push(tokenItem.id)
         global_token_info_from_debank.push(tokenItem);
       }
     });
@@ -752,6 +772,12 @@ async function getWalletCostBasis(data) {
     let crrBalance = await getTokenBalances(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight);
     crrBalance = crrBalance.map(item => ({...item, chain: chainIdListForMoralis[i], chainForDebank: chainIdList[i]}))
     global_balances = global_balances.concat(crrBalance);
+
+    // add native token balance to global_balance
+    let crrNativeTokenvBalance = await getNativeTokenBalances(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight);
+    crrNativeTokenvBalance = crrNativeTokenvBalance.map(item => ({...item, token_address: chainIdListForMoralis[i], chain: chainIdListForMoralis[i], chainForDebank: chainIdList[i]}))
+    global_balances = global_balances.concat(crrNativeTokenvBalance);
+
     global_transfers = global_transfers.concat(await getTokenTransfers(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight));
     const crrTx = await getTransactions(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight);
     global_tx = global_tx.concat(crrTx);
@@ -793,9 +819,7 @@ async function getWalletCostBasis(data) {
   global_transfers = global_transfers.sort(sortBlockNumber_reverseChrono);
  
   // console.log('GLOBAL_BALANCE BEFORE FILTER', global_balances.length)
-  // writeToFile('global_balances', global_balances)
   global_balances = global_balances.filter((each) => each && tokenList.includes(each.token_address));
-  writeToFile('global_balances', global_balances);
   // global_balances = global_balances.filter((each) => each && chainIdListForMoralis.includes(each.chain));
   // console.log('GLOBAL_BALANCE AFTER FILTER', global_balances)
   serverProcess.total_step = global_balances.length + 1;
@@ -843,9 +867,9 @@ async function getWalletCostBasis(data) {
           tokenInfo
         }],
         units: 123,
-        cost_basis: price.usdPrice,
+        cost_basis: price.usdPrice || 0,
         _comment: 'No cost info yet for wallet positions',
-        value: price.usdPrice,
+        value: price.usdPrice || 0,
         history: [],
       })
       continue;
