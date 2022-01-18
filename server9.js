@@ -852,6 +852,7 @@ async function getWalletCostBasis(data) {
         crrBalance.chainForDebank,
         crrBalance.token_address
       );
+      crrBalance.symbol = result.symbol;
       price = {
         usdPrice: result.price
       };
@@ -874,8 +875,6 @@ async function getWalletCostBasis(data) {
           id: crrBalance.token_address,
           ticker: crrBalance.symbol,
           logo: crrBalance.logo || tokenInfo.logo_url || null,
-          crrBalance,
-          tokenInfo
         }],
         units: 123,
         cost_basis: price.usdPrice || 0,
