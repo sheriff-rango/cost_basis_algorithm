@@ -273,7 +273,7 @@ function getWalletCostHistory(callback) {
     const endTime = new Date();
     console.log('final result ', result, `in ${(endTime - startTime) / 1000}s`);
     fs.writeFileSync('./result.json', JSON.stringify(result || ''));
-    history = result.sort((item1, item2) => item1.value - item2.value);
+    history = result.sort((item1, item2) => item2.value - item1.value);
     serverProcess.isRunning = false;
     if (callback) callback(result);
     // exit(1);
