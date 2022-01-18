@@ -858,7 +858,6 @@ async function getWalletCostBasis(data) {
     }
     
     if (price) {
-      console.log('11111111111111111111')
       serverProcess.current_step = (i + 1) + 1;
 
       result.push({
@@ -886,7 +885,6 @@ async function getWalletCostBasis(data) {
       })
       continue;
     }
-    console.log('22222222222222222222222')
     const tokenHistory = await getTokenCostBasis(
       crrBalance.chain,
       data.blockheight,
@@ -933,7 +931,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
   let cost_basis = 0, current_balance = balance, newHistory = [];
 
   // retrieve list of token transactions to/from wallet, prior to block
-  let token_transactions = global_transfers.filter((xfer) => xfer && xfer.address == token.address && xfer.used == undefined && Number(xfer.block_number) <= Number(blockheight));
+  let token_transactions = global_transfers.filter((xfer) => xfer && xfer.address == token.address && xfer.used == undefined && (!blockheight || Number(xfer.block_number) <= Number(blockheight)));
   // console.log('token transactions', token_transactions.length);
 
   // get token meta data
@@ -982,7 +980,6 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
     return {cost_basis, history: newHistory};
   }
 
-  console.log('33333333333333333333333')
 
   // process token transactions in reverse chronological order is skipped because global_transfers is already in that form
   token_transactions = token_transactions.sort(sortBlockNumber_reverseChrono);
@@ -1004,7 +1001,6 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
       console.log('Error: wallet address ' + wallet + ' not found in transaction ' + transaction.transaction_hash);
       continue;
     }
-    console.log('isReceived', isReceived)
 
     //calculate the balance of token in wallet, just before transaction.
     const units_of_token = transaction.value / 10 ** (token_meta?.decimals || 18);
