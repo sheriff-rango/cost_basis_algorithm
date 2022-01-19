@@ -904,7 +904,6 @@ async function getWalletCostBasis(data) {
       crrBalance.balance / 10 ** crrBalance.decimals,
       1,
       {},
-      [],
     );
     cost_basis = tokenHistory.cost_basis;
     returnData = returnData.concat(tokenHistory.history);
@@ -932,11 +931,11 @@ async function getWalletCostBasis(data) {
   return result;
 }
 
-async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hierarchy_level, parent_transaction, assets) {
+async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hierarchy_level, parent_transaction) {
   console.log('Cost basis for: Chain:' + chain + ' Token:' + token.address + ' Block:' + blockheight + ' balance: ' + balance);
 
   // initialize cost_basis and balance
-  let cost_basis = 0, current_balance = balance, newHistory = [];
+  let cost_basis = 0, current_balance = balance, newHistory = [], assets = [];
 
   // retrieve list of token transactions to/from wallet, prior to block
   let token_transactions = global_transfers.filter((xfer) => xfer && xfer.address == token.address && xfer.used == undefined && (!blockheight || Number(xfer.block_number) <= Number(blockheight)));
@@ -990,7 +989,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
       valued_directly: true,
     })
     // console.log('Token: ' + token.address + ' Cost= ' + cost_basis);
-    return {cost_basis, history: newHistory};
+    return {cost_basis, history: newHistory, assets};
   }
 
 
@@ -1046,11 +1045,11 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
         balance_of_offsetting_coin,
         hierarchy_level + 1,
         transaction,
-        assets,
       );
       cost_basis = cost_basis + (isReceived? 1 : -1) * getTokenCostBasisResult.cost_basis;
       // newHistory = newHistory.concat(getTokenCostBasisResult.history);
       childHistory = childHistory.concat(getTokenCostBasisResult.history);
+      assets = assets.concat(getTokenCostBasisResult.assets || []);
       // childHistory.push(getTokenCostBasisResult.history);
     }
     const fee_native_units = transaction_detail.gas * transaction_detail.gas_price / 10 ** (token_meta?.decimals || 18);
@@ -1075,5 +1074,5 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
     if (current_balance <= 0) break;
   }
   
-  return {cost_basis, history: newHistory};
+  return {cost_basis, history: newHistory, assets};
 }
