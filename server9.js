@@ -855,9 +855,9 @@ async function getWalletCostBasis(data) {
         crrBalance.token_address
       );
       crrBalance.symbol = result.symbol;
-      price = {
-        usdPrice: result.price
-      };
+      // price = {
+      //   usdPrice: result.price
+      // };
     }
 
     serverProcess.current_step = (i + 1) + 1;
