@@ -256,6 +256,7 @@ Moralis.start({ serverUrl, appId })
   .then(() => {
     console.log('moralis successfully started');
     serverProcess.moralis_started = true;
+    // getWalletCostHistory();
   })
   .catch((e) => {
     console.log('moralis start error', e);
@@ -776,7 +777,6 @@ async function getWalletCostBasis(data) {
 
     // add native token balance to global_balance
     let crrNativeTokenBalance = await getNativeTokenBalances(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight);
-    writeToFile(`current_native_token_balance_${chainIdListForMoralis[i]}`, crrNativeTokenBalance)
     global_balances.push({...crrNativeTokenBalance, token_address: chainIdList[i], chain: chainIdListForMoralis[i], chainForDebank: chainIdList[i]});
 
     global_transfers = global_transfers.concat(await getTokenTransfers(chainIdListForMoralis[i], data.wallet.toLowerCase(), data.blockheight));
@@ -945,7 +945,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
   let token_meta = global_token_meta.filter((meta) => meta.address == token.address)[0];
   if (!token_meta) {
     token_meta = await getTokenMetadata(chain, [token.address]);
-    if (token_meta) global_token_meta.push(token_meta);
+    if (token_meta) global_token_meta.push(token_meta[0]);
   }
   let token_info = global_token_info_from_debank.filter((tk) => tk.id === token.address)[0];
   if (!token_info && token.chainForDebank) {

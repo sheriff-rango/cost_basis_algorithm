@@ -1,0 +1,112 @@
+[
+  {
+    "address": "0xaaa5b9e6c589642f98a1cda99b9d024b8407285a",
+    "name": "IRON Titanium Token",
+    "symbol": "TITAN",
+    "logo": null,
+    "logo_hash": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "block_number": "14589812",
+    "validated": 1
+  },
+  {
+    "address": "0x8a953cfe442c5e8855cc6c61b1293fa648bae472",
+    "name": "PolyDoge",
+    "symbol": "PolyDoge",
+    "logo": null,
+    "logo_hash": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "block_number": "13760222",
+    "validated": 1
+  },
+  {
+    "address": "0xc004e2318722ea2b15499d6375905d75ee5390b8",
+    "name": "Kommunitas",
+    "symbol": "KOM",
+    "logo": null,
+    "logo_hash": null,
+    "thumbnail": null,
+    "decimals": "8",
+    "block_number": "14791613",
+    "validated": 1
+  },
+  {
+    "address": "0xf28164a485b0b2c90639e47b0f377b4a438a16b1",
+    "name": "Dragon QUICK",
+    "symbol": "dQUICK",
+    "logo": null,
+    "logo_hash": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "block_number": "12537697",
+    "validated": 1
+  },
+  {
+    "address": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+    "name": "Wrapped Matic",
+    "symbol": "WMATIC",
+    "logo": null,
+    "logo_hash": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "block_number": "5174939",
+    "validated": 1
+  },
+  {
+    "address": "0x3ecdeb8fc5023839b92b0c293d049d61069e02b1",
+    "name": "GenX Token",
+    "symbol": "GENX",
+    "logo": null,
+    "logo_hash": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "block_number": "15696774",
+    "validated": 1
+  },
+  {
+    "address": "0xc68e83a305b0fad69e264a1769a0a070f190d2d6",
+    "name": "Polyroll Token",
+    "symbol": "ROLL",
+    "logo": null,
+    "logo_hash": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "block_number": "15791609",
+    "validated": 1
+  },
+  {
+    "address": "0xdda40cdfe4a0090f42ff49f264a831402adb801a",
+    "name": "Dogira",
+    "symbol": "DOGIRA",
+    "logo": null,
+    "logo_hash": null,
+    "thumbnail": null,
+    "decimals": "9",
+    "block_number": "19217521",
+    "validated": 1
+  },
+  {
+    "address": "0x59e9261255644c411afdd00bd89162d09d862e38",
+    "name": "ETHA",
+    "symbol": "ETHA",
+    "logo": null,
+    "logo_hash": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "block_number": "16872576",
+    "validated": 1
+  },
+  {
+    "address": "0x22e51bae3f545255e115090202a23c7ede0b00b9",
+    "name": "LELX.io",
+    "symbol": "LELX.io",
+    "logo": null,
+    "logo_hash": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "block_number": "21928105",
+    "validated": 1
+  }
+]

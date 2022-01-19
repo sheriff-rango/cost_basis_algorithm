@@ -1,0 +1,67 @@
+[
+  {
+    "address": "0x180dae91d6d56235453a892d2e56a3e40ba81df8",
+    "name": "DOJO",
+    "symbol": "DOJO",
+    "decimals": "18",
+    "logo": null,
+    "logo_hash": null,
+    "thumbnail": null,
+    "block_number": "12922245",
+    "validated": 1
+  },
+  {
+    "address": "0x0c5dbd637a1b6665af6633c6b0eff03fedaaef3a",
+    "name": "",
+    "symbol": "",
+    "decimals": ""
+  },
+  {
+    "address": "0x0f761ca9bcd0f0d9be5ee193defe1dc2f86b1b8c",
+    "name": "",
+    "symbol": "",
+    "decimals": ""
+  },
+  {
+    "address": "0x25d2e80cb6b86881fd7e07dd263fb79f4abe033c",
+    "name": "",
+    "symbol": "",
+    "decimals": ""
+  },
+  {
+    "address": "0x2aa87658bfc133abcdde8f553380e87b2c66f964",
+    "name": "",
+    "symbol": "",
+    "decimals": ""
+  },
+  {
+    "address": "0x514441e9c39a553c71a8d781e20b7c69adc71962",
+    "name": "",
+    "symbol": "",
+    "decimals": ""
+  },
+  {
+    "address": "0x782b2be4cb221cd9d7916ce2b4e15f7aa43ab754",
+    "name": "",
+    "symbol": "",
+    "decimals": ""
+  },
+  {
+    "address": "0x7fc7b1c464f16f8ccc20b17eb95231a8bab8b7f4",
+    "name": "",
+    "symbol": "",
+    "decimals": ""
+  },
+  {
+    "address": "0x80861a817106665bca173db6ac2ab628a738c737",
+    "name": "",
+    "symbol": "",
+    "decimals": ""
+  },
+  {
+    "address": "0x80c66d460e2bb9d31a8de54b4016fca986d0811f",
+    "name": "",
+    "symbol": "",
+    "decimals": ""
+  }
+]

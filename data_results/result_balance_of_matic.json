@@ -1,0 +1,452 @@
+[
+  {
+    "token_address": "0x4e12f3cf131c56080f181c795c1c012f157a68e8",
+    "name": "Uniswap V2",
+    "symbol": "UNI-V2",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "4"
+  },
+  {
+    "token_address": "0xcbf4ab00b6aa19b4d5d29c7c3508b393a1c01fe3",
+    "name": "MegaDoge.Org",
+    "symbol": "MegaDoge",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "1000000000000000000000"
+  },
+  {
+    "token_address": "0x3ecdeb8fc5023839b92b0c293d049d61069e02b1",
+    "name": "GenX Token",
+    "symbol": "GENX",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "71732309204261366915"
+  },
+  {
+    "token_address": "0x8a953cfe442c5e8855cc6c61b1293fa648bae472",
+    "name": "PolyDoge",
+    "symbol": "PolyDoge",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "7000000000779354752432433369"
+  },
+  {
+    "token_address": "0x36ab72472db0d5ca55a451d324b36a3230bf8674",
+    "name": "TokenOriginal.com",
+    "symbol": "Original",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "8",
+    "balance": "5000000000000"
+  },
+  {
+    "token_address": "0xe4fb1bb8423417a460286b0ed44b64e104c5fae5",
+    "name": "Zepe.io",
+    "symbol": "Zepe.io",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "750000000000000000000000"
+  },
+  {
+    "token_address": "0x6142f62e7996faec5c5bb9d10669d60299d69dfe",
+    "name": "Go Buy SpaceRat at SpaceRat.Finance",
+    "symbol": "BuySpaceRat",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "5000000000000000000"
+  },
+  {
+    "token_address": "0x9fd4969573f9dec7882409709c9b35f2dc3074ca",
+    "name": "TAO Coin",
+    "symbol": "TAO",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "474934833333000000000"
+  },
+  {
+    "token_address": "0x98c565a2318c3f180e47edd68893375779186b34",
+    "name": " .GET $THRUST & CLAIM 10% BONUS TG: @THRUST_ZONE",
+    "symbol": "https://thrust.zone/dextools",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "20000000000000000000000"
+  },
+  {
+    "token_address": "0x05e7282f459d5b90a91f64fb697b07c1f544d9d8",
+    "name": "Mini Feg",
+    "symbol": "MiniFeg",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "9",
+    "balance": "50000000000000000"
+  },
+  {
+    "token_address": "0x0b91b07beb67333225a5ba0259d55aee10e3a578",
+    "name": "Minereum Polygon",
+    "symbol": "MNEP",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "8",
+    "balance": "30000000000000"
+  },
+  {
+    "token_address": "0xc68e83a305b0fad69e264a1769a0a070f190d2d6",
+    "name": "Polyroll Token",
+    "symbol": "ROLL",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "1000000000000000000"
+  },
+  {
+    "token_address": "0x29040596c98c193014801ce473fce644cc4ea339",
+    "name": "PLGPUNK.COM",
+    "symbol": "PLGPUNK.COM",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "100000000000000000000"
+  },
+  {
+    "token_address": "0x0c3d40d6d1ed1392ae9dcc5cfd1052f2d9a0fb6d",
+    "name": "iAAPL",
+    "symbol": "iAAPL",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "41081"
+  },
+  {
+    "token_address": "0xf28164a485b0b2c90639e47b0f377b4a438a16b1",
+    "name": "Dragon QUICK",
+    "symbol": "dQUICK",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "800612314757351"
+  },
+  {
+    "token_address": "0xac105efc8250b4b2f3a849f9586d0c2067a87535",
+    "name": "Apple V2 Wrapped MATIC",
+    "symbol": "aMATIC",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "8",
+    "balance": "4"
+  },
+  {
+    "token_address": "0x50b9e80632380a20d1e7612b218c987039c29601",
+    "name": "Apple Wrapped FISH",
+    "symbol": "aFISH",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "8",
+    "balance": "226910"
+  },
+  {
+    "token_address": "0xd1e6354fb05bf72a8909266203dab80947dceccf",
+    "name": "Cryption Network Token",
+    "symbol": "CNT",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "817721415969754"
+  },
+  {
+    "token_address": "0x59e9261255644c411afdd00bd89162d09d862e38",
+    "name": "ETHA",
+    "symbol": "ETHA",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "7246130830153286533"
+  },
+  {
+    "token_address": "0x0364c8dbde082372e8d6a6137b45613dd0f8138a",
+    "name": "PolyBest.io",
+    "symbol": "BEST",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "9608002000000000000000000"
+  },
+  {
+    "token_address": "0xe1bb02b367173ac31077a8c443802f75cc9accb6",
+    "name": "KommunitasVoting",
+    "symbol": "KOMV",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "0",
+    "balance": "1"
+  },
+  {
+    "token_address": "0xef6c9245493302a52a5eab6172c745339f6e5493",
+    "name": "Apple V2 Wrapped USDC",
+    "symbol": "aUSDC",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "8",
+    "balance": "1095420466"
+  },
+  {
+    "token_address": "0x9e2d266d6c90f6c0d80a88159b15958f7135b8af",
+    "name": "StakeShare",
+    "symbol": "SSX",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "5538000000000000000000000"
+  },
+  {
+    "token_address": "0x7930714d174f1f80819c8607b0abb083f448a179",
+    "name": "stadium.finance",
+    "symbol": "STDM",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "131330000000000000000"
+  },
+  {
+    "token_address": "0xc004e2318722ea2b15499d6375905d75ee5390b8",
+    "name": "Kommunitas",
+    "symbol": "KOM",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "8",
+    "balance": "2442883"
+  },
+  {
+    "token_address": "0x4a1a24542644d77b34497de7f218d63cb4d36e0f",
+    "name": "yui.finance",
+    "symbol": "YUI",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "255000000000000000000"
+  },
+  {
+    "token_address": "0x19a935cbaaa4099072479d521962588d7857d717",
+    "name": "LitCoin",
+    "symbol": "LitCoin",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "10000000000000000000000000"
+  },
+  {
+    "token_address": "0x4d5e8dd1b3c44e160b9381ad062628f1630ea7e3",
+    "name": "TEST3",
+    "symbol": "TEST3",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "10000000000000000"
+  },
+  {
+    "token_address": "0x0b048d6e01a6b9002c291060bf2179938fd8264c",
+    "name": "PolyAlpha Finance",
+    "symbol": "ALPHA",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "3395618530763498"
+  },
+  {
+    "token_address": "0x1cc384b6f900a947eb3bbfc47417afeee7599e24",
+    "name": "yui.finance",
+    "symbol": "YUI",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "932000000000000000000"
+  },
+  {
+    "token_address": "0x673e064ecb5889ef163ec3c3ea693b8f74bbc95d",
+    "name": "Protofi Token",
+    "symbol": "PROTO",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "9468953040727429865"
+  },
+  {
+    "token_address": "0x81067076dcb7d3168ccf7036117b9d72051205e2",
+    "name": "DxDex.io",
+    "symbol": "DxDex.io",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "800000000000000000000000"
+  },
+  {
+    "token_address": "0x80a3f315542f7ff2149fd75a74a964c13de6c7fe",
+    "name": " %BUY THRUST - https://t.me/thrust_zone",
+    "symbol": "https://thrust.zone/dextools",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "40000000000000000000000"
+  },
+  {
+    "token_address": "0xa9316e1909edf3ed33b0dd1c6631c50b82c6e142",
+    "name": "A NFTSprites.com",
+    "symbol": "NFT Sprites",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "1000000000000000000"
+  },
+  {
+    "token_address": "0xbb000a93fef6b61dbc3b03b9c09788b309f30793",
+    "name": "Gab",
+    "symbol": "GAB",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "108930817153398744843"
+  },
+  {
+    "token_address": "0xdda40cdfe4a0090f42ff49f264a831402adb801a",
+    "name": "Dogira",
+    "symbol": "DOGIRA",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "9",
+    "balance": "422176494"
+  },
+  {
+    "token_address": "0xa85f8a198d59f0fda82333be9aeeb50f24dd59ff",
+    "name": "FlowDAO.io",
+    "symbol": "FlowDAO.io",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "800000000000000000000000"
+  },
+  {
+    "token_address": "0xaaa5b9e6c589642f98a1cda99b9d024b8407285a",
+    "name": "IRON Titanium Token",
+    "symbol": "TITAN",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "77647733681165647963535"
+  },
+  {
+    "token_address": "0x4227c55bf21e95a87c00988fec98c50e9aba866c",
+    "name": "Fluffy Corgi Inu",
+    "symbol": "FluffyCorgi",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "9",
+    "balance": "10030995800993"
+  },
+  {
+    "token_address": "0x2744861accb5bd435017c1cfee789b6ebab42082",
+    "name": "AeFX.io",
+    "symbol": "AeFX.io",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "800000000000000000000000"
+  },
+  {
+    "token_address": "0x8ae127d224094cb1b27e1b28a472e588cbcc7620",
+    "name": "aaxexchange.org",
+    "symbol": "AAX",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "52695086193007896400000000000"
+  },
+  {
+    "token_address": "0x9760f74f5f120648b22bb2d0b87342ffabec035d",
+    "name": "Dopey",
+    "symbol": "DOPEY",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "43453800007363179971"
+  },
+  {
+    "token_address": "0xc48977b89b1fc62a9c4d4881a7f8a5e45f010df4",
+    "name": "Apes vs Pepes",
+    "symbol": "stadium.finance",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "12340000000000000000"
+  },
+  {
+    "token_address": "0xd7f1d4f5a1b44d827a7c3cc5dd46a80fade55558",
+    "name": "Zers.io",
+    "symbol": "Zers.io",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "22574000000000000000000"
+  },
+  {
+    "token_address": "0x87ff96aba480f1813af5c780387d8de7cf7d8261",
+    "name": "Wrapped BUSD",
+    "symbol": "WBUSD",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "193578767739650278"
+  },
+  {
+    "token_address": "0x22d5df224348321b65dcb14ff2bed72d4b6e5634",
+    "name": "Electron Token",
+    "symbol": "ELCT",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "163142403376904120391"
+  },
+  {
+    "token_address": "0xa39b14f57087aa5f16b941e5ec182b84a5432aa7",
+    "name": "BeezEX.Net",
+    "symbol": "BeezEX",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "9",
+    "balance": "777000000000"
+  },
+  {
+    "token_address": "0x22e51bae3f545255e115090202a23c7ede0b00b9",
+    "name": "LELX.io",
+    "symbol": "LELX.io",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "43557200000000000000000"
+  },
+  {
+    "token_address": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+    "name": "Wrapped Matic",
+    "symbol": "WMATIC",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "898443416161760203"
+  },
+  {
+    "token_address": "0x29198a281fe6ed6a49abe32a5d6864adccd7e89e",
+    "name": "DOGZ (PoS)",
+    "symbol": "DOGZ",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "100000000000000000"
+  }
+]

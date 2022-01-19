@@ -1,0 +1,209 @@
+[
+  {
+    "token_address": "0x7e9e431a0b8c4d532c745b1043c7fa29a48d4fba",
+    "name": "eosDAC Community Owned EOS Block Producer ERC20 Tokens",
+    "symbol": "eosDAC",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "428422800000000000000"
+  },
+  {
+    "token_address": "0xf0df09387693690b1e00d71eabf5e98e7955cff4",
+    "name": "ENDO.network Promo Token",
+    "symbol": "ETP",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "16000000000000000000"
+  },
+  {
+    "token_address": "0x599900686a27b465781323135d4dee4be3c0a70f",
+    "name": "GBT Token",
+    "symbol": "GBT",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "3000000000000000000000"
+  },
+  {
+    "token_address": "0xf3e014fe81267870624132ef3a646b8e83853a96",
+    "name": "VIN",
+    "symbol": "VIN",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "7770000000000000000"
+  },
+  {
+    "token_address": "0x9ec58861641bc805564bbc0c5fb4a856516238e7",
+    "name": "Appics",
+    "symbol": "XAP",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "894232500000000040000"
+  },
+  {
+    "token_address": "0xeeac3f8da16bb0485a4a11c5128b0518dac81448",
+    "name": "20-footEqvUnit",
+    "symbol": "TEU",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "3500000000000000000"
+  },
+  {
+    "token_address": "0xa3ee21c306a700e682abcdfe9baa6a08f3820419",
+    "name": "Gluwa Creditcoin Vesting Token",
+    "symbol": "G-CRE",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "3000000000000000000"
+  },
+  {
+    "token_address": "0x5874548c51822da642661b235e101d6d636b6feb",
+    "name": "MESSE Coin",
+    "symbol": "MESSE",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "69000000000000000000"
+  },
+  {
+    "token_address": "0x49e033122c8300a6d5091acf667494466ee4a9d2",
+    "name": "MEET.ONE",
+    "symbol": "MEET.ONE",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "256647950000000000000"
+  },
+  {
+    "token_address": "0xd4ae0807740df6fbaa7a258907132a2ac8d52fbc",
+    "name": "KEOSToken",
+    "symbol": "KEOS",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "513295900000000000000"
+  },
+  {
+    "token_address": "0xcbd49182346421d3b410b04aeb1789346da6ce43",
+    "name": "Grabity Coin",
+    "symbol": "GBT",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "3000000000000000000000"
+  },
+  {
+    "token_address": "0x4cf488387f035ff08c371515562cba712f9015d4",
+    "name": "WePower Token",
+    "symbol": "WPR",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "50000000000000000000"
+  },
+  {
+    "token_address": "0x5aeca4f96d8bf94f6b4d56b83cf3240032b21744",
+    "name": "Dsion",
+    "symbol": "DSN",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "8",
+    "balance": "10000000000"
+  },
+  {
+    "token_address": "0xb562ec0261a9cb550a5fbcb46030088f1d6a53cf",
+    "name": "EOSpace",
+    "symbol": "EOP",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "513295928674470546806"
+  },
+  {
+    "token_address": "0x8713d26637cf49e1b6b4a7ce57106aabc9325343",
+    "name": "CNN Token",
+    "symbol": "CNN",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "214000000000000000000"
+  },
+  {
+    "token_address": "0x86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0",
+    "name": "",
+    "symbol": "EOS",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "513295928674470546806"
+  },
+  {
+    "token_address": "0xb31c219959e06f9afbeb36b388a4bad13e802725",
+    "name": "ONOT",
+    "symbol": "ONOT",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "400000000000000000000"
+  },
+  {
+    "token_address": "0x6c22b815904165f3599f0a4a092d458966bd8024",
+    "name": "BPTN",
+    "symbol": "BPTN",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "5000000000000000000"
+  },
+  {
+    "token_address": "0x4540fcf016bcb67290c3e14238702c64e6a51600",
+    "name": "MOAT",
+    "symbol": "MOAT",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "317000000000000000000"
+  },
+  {
+    "token_address": "0x228ba514309ffdf03a81a205a6d040e429d6e80c",
+    "name": "Global Social Chain",
+    "symbol": "GSC",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "4000000000000000000"
+  },
+  {
+    "token_address": "0xefbd6d7def37ffae990503ecdb1291b2f7e38788",
+    "name": "Evolution",
+    "symbol": "EVO",
+    "logo": "https://cdn.moralis.io/eth/0xefbd6d7def37ffae990503ecdb1291b2f7e38788.png",
+    "thumbnail": "https://cdn.moralis.io/eth/0xefbd6d7def37ffae990503ecdb1291b2f7e38788_thumb.png",
+    "decimals": "18",
+    "balance": "12287000000000000000000"
+  },
+  {
+    "token_address": "0xd3ace836e47f7cf4948dffd8ca2937494c52580c",
+    "name": "Free BOB Tokens - BobsRepair.com",
+    "symbol": "BOBx",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "1500000000000000000000"
+  },
+  {
+    "token_address": "0x4092678e4e78230f46a1534c0fbc8fa39780892b",
+    "name": "OCoin",
+    "symbol": "OCN",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "5000000000000000000"
+  }
+]

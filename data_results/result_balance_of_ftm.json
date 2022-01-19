@@ -1,0 +1,38 @@
+[
+  {
+    "token_address": "0xd17584633bc8d190e5a14502976dad9640456d6d",
+    "name": "Tangle",
+    "symbol": "TNGL",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "9",
+    "balance": "1006247289"
+  },
+  {
+    "token_address": "0xe85fafb631fbc8a08ea8048a69984e3d91185588",
+    "name": "PRE-PROTON",
+    "symbol": "PPROTON",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "140000000000000000000"
+  },
+  {
+    "token_address": "0x9ba3e4f84a34df4e08c112e1a0ff148b81655615",
+    "name": "Shiba",
+    "symbol": "Shiba",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "9",
+    "balance": "256540058178806533303"
+  },
+  {
+    "token_address": "0x74b23882a30290451a17c44f4f05243b6b58c76d",
+    "name": "Ethereum",
+    "symbol": "ETH",
+    "logo": null,
+    "thumbnail": null,
+    "decimals": "18",
+    "balance": "3932739909839"
+  }
+]
