@@ -757,7 +757,7 @@ async function getWalletCostBasis(data) {
   // tokenList = tokenList.concat(addedTokenList);
 
   for (let i =0; i < chainIdList.length; i++) {
-    const crrTokenList = await getWalletTokenListByDebank(data.wallet, chainIdList[i]);
+    const crrTokenList = await getWalletTokenListByDebank(data.wallet, chainIdList[i], true);
 
     // global_token_info_from_debank = global_token_info_from_debank.concat(crrTokenList);
     
@@ -859,14 +859,15 @@ async function getWalletCostBasis(data) {
         usdPrice: result.price
       };
     }
+
+    serverProcess.current_step = (i + 1) + 1;
+    console.log('1111111111111')
+    console.log('token info', tokenInfo)
+    console.log('protocol info', protocolInfo)
+    console.log('price', price)
+    console.log('current balance', crrBalance)
     
     if (price) {
-      serverProcess.current_step = (i + 1) + 1;
-      console.log('1111111111111')
-      console.log('token info', tokenInfo)
-      console.log('protocol info', protocolInfo)
-      console.log('price', price)
-      console.log('current balance', crrBalance)
 
       result.push({
         id: chainInfo.id || '',
@@ -952,6 +953,10 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
     token_info = await getTokenInfoByDebank(token.chainForDebank, token.address);
     if (token_info) global_token_info_from_debank.push(token_info);
   }
+  console.log('2222222222222222222222')
+  console.log('token', token)
+  console.log('token meta', token_meta)
+  console.log('token info', token_info)
   if (token_info) {
     assets.push({
       id: token_info.id,
@@ -967,6 +972,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
 
   // confirm wether token is valued or not
   let price = await getTokenPrice(chain, token.address, blockheight);
+  console.log('price', price)
 
   if (price) {
     cost_basis = balance * price.usdPrice;
