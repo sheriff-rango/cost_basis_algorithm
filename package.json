@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "server.js",
 	"scripts": {
-		"start": "node server11"
+		"start": "node server9_backup"
 	},
 	"keywords": [],
 	"author": "",

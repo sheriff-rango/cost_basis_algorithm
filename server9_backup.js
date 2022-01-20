@@ -942,7 +942,7 @@ async function getTokenCostBasis(chain, blockheight, wallet, token, balance, hie
   // console.log('token transactions', token_transactions.length);
 
   // get token meta data
-  let token_meta = global_token_meta.filter((meta) => meta.address == token.address)[0];
+  let token_meta = global_token_meta.filter((meta) => meta?.address == token.address)[0];
   if (!token_meta) {
     token_meta = await getTokenMetadata(chain, [token.address]);
     if (token_meta) global_token_meta.push(token_meta[0]);
