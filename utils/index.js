@@ -1,5 +1,10 @@
 const axios = require('axios');
 const Moralis = require('moralis/node');
+const fs = require('fs');
+
+function writeToFile(filename, data) {
+  fs.writeFileSync(`./result_${filename}.json`, JSON.stringify(data || 'undefined'))
+}
 
 const { chain_details, transfer_topic, per_cycle, debank_baseurl } = require('./constant.js')
 
@@ -299,4 +304,4 @@ const getTokenHistory = async (_chain, _wallet, _token, _startBlock, _endBlock, 
     return returnData;
 }
 
-module.exports = { getTokenLists, getTokenHistory, getTokenBalances, getComplexProtocolLists, getMoralis };
+module.exports = { writeToFile, getTokenLists, getTokenHistory, getTokenBalances, getComplexProtocolLists, getMoralis };

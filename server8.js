@@ -75,11 +75,11 @@ const chainCoins = {
 };
 
 let testData = {
-  wallet: '0x3ddfa8ec3052539b6c9549f12cea2c295cff5296',
-  // wallet: '0x704111eDBee29D79a92c4F21e70A5396AEDCc44a',
+  // wallet: '0x3ddfa8ec3052539b6c9549f12cea2c295cff5296',
+  wallet: '0x704111eDBee29D79a92c4F21e70A5396AEDCc44a',
   token: '0x510d776fea6469531f8be69e669e553c0de69621',
-  // blockheight: 20138207,
-  chain: 'fantom',
+  blockheight: 20138207,
+  chain: 'polygon',
 };
 
 const DELAY = 1000;

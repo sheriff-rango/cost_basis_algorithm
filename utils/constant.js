@@ -145,6 +145,57 @@ const chain_details = {
   }
 }
 
+const chainCoins = {
+  polygon: {
+    chainId: 'matic',
+    name: 'Wrapped Matic',
+    decimals: 18,
+    symbol: 'WMATIC',
+    address: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
+    native_coin: 'MATIC',
+  },
+  eth: {
+    chainId: 'eth',
+    name: 'Wrapped Ether',
+    decimals: 18,
+    symbol: 'WETH',
+    address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+    native_coin: 'ETH',
+  },
+  bsc: {
+    chainId: 'bsc',
+    name: 'Wrapped BNB',
+    decimals: 18,
+    symbol: 'WBNB',
+    address: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
+    native_coin: 'BSC',
+  },
+  fantom: {
+    chainId: 'ftm',
+    name: 'Fantom',
+    decimals: 18,
+    symbol: 'WFTM',
+    address: '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83',
+    native_coin: 'ftm',
+  },
+  avalanche: {
+    chainId: 'avax',
+    name: 'Avalanche',
+    decimals: 18,
+    symbol: 'WAVAX',
+    address: '0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7',
+    native_coin: 'avax'
+  }
+};
+
+const chainIdTable = {
+  eth: 'eth',
+  bsc: 'bsc',
+  matic: 'polygon',
+  avax: 'avalanche',
+  ftm: 'fantom'
+}
+
 const transfer_topic = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
 
 const per_cycle = 100000;
@@ -153,6 +204,8 @@ const debank_baseurl = "https://openapi.debank.com/v1/";
 
 module.exports = {
   chain_details,
+  chainCoins,
+  chainIdTable,
   transfer_topic,
   per_cycle,
   debank_baseurl
